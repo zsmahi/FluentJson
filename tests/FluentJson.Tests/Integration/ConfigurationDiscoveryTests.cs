@@ -22,7 +22,7 @@ public class ConfigurationDiscoveryTests
     }
 
     // --- Configuration Class with Constructor Injection ---
-    public class ScannedEntityConfiguration(ConfigurationDiscoveryTests.IPrefixService prefixService) : IJsonEntityTypeConfiguration<ScannedEntity>
+    public class ScannedEntityConfiguration(IPrefixService prefixService) : IJsonEntityTypeConfiguration<ScannedEntity>
     {
         private readonly IPrefixService _prefixService = prefixService;
 
@@ -48,7 +48,7 @@ public class ConfigurationDiscoveryTests
             .Returns(new ScannedEntityConfiguration(prefixService));
 
         // 2. Act - Configure Builder via Scanning
-        var builder = new FluentJson.NewtonsoftJson.JsonModelBuilder();
+        var builder = new NewtonsoftJson.JsonModelBuilder();
 
 
         builder.ApplyConfigurationsFromAssemblies(serviceProvider, Assembly.GetExecutingAssembly());
@@ -76,7 +76,7 @@ public class ConfigurationDiscoveryTests
             .Returns(new ScannedEntityConfiguration(prefixService));
 
         // 2. Act - Configure Builder via Scanning
-        var builder = new FluentJson.SystemTextJson.JsonModelBuilder();
+        var builder = new SystemTextJson.JsonModelBuilder();
 
         builder.ApplyConfigurationsFromAssemblies(serviceProvider, Assembly.GetExecutingAssembly());
 
