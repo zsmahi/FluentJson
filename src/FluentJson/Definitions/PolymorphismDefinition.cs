@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using FluentJson.Abstractions;
+using FluentJson.Exceptions;
 
 namespace FluentJson.Definitions;
 
@@ -59,52 +60,59 @@ public class PolymorphismDefinition : FreezableBase
     /// (i.e. it exists in the JSON but not in the C# class).
     /// </summary>
     public bool IsShadowProperty { get; set; }
-
     /// <summary>
     /// Registers a mapping between a concrete derived type and its discriminator value.
+    /// Enforces strict uniqueness for both types and values.
     /// </summary>
     /// <param name="type">The concrete CLR type to instantiate.</param>
     /// <param name="value">The unique value found in the JSON discriminator property.</param>
-    /// <remarks>
-    /// <para>
-    /// <strong>Architectural Constraint:</strong>
-    /// To ensure optimal parsing performance and broad compatibility across JSON standards, 
-    /// the discriminator <paramref name="value"/> is strictly limited to primitive types 
-    /// (<c>string</c>, <c>int</c>, <c>bool</c>) or <c>enum</c> values. Complex objects are not supported as discriminators.
-    /// </para>
-    /// </remarks>
-    /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is not a primitive, string, or enum.</exception>
-    /// <exception cref="InvalidOperationException">Thrown if the definition is frozen.</exception>
+    /// <exception cref="FluentJsonConfigurationException">Thrown if the type or value is already registered, or if the value type is invalid.</exception>
     public void AddSubType(Type type, object value)
     {
         ThrowIfFrozen();
 
-        if (value != null)
+        if (value == null)
         {
-            Type vType = value.GetType();
-            // Validate that the discriminator is lightweight
-            if (!vType.IsPrimitive && !vType.IsEnum && vType != typeof(string))
-            {
-                throw new ArgumentException(
-                    $"Discriminator value for '{type.Name}' must be a primitive (int, string, bool, enum). Found: '{vType.Name}'.");
-            }
-
-            _subTypes[type] = value;
+            throw new ArgumentNullException(nameof(value));
         }
-    }
 
+        // 1. Validate Discriminator Type (Primitive/String/Enum only)
+        Type vType = value.GetType();
+        if (!vType.IsPrimitive && !vType.IsEnum && vType != typeof(string))
+        {
+            throw new FluentJsonConfigurationException(
+                $"Discriminator value for '{type.Name}' must be a primitive (int, string, bool, enum). Found: '{vType.Name}'.");
+        }
+
+        // 2. Validate Type Uniqueness (No silent override)
+        if (_subTypes.ContainsKey(type))
+        {
+            throw new FluentJsonConfigurationException(
+                $"The type '{type.Name}' is already registered in the polymorphic hierarchy.");
+        }
+
+        // 3. Validate Value Uniqueness
+        // Note: linear search is acceptable here as configuration happens once and hierarchies are generally small.
+        if (_subTypes.ContainsValue(value))
+        {
+            throw new FluentJsonConfigurationException(
+                $"The discriminator value '{value}' is already assigned to another type in the hierarchy.");
+        }
+
+        _subTypes.Add(type, value);
+    }
 
     /// <summary>
     /// Locks the definition to prevent further modifications.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown if the discriminator property name is invalid.</exception>
+    /// <exception cref="FluentJsonConfigurationException">Thrown if the discriminator property name is invalid.</exception>
     public override void Freeze()
     {
-        // Sanity check ensuring the definition is valid before locking it.
         if (string.IsNullOrWhiteSpace(DiscriminatorProperty))
         {
-            throw new InvalidOperationException("DiscriminatorProperty metadata must be present to freeze.");
+            throw new FluentJsonConfigurationException("DiscriminatorProperty metadata must be present to freeze.");
         }
+
         base.Freeze();
     }
 

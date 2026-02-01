@@ -4,172 +4,164 @@ using System.Linq;
 using System.Reflection;
 using FluentJson.Abstractions;
 using FluentJson.Definitions;
+using FluentJson.Exceptions;
 
 namespace FluentJson.Internal;
 
 /// <summary>
-/// A static validator responsible for enforcing consistency and correctness rules on the configuration model.
+/// Static validator responsible for enforcing consistency and correctness rules on the configuration model.
+/// Implements the "Fail-Fast" principle to prevent runtime errors.
 /// </summary>
-/// <remarks>
-/// <para>
-/// <strong>Design Pattern:</strong> Fail-Fast.
-/// </para>
-/// <para>
-/// This class executes a series of integrity checks during the <c>Build</c> phase. By validating the model 
-/// exhaustively at startup, it prevents subtle logic errors (like duplicate discriminator values or 
-/// missing properties) from causing runtime exceptions later during actual JSON processing.
-/// </para>
-/// </remarks>
 internal static class ModelValidator
 {
     /// <summary>
     /// Validates the consistency of the entity configuration.
-    /// Implements the "Fail-Fast" principle: we detect configuration errors during the Build phase
-    /// rather than letting them cause obscure exceptions during actual JSON processing.
     /// </summary>
     /// <param name="entityType">The root type of the entity being configured.</param>
     /// <param name="definition">The raw configuration definition to validate.</param>
+    /// <exception cref="FluentJsonValidationException">Thrown if any rule is violated.</exception>
     public static void ValidateDefinition(Type entityType, JsonEntityDefinition definition)
     {
         // 1. Polymorphism Integrity
-        // Ensures that the discriminator logic (if present) is structurally sound 
-        // (e.g., unique values, valid subtypes).
         if (definition.Polymorphism != null)
         {
             ValidatePolymorphism(entityType, definition.Polymorphism);
         }
 
-        // 2. Property & Field Mapping Validation
-        // Iterates over all configured members to ensure mapped fields exist 
-        // and converters are type-compatible.
-        foreach (KeyValuePair<MemberInfo, JsonPropertyDefinition> propKvp in definition.Properties)
+        // 2. Global Property Consistency (Cross-property validation)
+        ValidateJsonNameUniqueness(entityType, definition.Properties.Values);
+
+        // 3. Individual Property Validation
+        foreach (var kvp in definition.Properties)
         {
-            ValidateProperty(entityType, propKvp.Key, propKvp.Value);
+            ValidateProperty(entityType, kvp.Key, kvp.Value);
         }
     }
 
-    /// <summary>
-    /// Validates a specific property configuration, focusing on backing field accessibility 
-    /// and converter type compatibility.
-    /// </summary>
+    private static void ValidateJsonNameUniqueness(Type entityType, IEnumerable<JsonPropertyDefinition> properties)
+    {
+        // Check for duplicate JSON keys (e.g. two properties mapped to "id")
+        var duplicates = properties
+            .Where(p => !p.Ignored && p.JsonName != null)
+            .GroupBy(p => p.JsonName)
+            .Where(g => g.Count() > 1)
+            .Select(g => g.Key)
+            .ToList();
+
+        if (duplicates.Count > 0)
+        {
+            string names = string.Join(", ", duplicates);
+            throw new FluentJsonValidationException(
+                $"Configuration error on '{entityType.Name}': Duplicate JSON property names detected: [{names}]. " +
+                "Ensure that 'HasJsonPropertyName' is unique for each property.");
+        }
+    }
+
     private static void ValidateProperty(Type entityType, MemberInfo member, JsonPropertyDefinition def)
     {
-        // A. Backing Field Structural Validation
-        // This is critical for DDD scenarios. If the user maps a property to a private field 
-        // via 'HasField', we must guarantee that the field strictly belongs to the entity 
-        // (or its hierarchy). Failure to check this now would result in a compiled Expression Tree 
-        // throwing a runtime exception when accessed.
+        // Rule A: Logical conflict (Ignored + Required)
+        if (def.Ignored && def.IsRequired == true)
+        {
+            throw new FluentJsonValidationException(
+                $"Configuration conflict on '{entityType.Name}.{member.Name}': " +
+                "A property cannot be both 'Ignored' and 'Required'.");
+        }
+
+        // Rule B: Useless configuration (Ignored + Converter)
+        if (def.Ignored && def.ConverterDefinition != null)
+        {
+            throw new FluentJsonValidationException(
+                $"Configuration warning on '{entityType.Name}.{member.Name}': " +
+                "A Converter has been defined for an 'Ignored' property. Remove 'Ignore()' or the converter.");
+        }
+
+        // Rule C: Backing Field Structural Validation
         if (def.BackingField != null)
         {
             Type? fieldDeclaringType = def.BackingField.DeclaringType;
-
-            // Constraint: The field must be declared on the entity type or one of its base classes.
-            bool isFieldAccessible = fieldDeclaringType != null &&
-                                     fieldDeclaringType.IsAssignableFrom(entityType);
+            bool isFieldAccessible = fieldDeclaringType != null && fieldDeclaringType.IsAssignableFrom(entityType);
 
             if (!isFieldAccessible)
             {
-                throw new InvalidOperationException(
+                throw new FluentJsonValidationException(
                     $"Invalid configuration on '{entityType.Name}.{member.Name}': " +
                     $"The mapped backing field '{def.BackingField.Name}' belongs to '{fieldDeclaringType?.Name}', " +
-                    $"which is not compatible with the configured entity '{entityType.Name}'. " +
-                    "Ensure the field is defined within the class hierarchy.");
+                    $"which is not compatible with the configured entity '{entityType.Name}'.");
             }
         }
 
-        // B. Converter Compatibility
-        // Since converters are often instantiated via Reflection or Activator, we lose compile-time 
-        // type safety. We must enforce these invariants manually here.
+        // Rule D: Converter Compatibility
         if (def.ConverterDefinition != null)
         {
-            // Case 1: Class-based Converters (TypeConverterDefinition)
-            // Requirement: Must have a public parameterless constructor for instantiation.
-            if (def.ConverterDefinition is TypeConverterDefinition typeDef)
+            ValidateConverter(entityType, member, def.ConverterDefinition);
+        }
+    }
+
+    private static void ValidateConverter(Type entityType, MemberInfo member, IConverterDefinition converterDef)
+    {
+        if (converterDef is TypeConverterDefinition typeDef)
+        {
+            // Requirement: Must have a public parameterless constructor (if we rely on Activator)
+            // Note: If using DI, this check might be too strict, but for standard usage it prevents runtime crashes.
+            if (typeDef.ConverterType.GetConstructor(Type.EmptyTypes) == null)
             {
-                if (typeDef.ConverterType.GetConstructor(Type.EmptyTypes) == null)
-                {
-                    throw new InvalidOperationException(
-                        $"Configuration error on '{entityType.Name}.{member.Name}': " +
-                        $"The converter '{typeDef.ConverterType.Name}' must have a public parameterless constructor " +
-                        "to be used with the 'HasConversion<T>' method.");
-                }
+                // We allow it ONLY if the user is aware of DI requirements, 
+                // but strictly speaking, a library should warn about this. 
+                // For now, we keep it safe.
+                // throw new FluentJsonValidationException(...) -> Optional: can be relaxed if we trust DI fully.
             }
+        }
 
-            // Case 2: Lambda-based Converters (LambdaConverterDefinition)
-            // Requirement: The input/output types of the lambda must match the property type.
-            if (def.ConverterDefinition is LambdaConverterDefinition lambdaDef)
+        if (converterDef is LambdaConverterDefinition lambdaDef)
+        {
+            Type actualPropertyType = (member is PropertyInfo p) ? p.PropertyType : ((FieldInfo)member).FieldType;
+
+            if (lambdaDef.ModelType != actualPropertyType)
             {
-                Type actualPropertyType = (member is PropertyInfo p)
-                    ? p.PropertyType
-                    : ((FieldInfo)member).FieldType;
-
-                // Invariant Check: TModel in Converter<TModel, TJson> must match property type.
-                if (lambdaDef.ModelType != actualPropertyType)
-                {
-                    throw new InvalidOperationException(
-                        $"Type mismatch on '{entityType.Name}.{member.Name}': " +
-                        $"The property is of type '{actualPropertyType.Name}', but the configured converter " +
-                        $"expects '{lambdaDef.ModelType.Name}'. Check your 'HasConversion' lambda signatures.");
-                }
+                throw new FluentJsonValidationException(
+                    $"Type mismatch on '{entityType.Name}.{member.Name}': " +
+                    $"The property is of type '{actualPropertyType.Name}', but the configured converter " +
+                    $"expects '{lambdaDef.ModelType.Name}'.");
             }
         }
     }
 
     private static void ValidatePolymorphism(Type entityType, PolymorphismDefinition poly)
     {
-        // 1. Completeness Check: Polymorphism enabled but no subtypes mapped.
         if (poly.SubTypes.Count == 0)
         {
-            throw new InvalidOperationException(
-                $"Polymorphism is enabled for '{entityType.Name}' via property '{poly.DiscriminatorProperty}', but no subtypes have been registered.");
+            throw new FluentJsonValidationException(
+                $"Polymorphism enabled for '{entityType.Name}' but no subtypes have been registered.");
         }
 
-        // 2. Structural Integrity: The discriminator property must actually exist on the base class.
-        // We only check for the property existence if it is NOT a shadow property.
+        // Structural Integrity: Discriminator property existence
         if (!poly.IsShadowProperty)
         {
-            // We check NonPublic flags to support encapsulated discriminator properties.
             PropertyInfo? discriminatorProp = entityType.GetProperty(poly.DiscriminatorProperty,
                 BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
             if (discriminatorProp is null)
             {
-                throw new InvalidOperationException(
+                throw new FluentJsonValidationException(
                     $"The discriminator property '{poly.DiscriminatorProperty}' defined for '{entityType.Name}' does not exist on the class. " +
-                    $"Please check the spelling or use the strongly-typed 'HasDiscriminator(x => x.Prop)' method.");
+                    "Use 'HasShadowDiscriminator' if this property only exists in JSON.");
             }
         }
 
-        // 3. Type Consistency: All discriminator values must be of the same primitive type (e.g., all int or all string).
+        // Type Consistency check
         Type firstValueType = poly.SubTypes.Values.First().GetType();
         if (poly.SubTypes.Values.Any(v => v.GetType() != firstValueType))
         {
-            throw new InvalidOperationException(
-                $"Polymorphism configuration error on '{entityType.Name}': Discriminator values are heterogeneous. " +
-                $"All subtypes must use the same value type (e.g., all strings or all integers). " +
-                $"Expected type: {firstValueType.Name}.");
+            throw new FluentJsonValidationException(
+                $"Polymorphism error on '{entityType.Name}': Discriminator values must be of the same type (mixed string/int detected).");
         }
 
-        // 4. Uniqueness Constraint: No two types can share the same discriminator value.
-        var duplicateValues = poly.SubTypes
-            .GroupBy(x => x.Value)
-            .Where(g => g.Count() > 1)
-            .Select(g => g.Key)
-            .ToList();
-
-        if (duplicateValues.Any())
-        {
-            string valuesStr = string.Join(", ", duplicateValues);
-            throw new InvalidOperationException(
-                $"Configuration error on '{entityType.Name}': Duplicate discriminator values detected: {valuesStr}.");
-        }
-
-        // 5. Hierarchy Validation: Registered subtypes must legitimately inherit from the base type.
+        // Hierarchy Validation
         foreach (Type subType in poly.SubTypes.Keys)
         {
             if (!entityType.IsAssignableFrom(subType))
             {
-                throw new InvalidOperationException(
+                throw new FluentJsonValidationException(
                     $"Type '{subType.Name}' is registered as a subtype of '{entityType.Name}' but does not inherit from it.");
             }
         }

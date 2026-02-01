@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using FluentJson.Abstractions;
 using FluentJson.Definitions;
+using FluentJson.Exceptions;
 
 namespace FluentJson.Builders;
 
@@ -81,7 +82,7 @@ public class JsonPropertyBuilder<T, TProp>
     /// </remarks>
     /// <param name="fieldName">The case-sensitive name of the field.</param>
     /// <returns>The builder instance for chaining.</returns>
-    /// <exception cref="InvalidOperationException">Thrown if the specified field cannot be found on the type.</exception>
+    /// <exception cref="FluentJsonConfigurationException">Thrown if the specified field cannot be found on the type.</exception>
     public JsonPropertyBuilder<T, TProp> HasField(string fieldName)
     {
         Type type = _definition.Member.DeclaringType!;
@@ -91,7 +92,9 @@ public class JsonPropertyBuilder<T, TProp>
 
         if (field is null)
         {
-            throw new InvalidOperationException($"The field '{fieldName}' does not exist in class '{type.Name}'.");
+            throw new FluentJsonConfigurationException(
+                $"The field '{fieldName}' does not exist in class '{type.Name}'. " +
+                "Ensure the name is correct (case-sensitive) and the field is defined in this class.");
         }
 
         _definition.BackingField = field;

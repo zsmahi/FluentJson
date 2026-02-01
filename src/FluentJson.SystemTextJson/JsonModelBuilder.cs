@@ -180,9 +180,20 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
         }
 
         // 2. Metadata Overrides
-        if (def.JsonName != null) jsonProp.Name = def.JsonName;
-        if (def.Order.HasValue) jsonProp.Order = def.Order.Value;
-        if (def.IsRequired.HasValue && def.IsRequired.Value) jsonProp.IsRequired = true;
+        if (def.JsonName != null)
+        {
+            jsonProp.Name = def.JsonName;
+        }
+
+        if (def.Order.HasValue)
+        {
+            jsonProp.Order = def.Order.Value;
+        }
+
+        if (def.IsRequired.HasValue && def.IsRequired.Value)
+        {
+            jsonProp.IsRequired = true;
+        }
 
         // 3. Converters
         if (def.ConverterDefinition != null)
@@ -223,7 +234,10 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
                     try
                     {
                         var service = _runtimeServiceProvider.GetService(t);
-                        if (service is JsonConverter diConverter) return diConverter;
+                        if (service is JsonConverter diConverter)
+                        {
+                            return diConverter;
+                        }
                     }
                     catch (Exception ex)
                     {
