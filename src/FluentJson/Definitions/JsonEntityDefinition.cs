@@ -63,14 +63,17 @@ public class JsonEntityDefinition : FreezableBase
     /// Enables and initializes polymorphic behavior for this entity.
     /// </summary>
     /// <param name="discriminator">The name of the JSON property that will hold the type discriminator value.</param>
+    /// <param name="isShadowProperty">Indicates if the discriminator property exists only in JSON (true) or maps to a C# member (false).</param>
     /// <exception cref="InvalidOperationException">Thrown if the definition has already been frozen.</exception>
-    public void EnablePolymorphism(string discriminator)
+    public void EnablePolymorphism(string discriminator, bool isShadowProperty = false)
     {
         ThrowIfFrozen();
-
         if (Polymorphism == null)
         {
-            Polymorphism = new PolymorphismDefinition(discriminator);
+            Polymorphism = new PolymorphismDefinition(discriminator)
+            {
+                IsShadowProperty = isShadowProperty
+            };
         }
     }
 

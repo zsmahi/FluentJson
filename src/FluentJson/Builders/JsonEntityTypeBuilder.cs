@@ -87,7 +87,8 @@ public class JsonEntityTypeBuilder<T> : IJsonEntityTypeBuilderAccessor where T :
     }
 
     /// <summary>
-    /// Configures a discriminator that exists only in the JSON payload, not on the CLR class.
+    /// Configures a discriminator that exists ONLY in the JSON payload and has no counterpart in the C# class.
+    /// (Standard EF Core "Shadow Property" concept).
     /// </summary>
     public JsonDiscriminatorBuilder<T> HasShadowDiscriminator(string jsonPropertyName)
     {
