@@ -27,4 +27,9 @@ public class TypeConverterDefinition(Type converterType) : IConverterDefinition
     /// Gets the concrete type of the converter to be resolved and instantiated by the serializer adapter.
     /// </summary>
     public Type ConverterType { get; } = converterType;
+
+    /// <inheritdoc />
+    // We cannot determine the target model type statically from just the converter type 
+    // without complex reflection, so we return null to skip type validation.
+    public Type? ModelType => null;
 }

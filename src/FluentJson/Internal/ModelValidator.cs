@@ -99,33 +99,35 @@ internal static class ModelValidator
 
     private static void ValidateConverter(Type entityType, MemberInfo member, IConverterDefinition converterDef)
     {
+        // 1. Structural Integrity Check (for Type-based converters)
+        // We ensure that the type provided can be instantiated by the Activator (requires a public parameterless constructor).
+        // Note: In a pure DI scenario, this might be too strict, but for a library ensuring stability, we enforce it.
         if (converterDef is TypeConverterDefinition typeDef)
         {
-            // Requirement: Must have a public parameterless constructor (if we rely on Activator)
-            // Note: If using DI, this check might be too strict, but for standard usage it prevents runtime crashes.
             if (typeDef.ConverterType.GetConstructor(Type.EmptyTypes) == null)
             {
-                // We allow it ONLY if the user is aware of DI requirements, 
-                // but strictly speaking, a library should warn about this. 
-                // For now, we keep it safe.
-                // throw new FluentJsonValidationException(...) -> Optional: can be relaxed if we trust DI fully.
+                throw new FluentJsonValidationException(
+                   $"Configuration error on '{entityType.Name}.{member.Name}': " +
+                   $"The converter '{typeDef.ConverterType.Name}' must have a public parameterless constructor.");
             }
         }
 
-        if (converterDef is LambdaConverterDefinition lambdaDef)
+        // 2. Type Safety Check (Polymorphic)
+        // Instead of casting to specific implementations, we rely on the interface contract.
+        // If the converter definition exposes a specific ModelType, we enforce type compatibility.
+        if (converterDef.ModelType != null)
         {
             Type actualPropertyType = (member is PropertyInfo p) ? p.PropertyType : ((FieldInfo)member).FieldType;
 
-            if (lambdaDef.ModelType != actualPropertyType)
+            if (converterDef.ModelType != actualPropertyType)
             {
                 throw new FluentJsonValidationException(
                     $"Type mismatch on '{entityType.Name}.{member.Name}': " +
                     $"The property is of type '{actualPropertyType.Name}', but the configured converter " +
-                    $"expects '{lambdaDef.ModelType.Name}'.");
+                    $"expects '{converterDef.ModelType.Name}'.");
             }
         }
     }
-
     private static void ValidatePolymorphism(Type entityType, PolymorphismDefinition poly)
     {
         if (poly.SubTypes.Count == 0)

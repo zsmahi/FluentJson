@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using FluentJson.Abstractions;
 using FluentJson.Definitions;
@@ -75,6 +76,7 @@ public abstract class JsonModelBuilderBase<TSettings>
     /// </summary>
     /// <param name="assemblies">The assemblies to scan.</param>
     /// <param name="serviceProvider">Optional provider to resolve configuration classes with dependencies.</param>
+    [RequiresUnreferencedCode("Scanning assemblies relies on Reflection. Ensure configuration types are preserved from trimming.")]
     public void ApplyConfigurationsFromAssemblies(IServiceProvider? serviceProvider, params Assembly[] assemblies)
     {
         EnsureNotBuilt();
@@ -99,12 +101,14 @@ public abstract class JsonModelBuilderBase<TSettings>
     /// <summary>
     /// Overload for convenience without a service provider.
     /// </summary>
+    [RequiresUnreferencedCode("Scanning assemblies relies on Reflection. Ensure configuration types are preserved from trimming.")]
     public void ApplyConfigurationsFromAssemblies(params Assembly[] assemblies)
         => ApplyConfigurationsFromAssemblies(null, assemblies);
 
     /// <summary>
     /// Manually applies a specific configuration instance.
     /// </summary>
+    [RequiresUnreferencedCode("Uses Reflection to invoke the generic Configure method.")]
     public void ApplyConfiguration<T>(IJsonEntityTypeConfiguration<T> configuration) where T : class
     {
         EnsureNotBuilt();
@@ -119,11 +123,13 @@ public abstract class JsonModelBuilderBase<TSettings>
     /// <summary>
     /// Internal helper to execute the 'Configure' method on a configuration instance.
     /// </summary>
+    [RequiresUnreferencedCode("Constructs generic builder types and invokes methods dynamically via Reflection.")]
     private void ApplyConfigurationInstance(object configInstance, Type configType, Type entityType)
     {
         try
         {
             // 1. Create the specific builder: JsonEntityTypeBuilder<T>
+            // MakeGenericType is the primary reason for RequiresUnreferencedCode here.
             Type builderType = typeof(JsonEntityTypeBuilder<>).MakeGenericType(entityType);
             object builderInstance = Activator.CreateInstance(builderType)
                 ?? throw new FluentJsonConfigurationException($"Failed to create builder context for '{entityType.Name}'.");
