@@ -3,182 +3,160 @@ using System.Collections.Generic;
 using System.Reflection;
 using FluentJson.Abstractions;
 using FluentJson.Definitions;
+using FluentJson.Exceptions;
 using FluentJson.Internal;
 
 namespace FluentJson.Builders;
 
 /// <summary>
-/// Serves as the abstract foundation for implementing JSON configuration builders.
-/// It centralizes the logic for configuration discovery, scanning, and definition aggregation.
+/// Abstract foundation for JSON configuration builders.
+/// Implements the "Template Method" pattern to enforce lifecycle safety (Validation -> Freeze -> Build).
 /// </summary>
-/// <typeparam name="TSettings">
-/// The type of the final configuration object produced by the builder 
-/// (e.g., <c>JsonSerializerSettings</c> for Newtonsoft or <c>JsonSerializerOptions</c> for System.Text.Json).
-/// </typeparam>
-/// <remarks>
-/// <para>
-/// <strong>Design Pattern:</strong> Template Method / Layer Supertype.
-/// </para>
-/// <para>
-/// This class handles the heavy lifting of reflection-based discovery and definition management.
-/// Concrete implementations (adapters) only need to implement the <see cref="Build"/> method 
-/// to translate the agnostic <see cref="JsonEntityDefinition"/> model into the specific 
-/// settings object required by the underlying JSON engine.
-/// </para>
-/// </remarks>
+/// <typeparam name="TSettings">The type of the resulting serializer settings object.</typeparam>
 public abstract class JsonModelBuilderBase<TSettings>
 {
-    // Centralized definition storage accessible by child implementations
+    // Repository of definitions, keyed by the entity type.
     protected readonly Dictionary<Type, JsonEntityDefinition> _scannedDefinitions = [];
 
-    // Shared state
+    // Shared configuration state.
     protected NamingConvention _namingConvention = NamingConvention.Default;
-    protected bool _isBuilt;
+
+    // Lifecycle control flag.
+    private volatile bool _isBuilt;
 
     /// <summary>
-    /// When implemented in a derived class, compiles the aggregated definitions into the engine-specific settings object.
+    /// Compiles the aggregated configurations into a ready-to-use serializer settings object.
+    /// This method enforces validation and immutability of the configuration model.
     /// </summary>
-    /// <returns>The fully configured settings object ready for use by the serializer.</returns>
-    /// <exception cref="InvalidOperationException">Thrown if the builder has already been built.</exception>
-    public abstract TSettings Build();
-
-    /// <summary>
-    /// Verifies that the builder is in a mutable state.
-    /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown if <see cref="Build"/> has already been called.</exception>
-    protected void EnsureNotBuilt()
+    /// <param name="serviceProvider">
+    /// An optional dependency injection provider used to instantiate converters during the build phase.
+    /// </param>
+    /// <returns>The configured settings object.</returns>
+    /// <exception cref="FluentJsonConfigurationException">Thrown if the builder has already been built.</exception>
+    /// <exception cref="FluentJsonValidationException">Thrown if the configuration contains logical errors.</exception>
+    public TSettings Build(IServiceProvider? serviceProvider = null)
     {
-        if (_isBuilt) throw new InvalidOperationException("JsonModelBuilder cannot be modified after Build().");
+        EnsureNotBuilt();
+
+        // 1. Integrity Check & Locking Phase
+        // We iterate over all definitions to validate them against business rules 
+        // and freeze them to ensure thread safety before generation.
+        foreach (KeyValuePair<Type, JsonEntityDefinition> kvp in _scannedDefinitions)
+        {
+            Type entityType = kvp.Key;
+            JsonEntityDefinition definition = kvp.Value;
+
+            // Fail-Fast: Detect invalid configurations immediately
+            ModelValidator.ValidateDefinition(entityType, definition);
+
+            // Thread-Safety: Lock the definition permanently
+            definition.Freeze();
+        }
+
+        // 2. Generation Phase (Adapter specific logic)
+        TSettings settings = BuildEngineSettings(serviceProvider);
+
+        // 3. Lifecycle Finalization
+        _isBuilt = true;
+
+        return settings;
     }
 
-    #region Configuration Scanning (Shared Logic)
+    /// <summary>
+    /// When implemented in a derived class, translates the frozen definitions into the engine-specific settings object.
+    /// </summary>
+    /// <param name="serviceProvider">The provider for resolving runtime dependencies (e.g., Converters).</param>
+    /// <returns>The concrete settings instance.</returns>
+    protected abstract TSettings BuildEngineSettings(IServiceProvider? serviceProvider);
 
     /// <summary>
-    /// Scans the specified assemblies for implementations of <see cref="IJsonEntityTypeConfiguration{T}"/> 
-    /// and applies them to the builder using default constructors.
+    /// Scans the specified assemblies for <see cref="IJsonEntityTypeConfiguration{T}"/> implementations 
+    /// and applies them to the builder.
     /// </summary>
-    /// <param name="assemblies">The list of assemblies to scan.</param>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="assemblies"/> is null.</exception>
+    /// <param name="assemblies">The assemblies to scan.</param>
+    /// <param name="serviceProvider">Optional provider to resolve configuration classes with dependencies.</param>
+    public void ApplyConfigurationsFromAssemblies(IServiceProvider? serviceProvider, params Assembly[] assemblies)
+    {
+        EnsureNotBuilt();
+        if (assemblies == null || assemblies.Length == 0)
+        {
+            throw new ArgumentNullException(nameof(assemblies));
+        }
+
+        Func<Type, object>? providerDelegate = serviceProvider is null
+            ? null
+            : serviceProvider.GetService;
+
+        // Delegate discovery to the internal service
+        IEnumerable<DiscoveredConfiguration> configs = ConfigurationDiscovery.FindAndInstantiateConfigurations(assemblies, providerDelegate);
+
+        foreach (DiscoveredConfiguration config in configs)
+        {
+            ApplyConfigurationInstance(config.Instance, config.ConfigType, config.EntityType);
+        }
+    }
+
+    /// <summary>
+    /// Overload for convenience without a service provider.
+    /// </summary>
     public void ApplyConfigurationsFromAssemblies(params Assembly[] assemblies)
         => ApplyConfigurationsFromAssemblies(null, assemblies);
 
     /// <summary>
-    /// Scans the specified assemblies for configuration classes and instantiates them using the provided service provider.
+    /// Manually applies a specific configuration instance.
     /// </summary>
-    /// <param name="serviceProvider">
-    /// An optional delegate to resolve dependencies for configuration classes (e.g., <c>serviceProvider.GetService</c>). 
-    /// If null, <see cref="Activator.CreateInstance(Type)"/> is used.
-    /// </param>
-    /// <param name="assemblies">The assemblies to scan.</param>
-    /// <exception cref="InvalidOperationException">Thrown if a configuration class cannot be instantiated.</exception>
-    public void ApplyConfigurationsFromAssemblies(Func<Type, object>? serviceProvider, params Assembly[] assemblies)
-    {
-        EnsureNotBuilt();
-        if (assemblies == null) throw new ArgumentNullException(nameof(assemblies));
-
-        foreach (Assembly assembly in assemblies)
-        {
-            ApplyConfigurationsFromAssembly(assembly, serviceProvider);
-        }
-    }
-
-    /// <summary>
-    /// Applies a specific configuration instance manually.
-    /// </summary>
-    /// <typeparam name="T">The entity type being configured.</typeparam>
-    /// <param name="configuration">The configuration instance to apply.</param>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="configuration"/> is null.</exception>
     public void ApplyConfiguration<T>(IJsonEntityTypeConfiguration<T> configuration) where T : class
     {
         EnsureNotBuilt();
-        if (configuration == null) throw new ArgumentNullException(nameof(configuration));
-
-        Type entityType = typeof(T);
-        var builder = new JsonEntityTypeBuilder<T>();
-
-        // User logic execution
-        configuration.Configure(builder);
-
-        // Extract definition via internal interface
-        if (builder is IJsonEntityTypeBuilderAccessor accessor)
+        if (configuration == null)
         {
-            _scannedDefinitions[entityType] = accessor.Definition;
+            throw new ArgumentNullException(nameof(configuration));
         }
+
+        ApplyConfigurationInstance(configuration, configuration.GetType(), typeof(T));
     }
 
     /// <summary>
-    /// Scans a single assembly for configurations.
+    /// Internal helper to execute the 'Configure' method on a configuration instance.
     /// </summary>
-    /// <param name="assembly">The assembly to scan.</param>
-    /// <param name="serviceProvider">Optional service provider for DI resolution.</param>
-    public void ApplyConfigurationsFromAssembly(Assembly assembly, Func<Type, object>? serviceProvider = null)
-    {
-        EnsureNotBuilt();
-        // Uses the internal scanner from the Core project
-        IEnumerable<(Type ConfigType, Type EntityType)> configs = ConfigurationScanner.FindConfigurations(assembly);
-
-        foreach ((Type configType, Type entityType) in configs)
-        {
-            ProcessConfiguration(configType, entityType, serviceProvider);
-        }
-    }
-
-    private void ProcessConfiguration(Type configType, Type entityType, Func<Type, object>? serviceProvider)
+    private void ApplyConfigurationInstance(object configInstance, Type configType, Type entityType)
     {
         try
         {
-            // 1. Create configuration instance (DI or Activator)
-            object configInstance = CreateConfigurationInstance(configType, serviceProvider);
-
-            // 2. Create generic builder JsonEntityTypeBuilder<T>
+            // 1. Create the specific builder: JsonEntityTypeBuilder<T>
             Type builderType = typeof(JsonEntityTypeBuilder<>).MakeGenericType(entityType);
             object builderInstance = Activator.CreateInstance(builderType)
-                ?? throw new InvalidOperationException($"Failed to create builder for '{entityType.Name}'.");
+                ?? throw new FluentJsonConfigurationException($"Failed to create builder context for '{entityType.Name}'.");
 
-            // 3. Invoke Configure method via reflection
-            MethodInfo? configureMethod = configType.GetMethod("Configure");
-            if (configureMethod is null)
-                throw new InvalidOperationException($"Method 'Configure' is missing on configuration '{configType.Name}'.");
-
+            // 2. Invoke the 'Configure' method
+            // We know the method exists because configInstance implements IJsonEntityTypeConfiguration<T>
+            MethodInfo configureMethod = configType.GetMethod("Configure")!;
             configureMethod.Invoke(configInstance, [builderInstance]);
 
-            // 4. Store result
+            // 3. Extract and store the definition via the internal accessor
             if (builderInstance is IJsonEntityTypeBuilderAccessor accessor)
             {
+                // Last-write wins strategy for duplicated configurations of the same type
                 _scannedDefinitions[entityType] = accessor.Definition;
             }
         }
         catch (TargetInvocationException ex)
         {
-            throw new InvalidOperationException(
-                $"Error applying configuration for entity '{entityType.Name}': {ex.InnerException?.Message}",
+            throw new FluentJsonConfigurationException(
+                $"Error applying configuration '{configType.Name}': {ex.InnerException?.Message}",
                 ex.InnerException ?? ex);
         }
     }
 
-    private static object CreateConfigurationInstance(Type configType, Func<Type, object>? serviceProvider)
+    /// <summary>
+    /// Guarantees that the builder is in a mutable state.
+    /// </summary>
+    protected void EnsureNotBuilt()
     {
-        // Try via DI
-        if (serviceProvider != null)
+        if (_isBuilt)
         {
-            object? instance = serviceProvider(configType);
-            if (instance != null) return instance;
-            throw new InvalidOperationException($"The provided serviceFactory returned null for type '{configType.Name}'.");
-        }
-
-        // Fallback via Activator
-        try
-        {
-            return Activator.CreateInstance(configType)
-                ?? throw new InvalidOperationException($"Could not instantiate '{configType.Name}'.");
-        }
-        catch (MissingMethodException)
-        {
-            throw new InvalidOperationException(
-                $"The configuration class '{configType.Name}' does not have a parameterless constructor. " +
-                $"If this class relies on dependencies, you must pass a 'serviceProvider' delegate to 'ApplyConfigurationsFromAssembly'.");
+            throw new FluentJsonConfigurationException(
+                "The builder has already been built. Modifications are not allowed after Build() has been called.");
         }
     }
-
-    #endregion
 }

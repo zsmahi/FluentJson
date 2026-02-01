@@ -34,7 +34,10 @@ internal class LambdaJsonConverter<TModel, TJson>(Func<TModel, TJson> convertTo,
     public override TModel? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         // Null Handling: Align with standard behavior
-        if (reader.TokenType == JsonTokenType.Null) return default;
+        if (reader.TokenType == JsonTokenType.Null)
+        {
+            return default;
+        }
 
         // Phase 1: Deserialize to Intermediate Type (TJson)
         // We let STJ handle the low-level parsing of the surrogate type.

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using FluentJson.Builders;
 using FluentJson.Definitions;
-using FluentJson.Internal;
 using FluentJson.NewtonsoftJson.Core;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -13,18 +12,9 @@ namespace FluentJson.NewtonsoftJson;
 
 /// <summary>
 /// A fluent builder for configuring and creating a Newtonsoft.Json <see cref="JsonSerializerSettings"/> object.
+/// Adapts the agnostic configuration model to the Newtonsoft engine.
 /// </summary>
-/// <remarks>
-/// <para>
-/// <strong>Design Pattern:</strong> Builder / Adapter.
-/// </para>
-/// <para>
-/// This class serves as the public API entry point for the Newtonsoft.Json integration. It extends the core 
-/// <see cref="JsonModelBuilderBase{T}"/> to leverage shared discovery logic, while adding Newtonsoft-specific 
-/// features like global <see cref="JsonConverter"/> registration and naming strategies.
-/// </para>
-/// </remarks>
-public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerSettings>
+public sealed class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerSettings>
 {
     // Specific storage for global Newtonsoft converters
     private readonly Dictionary<Type, JsonConverter> _globalConverters = [];
@@ -58,7 +48,6 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerSettings>
     /// <summary>
     /// Configures the serializer to use camelCase naming (e.g., "firstName") for all properties.
     /// </summary>
-    /// <returns>The builder instance.</returns>
     public JsonModelBuilder UseCamelCaseNamingConvention()
     {
         EnsureNotBuilt();
@@ -69,7 +58,6 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerSettings>
     /// <summary>
     /// Configures the serializer to use snake_case naming (e.g., "first_name") for all properties.
     /// </summary>
-    /// <returns>The builder instance.</returns>
     public JsonModelBuilder UseSnakeCaseNamingConvention()
     {
         EnsureNotBuilt();
@@ -80,7 +68,6 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerSettings>
     /// <summary>
     /// Enables indented formatting (pretty printing) for the JSON output.
     /// </summary>
-    /// <returns>The builder instance.</returns>
     public JsonModelBuilder UsePrettyPrinting()
     {
         EnsureNotBuilt();
@@ -91,7 +78,6 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerSettings>
     /// <summary>
     /// Disables formatting to produce compact (minified) JSON output.
     /// </summary>
-    /// <returns>The builder instance.</returns>
     public JsonModelBuilder UseMinification()
     {
         EnsureNotBuilt();
@@ -106,15 +92,12 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerSettings>
     /// <summary>
     /// Scans the specified assemblies for <see cref="JsonConverter"/> implementations and registers them.
     /// </summary>
-    /// <param name="assemblies">The assemblies to scan.</param>
     public void ApplyConvertersFromAssemblies(params Assembly[] assemblies)
         => ApplyConvertersFromAssemblies(null, assemblies);
 
     /// <summary>
     /// Scans assemblies for converters, using an optional service provider for instantiation.
     /// </summary>
-    /// <param name="serviceFactory">A delegate to resolve converter instances (e.g., via DI container).</param>
-    /// <param name="assemblies">The assemblies to scan.</param>
     public void ApplyConvertersFromAssemblies(Func<Type, object>? serviceFactory, params Assembly[] assemblies)
     {
         EnsureNotBuilt();
@@ -130,14 +113,21 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerSettings>
                     ? (JsonConverter)serviceFactory(type)
                     : (JsonConverter?)Activator.CreateInstance(type);
 
-                if (instance == null) continue;
+                if (instance is null)
+                {
+                    continue;
+                }
 
                 // Auto-detection: Does this converter target a specific generic type? (e.g., JsonConverter<T>)
                 Type? targetType = GetTargetTypeFromJsonConverter(type);
                 if (targetType != null)
+                {
                     HasConversion(targetType, instance);
+                }
                 else
+                {
                     _standardConverters.Add(instance);
+                }
             }
         }
     }
@@ -145,8 +135,6 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerSettings>
     /// <summary>
     /// Registers a specific global converter for a target type.
     /// </summary>
-    /// <param name="type">The type that this converter handles.</param>
-    /// <param name="converter">The converter instance.</param>
     public void HasConversion(Type type, JsonConverter converter)
     {
         EnsureNotBuilt();
@@ -159,7 +147,10 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerSettings>
         while (currentType != null && currentType != typeof(object))
         {
             if (currentType.IsGenericType && currentType.GetGenericTypeDefinition() == typeof(JsonConverter<>))
+            {
                 return currentType.GetGenericArguments()[0];
+            }
+
             currentType = currentType.BaseType;
         }
         return null;
@@ -168,16 +159,13 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerSettings>
     #endregion
 
     /// <summary>
-    /// Finalizes the configuration and returns the ready-to-use <see cref="JsonSerializerSettings"/>.
+    /// Implementation of the Template Method hook.
+    /// Configures the Newtonsoft-specific settings using the frozen definitions from the base class.
     /// </summary>
-    /// <remarks>
-    /// This method freezes all definitions to ensure thread safety and configures the internal <see cref="FluentContractResolver"/>.
-    /// </remarks>
-    /// <returns>The configured settings object.</returns>
-    public override JsonSerializerSettings Build()
+    /// <param name="serviceProvider">The DI provider (not fully utilized in this adapter version yet).</param>
+    /// <returns>The configured JsonSerializerSettings.</returns>
+    protected override JsonSerializerSettings BuildEngineSettings(IServiceProvider? serviceProvider)
     {
-        if (_isBuilt) return _settings;
-
         // 1. Configure Naming Strategy
         _resolver.NamingStrategy = _namingConvention switch
         {
@@ -186,15 +174,10 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerSettings>
             _ => null
         };
 
-        // 2. Process and Validate Scanned Definitions
+        // 2. Register Definitions (Validated and Frozen by Base)
+        // _scannedDefinitions is accessible from the base class
         foreach (KeyValuePair<Type, JsonEntityDefinition> kvp in _scannedDefinitions)
         {
-            // Validate consistency (fail-fast)
-            ModelValidator.ValidateDefinition(kvp.Key, kvp.Value);
-
-            // Lock the definition for thread safety
-            kvp.Value.Freeze();
-
             // Register with the resolver
             _resolver.RegisterDefinition(kvp.Key, kvp.Value);
 
@@ -215,10 +198,11 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerSettings>
         {
             _settings.Converters ??= [];
             foreach (JsonConverter conv in _standardConverters)
+            {
                 _settings.Converters.Add(conv);
+            }
         }
 
-        _isBuilt = true;
         return _settings;
     }
 }

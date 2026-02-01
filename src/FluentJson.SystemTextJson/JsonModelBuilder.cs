@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -5,29 +8,26 @@ using System.Text.Json.Serialization.Metadata;
 using FluentJson.Abstractions;
 using FluentJson.Builders;
 using FluentJson.Definitions;
+using FluentJson.Exceptions;
 using FluentJson.Internal;
 using FluentJson.SystemTextJson.Converters;
-using System.Collections.Concurrent;
 
 namespace FluentJson.SystemTextJson;
 
 /// <summary>
 /// A fluent builder for configuring and creating a System.Text.Json <see cref="JsonSerializerOptions"/> object.
+/// Leverages the <see cref="IJsonTypeInfoResolver"/> modifiers to inject configuration into the STJ pipeline.
 /// </summary>
-/// <remarks>
-/// <para>
-/// <strong>Design Pattern:</strong> Builder / Modifier Strategy.
-/// </para>
-/// <para>
-/// This class configures the System.Text.Json engine using the modern <see cref="IJsonTypeInfoResolver"/> API (available since .NET 7).
-/// Instead of writing a custom resolver from scratch, it hooks into the <c>DefaultJsonTypeInfoResolver.Modifiers</c> chain 
-/// to apply fluent configurations (renaming, private field access, converters) dynamically during the first serialization pass.
-/// </para>
-/// </remarks>
 public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
 {
     private readonly JsonSerializerOptions _options;
-    private static readonly ConcurrentDictionary<Type, JsonConverter> _converterInstanceCache = new();
+
+    // Instance-level cache to support DI scopes and prevent leakage between different builder instances.
+    private readonly ConcurrentDictionary<Type, JsonConverter> _converterInstanceCache = new();
+
+    // Captured provider to resolve dependencies inside the Modifier callback.
+    private IServiceProvider? _runtimeServiceProvider;
+
     /// <summary>
     /// Initializes a new instance of the builder with default modern options.
     /// </summary>
@@ -47,7 +47,6 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
     /// <summary>
     /// Configures the serializer to use camelCase naming (e.g., "firstName").
     /// </summary>
-    /// <returns>The builder instance.</returns>
     public JsonModelBuilder UseCamelCaseNamingConvention()
     {
         EnsureNotBuilt();
@@ -58,7 +57,6 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
     /// <summary>
     /// Configures the serializer to use snake_case naming (e.g., "first_name").
     /// </summary>
-    /// <returns>The builder instance.</returns>
     public JsonModelBuilder UseSnakeCaseNamingConvention()
     {
         EnsureNotBuilt();
@@ -69,7 +67,6 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
     /// <summary>
     /// Enables pretty-printing (indented JSON).
     /// </summary>
-    /// <returns>The builder instance.</returns>
     public JsonModelBuilder UsePrettyPrinting()
     {
         EnsureNotBuilt();
@@ -80,15 +77,15 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
     #endregion
 
     /// <summary>
-    /// Finalizes the configuration and returns the ready-to-use <see cref="JsonSerializerOptions"/>.
+    /// Implementation of the Template Method hook.
+    /// Configures the System.Text.Json options using the frozen definitions.
     /// </summary>
-    /// <remarks>
-    /// This method registers the <c>ModifyTypeInfo</c> callback, validates all definitions, and freezes the configuration to ensure thread safety.
-    /// </remarks>
-    /// <returns>The configured options.</returns>
-    public override JsonSerializerOptions Build()
+    /// <param name="serviceProvider">The provider for resolving runtime dependencies (e.g., Converters).</param>
+    /// <returns>The configured JsonSerializerOptions.</returns>
+    protected override JsonSerializerOptions BuildEngineSettings(IServiceProvider? serviceProvider)
     {
-        if (_isBuilt) return _options;
+        // Capture provider for the ModifyTypeInfo callback
+        _runtimeServiceProvider = serviceProvider;
 
         // 1. Configure Global Naming Policy
         _options.PropertyNamingPolicy = _namingConvention switch
@@ -99,33 +96,22 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
         };
 
         // 2. Register the Modifier Strategy
-        // This is the core of the STJ integration: we inject our logic into the type resolution pipeline.
+        // We hook into the TypeInfoResolver to apply our configurations dynamically.
         _options.TypeInfoResolver = new DefaultJsonTypeInfoResolver
         {
             Modifiers = { ModifyTypeInfo }
         };
 
-        // 3. Validation and Freezing
-        foreach (KeyValuePair<Type, JsonEntityDefinition> kvp in _scannedDefinitions)
-        {
-            ModelValidator.ValidateDefinition(kvp.Key, kvp.Value);
-            kvp.Value.Freeze();
-        }
-
-        _isBuilt = true;
         return _options;
     }
-
-    // --- SYSTEM.TEXT.JSON MODIFIER CORE ---
-
     /// <summary>
     /// The callback method invoked by STJ for every type it encounters.
-    /// This is where we inject our custom metadata (definitions) into the STJ model.
+    /// Injects FluentJson metadata (definitions) into the STJ model.
     /// </summary>
-    /// <param name="typeInfo">The metadata container provided by STJ.</param>
     private void ModifyTypeInfo(JsonTypeInfo typeInfo)
     {
         // Skip types that haven't been configured via FluentJson
+        // _scannedDefinitions is accessible from the base class
         if (!_scannedDefinitions.TryGetValue(typeInfo.Type, out JsonEntityDefinition? def))
         {
             return;
@@ -167,17 +153,13 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
 
         foreach (KeyValuePair<Type, object> subType in polyDef.SubTypes)
         {
-
             if (subType.Value is int intVal)
             {
-                // user has explicitly configured un int
-                // we force STJ to expect a number in json
                 typeInfo.PolymorphismOptions.DerivedTypes.Add(new JsonDerivedType(subType.Key, intVal));
             }
             else
             {
-                // for others we use to string
-                // HasSubType<B>("b") or HasSubType<C>(MyEnum.C)
+                // Ensure culture-invariant string conversion for discriminators
                 string strVal = Convert.ToString(subType.Value, System.Globalization.CultureInfo.InvariantCulture)!;
                 typeInfo.PolymorphismOptions.DerivedTypes.Add(new JsonDerivedType(subType.Key, strVal));
             }
@@ -209,10 +191,7 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
         }
 
         // 4. Performance & Private Field Access
-        // We only replace STJ's native accessors if we have a specific reason to do so:
-        // - A BackingField is configured (redirection required).
-        // - STJ failed to generate a getter/setter (e.g. non-public property).
-        // Otherwise, we keep STJ's optimized IL for standard properties.
+        // We replace STJ's native accessors only if necessary (e.g. BackingField or non-public property).
         MemberInfo targetMember = (MemberInfo?)def.BackingField ?? def.Member;
         bool needsRedirect = def.BackingField != null;
 
@@ -229,29 +208,47 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
 
     /// <summary>
     /// Instantiates and assigns the appropriate JsonConverter to the property.
+    /// Handles Dependency Injection if a provider is available.
     /// </summary>
     private void ApplyConverter(JsonPropertyInfo jsonProp, IConverterDefinition converterDef)
     {
         if (converterDef is TypeConverterDefinition typeDef)
         {
-            // ARCHITECTURAL NOTE:
-            // We use GetOrAdd to implement the Flyweight pattern.
-            // Since standard JsonConverters are typically stateless, we can reuse 
-            // the same instance across the entire application to reduce memory pressure.
-            JsonConverter converter = _converterInstanceCache.GetOrAdd(typeDef.ConverterType, static t =>
+            // Use GetOrAdd to reuse instances within this Options context.
+            JsonConverter converter = _converterInstanceCache.GetOrAdd(typeDef.ConverterType, t =>
             {
-                // Validation has already been done in Core (ModelValidator).
-                // We can safely assume the constructor exists.
-                return (JsonConverter)Activator.CreateInstance(t)!;
+                // 1. Try DI Resolution
+                if (_runtimeServiceProvider != null)
+                {
+                    try
+                    {
+                        var service = _runtimeServiceProvider.GetService(t);
+                        if (service is JsonConverter diConverter) return diConverter;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new FluentJsonConfigurationException(
+                            $"DI Resolution failed for converter '{t.Name}'.", ex);
+                    }
+                }
+
+                // 2. Fallback to Activator
+                try
+                {
+                    return (JsonConverter)Activator.CreateInstance(t)!;
+                }
+                catch (Exception ex)
+                {
+                    throw new FluentJsonConfigurationException(
+                        $"Failed to instantiate converter '{t.Name}'. Ensure it has a parameterless constructor or register it in DI.", ex);
+                }
             });
 
             jsonProp.CustomConverter = converter;
         }
         else if (converterDef is LambdaConverterDefinition lambdaDef)
         {
-            // NOTE: We cannot cache these instances globally because they contain 
-            // specific delegates (closures) unique to this property configuration.
-
+            // Lambda converters are specific to the property/types and cannot be easily cached globally.
             Type converterType = typeof(LambdaJsonConverter<,>)
                 .MakeGenericType(lambdaDef.ModelType, lambdaDef.JsonType);
 

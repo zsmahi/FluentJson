@@ -36,9 +36,20 @@ internal static class MemberConfigurator
         }
 
         // 2. Map basic metadata
-        if (def.JsonName != null) property.PropertyName = def.JsonName;
-        if (def.Order.HasValue) property.Order = def.Order;
-        if (def.IsRequired.HasValue) property.Required = def.IsRequired.Value ? Required.Always : Required.Default;
+        if (def.JsonName != null)
+        {
+            property.PropertyName = def.JsonName;
+        }
+
+        if (def.Order.HasValue)
+        {
+            property.Order = def.Order;
+        }
+
+        if (def.IsRequired.HasValue)
+        {
+            property.Required = def.IsRequired.Value ? Required.Always : Required.Default;
+        }
 
         // 3. Instantiate and assign converters
         if (def.ConverterDefinition != null)

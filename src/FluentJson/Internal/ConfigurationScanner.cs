@@ -33,7 +33,10 @@ internal static class ConfigurationScanner
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="assembly"/> is null.</exception>
     public static IEnumerable<(Type ConfigType, Type EntityType)> FindConfigurations(Assembly assembly)
     {
-        if (assembly == null) throw new ArgumentNullException(nameof(assembly));
+        if (assembly == null)
+        {
+            throw new ArgumentNullException(nameof(assembly));
+        }
 
         Type[] types = GetLoadableTypes(assembly);
 
