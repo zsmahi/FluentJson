@@ -6,18 +6,14 @@ using Newtonsoft.Json.Serialization;
 
 namespace FluentJson.NewtonsoftJson.Internal;
 
-/// <summary>
-/// A lightweight adapter that bridges Newtonsoft.Json's IValueProvider 
-/// to the centralized, cached AccessorFactory in the Core library.
-/// </summary>
 internal class FluentExpressionValueProvider(MemberInfo memberInfo) : IValueProvider
 {
     private readonly MemberInfo _memberInfo = memberInfo ?? throw new ArgumentNullException(nameof(memberInfo));
 
-    // We store the delegates directly to avoid dictionary lookups on every call (micro-optimization).
-    // The compilation/caching happens inside AccessorFactory.createXXX().
     private readonly Func<object, object?> _getter = AccessorFactory.CreateGetter(memberInfo);
-    private readonly Action<object, object?> _setter = AccessorFactory.CreateSetter(memberInfo);
+
+    // Marked as nullable to handle read-only members returned from AccessorFactory
+    private readonly Action<object, object?>? _setter = AccessorFactory.CreateSetter(memberInfo);
 
     public object? GetValue(object target)
     {
@@ -34,6 +30,12 @@ internal class FluentExpressionValueProvider(MemberInfo memberInfo) : IValueProv
 
     public void SetValue(object target, object? value)
     {
+        // If the setter is null (e.g., member is readonly), we skip the assignment
+        if (_setter == null)
+        {
+            return;
+        }
+
         try
         {
             _setter(target, value);

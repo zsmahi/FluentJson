@@ -1,0 +1,26 @@
+<Project>
+  <PropertyGroup>
+    <Version>1.0.0</Version>
+    <Authors>YourName</Authors>
+    <Company>FluentJson Open Source</Company>
+    <Description>A high-performance fluent configuration library for System.Text.Json and Newtonsoft.Json.</Description>
+    <PackageTags>json;fluent;configuration;serialization;performance</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    
+    <AnalysisLevel>latest</AnalysisLevel>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Optimize>true</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+</Project>

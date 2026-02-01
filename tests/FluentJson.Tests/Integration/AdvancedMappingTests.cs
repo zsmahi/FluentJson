@@ -10,7 +10,7 @@ public class AdvancedMappingTests
     // --- Scenario 1: Generic Envelopes ---
     public class Envelope<T>
     {
-        public T Content { get; set; }
+        public T Content { get; set; } = default!;
         public string Metadata { get; set; } = "v1";
     }
 

@@ -9,7 +9,7 @@ public class ShadowPropertyTests
 {
     public class BaseWithField
     {
-        private string _internalData = "initial";
+        private readonly string _internalData = "initial";
         public string PublicData => _internalData;
     }
 

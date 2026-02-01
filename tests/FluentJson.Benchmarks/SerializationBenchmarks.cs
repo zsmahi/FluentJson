@@ -15,9 +15,9 @@ public class SerializationBenchmarks
 {
     private static readonly SampleModel _data = new() { Id = 1, Name = "Architect", Value = 42.5 };
 
-    private JsonSerializerOptions _stjOptions;
-    private JsonSerializerSettings _newtonsoftSettings;
-    private JsonSerializerOptions _nativeStjOptions;
+    private JsonSerializerOptions _stjOptions = default!;
+    private JsonSerializerSettings _newtonsoftSettings = default!;
+    private JsonSerializerOptions _nativeStjOptions = default!;
 
     public class SampleModelConfiguration : IJsonEntityTypeConfiguration<SampleModel>
     {
@@ -73,6 +73,6 @@ public class SerializationBenchmarks
 public class SampleModel
 {
     public int Id { get; set; }
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     public double Value { get; set; }
 }

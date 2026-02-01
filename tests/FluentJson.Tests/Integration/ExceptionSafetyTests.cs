@@ -9,7 +9,7 @@ namespace FluentJson.Tests.Integration;
 
 public class ExceptionSafetyTests
 {
-    public class MissingConverterEntity { public string Data { get; set; } }
+    public class MissingConverterEntity { public string Data { get; set; } = default!; }
     public class MissingConverter : System.Text.Json.Serialization.JsonConverter<string>
     {
         public override string Read(ref Utf8JsonReader r, Type t, JsonSerializerOptions o) => "";
