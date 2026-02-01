@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using FluentJson.Abstractions;
+using FluentJson.Exceptions;
 
 namespace FluentJson.Definitions;
 
@@ -87,13 +88,14 @@ public class JsonEntityDefinition : FreezableBase
     /// It recursively freezes all contained <see cref="JsonPropertyDefinition"/> and <see cref="PolymorphismDefinition"/> objects.
     /// </para>
     /// </remarks>
-    /// <exception cref="InvalidOperationException">Thrown if <see cref="EntityType"/> is missing or invalid.</exception>
+    /// <exception cref="FluentJsonConfigurationException">Thrown if <see cref="EntityType"/> is missing or invalid.</exception>
     public override void Freeze()
     {
         // Validation check
         if (EntityType == null)
         {
-            throw new InvalidOperationException("EntityType metadata must be present to freeze.");
+            // CHANGED: Use typed exception for consistency
+            throw new FluentJsonConfigurationException("EntityType metadata must be present to freeze.");
         }
 
         if (IsFrozen)
