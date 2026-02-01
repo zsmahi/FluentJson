@@ -24,7 +24,10 @@ internal class PolymorphicJsonConverter : JsonConverter
 
     public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
     {
-        if (reader.TokenType == JsonToken.Null) return null;
+        if (reader.TokenType == JsonToken.Null)
+        {
+            return null;
+        }
 
         var item = JObject.Load(reader);
         JToken? discriminatorToken = item[_definition.DiscriminatorProperty];

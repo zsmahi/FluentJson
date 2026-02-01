@@ -6,6 +6,7 @@ using System.Text.Json.Serialization.Metadata;
 using FluentJson.Abstractions;
 using FluentJson.Builders;
 using FluentJson.Definitions;
+using FluentJson.Exceptions;
 using FluentJson.Internal;
 using FluentJson.SystemTextJson.Converters;
 
@@ -70,20 +71,28 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
             Modifiers = { ModifyTypeInfo }
         };
 
+        // enfore immediate resolution to detect errors as fast as possible
+        if (serviceProvider != null)
+        {
+            foreach (Type type in _scannedDefinitions.Keys)
+            {
+                // This triggers ModifyTypeInfo -> ApplyConverter -> DI Check
+                _options.GetTypeInfo(type);
+            }
+        }
+
         return _options;
     }
 
     private void ModifyTypeInfo(JsonTypeInfo typeInfo)
     {
         // 1. Handle Polymorphism ONLY if configured for this specific type.
-        // STJ throws if we add siblings as derived types to a non-base contract.
         if (_scannedDefinitions.TryGetValue(typeInfo.Type, out JsonEntityDefinition? selfDef) && selfDef.Polymorphism != null)
         {
             ConfigurePolymorphism(typeInfo, selfDef.Polymorphism);
         }
 
         // 2. Aggregate property definitions from the hierarchy.
-        // We scan from Base to Derived so that derived overrides take precedence.
         var currentType = typeInfo.Type;
         var hierarchy = new Stack<JsonEntityDefinition>();
 
@@ -101,6 +110,17 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
             ApplyProperties(typeInfo, hierarchy.Pop());
         }
 
+        // --- Resilience Check ---
+        foreach (JsonPropertyInfo jsonProp in typeInfo.Properties)
+        {
+            // Ignore unsupported types (IntPtr, Pointers) unless an explicit converter is specified
+            if (jsonProp.CustomConverter == null && TypeSafety.IsUnsupported(jsonProp.PropertyType))
+            {
+                jsonProp.ShouldSerialize = static (obj, val) => false;
+                continue;
+            }
+        }
+
         // 3. Special handling for standard/shadow discriminator behavior
         ApplyPolymorphismLogic(typeInfo);
     }
@@ -109,7 +129,10 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
     {
         foreach (JsonPropertyInfo jsonProp in typeInfo.Properties)
         {
-            if (jsonProp.AttributeProvider is not MemberInfo member) continue;
+            if (jsonProp.AttributeProvider is not MemberInfo member)
+            {
+                continue;
+            }
 
             if (def.Properties.TryGetValue(member, out JsonPropertyDefinition? propDef))
             {
@@ -135,7 +158,6 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
 
         if (polyDef != null)
         {
-            // A. Suppress discriminator property serialization (avoid metadata double-write)
             foreach (JsonPropertyInfo jsonProp in typeInfo.Properties)
             {
                 if (jsonProp.Name == polyDef.DiscriminatorProperty)
@@ -144,7 +166,6 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
                 }
             }
 
-            // B. Inject discriminator value after creation (fix STJ token consumption)
             object? discriminatorValue = null;
             foreach (var kvp in polyDef.SubTypes)
             {
@@ -164,7 +185,11 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
                 {
                     object obj = originalFactory();
                     PropertyInfo? prop = typeInfo.Type.GetProperty(propName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                    if (prop != null && prop.CanWrite) prop.SetValue(obj, discriminatorValue);
+                    if (prop != null && prop.CanWrite)
+                    {
+                        prop.SetValue(obj, discriminatorValue);
+                    }
+
                     return obj;
                 };
             }
@@ -182,8 +207,6 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
 
         foreach (KeyValuePair<Type, object> subType in polyDef.SubTypes)
         {
-            // JsonDerivedType supports both string and int discriminators via overloads.
-            // We resolve the correct overload by checking the underlying value type.
             if (subType.Value is int intDiscriminator)
             {
                 typeInfo.PolymorphismOptions.DerivedTypes.Add(new JsonDerivedType(subType.Key, intDiscriminator));
@@ -208,13 +231,23 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
         if (def.Order.HasValue) jsonProp.Order = def.Order.Value;
         if (def.IsRequired.HasValue && def.IsRequired.Value) jsonProp.IsRequired = true;
 
-        if (def.ConverterDefinition != null) ApplyConverter(jsonProp, def.ConverterDefinition);
+        if (def.ConverterDefinition != null)
+        {
+            ApplyConverter(jsonProp, def.ConverterDefinition);
+        }
 
         MemberInfo targetMember = (MemberInfo?)def.BackingField ?? def.Member;
         bool needsRedirect = def.BackingField != null;
 
-        if (needsRedirect || jsonProp.Get == null) jsonProp.Get = AccessorFactory.CreateGetter(targetMember);
-        if (needsRedirect || jsonProp.Set == null) jsonProp.Set = AccessorFactory.CreateSetter(targetMember);
+        if (needsRedirect || jsonProp.Get == null)
+        {
+            jsonProp.Get = AccessorFactory.CreateGetter(targetMember);
+        }
+
+        if (needsRedirect || jsonProp.Set == null)
+        {
+            jsonProp.Set = AccessorFactory.CreateSetter(targetMember);
+        }
     }
 
     private void ApplyConverter(JsonPropertyInfo jsonProp, IConverterDefinition converterDef)
@@ -226,9 +259,25 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
                 if (_runtimeServiceProvider != null)
                 {
                     var service = _runtimeServiceProvider.GetService(t);
-                    if (service is JsonConverter conv) return conv;
+                    if (service is JsonConverter conv)
+                    {
+                        return conv;
+                    }
+
+                    // Strict DI check: if provider is used, resolution must succeed
+                    throw new FluentJsonConfigurationException(
+                        $"DI Resolution failed for converter '{t.Name}'. Ensure the converter is registered in your ServiceCollection.");
                 }
-                return (JsonConverter)Activator.CreateInstance(t)!;
+
+                try
+                {
+                    return (JsonConverter)Activator.CreateInstance(t)!;
+                }
+                catch (Exception ex)
+                {
+                    throw new FluentJsonConfigurationException(
+                        $"Failed to instantiate converter '{t.Name}'. Ensure it has a parameterless constructor or register it in DI.", ex);
+                }
             });
         }
         else if (converterDef is LambdaConverterDefinition lambdaDef)

@@ -1,6 +1,7 @@
 using FluentJson.Definitions;
 using FluentJson.NewtonsoftJson.Converters;
 using FluentJson.NewtonsoftJson.Internal;
+using FluentJson.Internal; // Required for TypeSafety
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
@@ -34,16 +35,32 @@ public class FluentContractResolver : DefaultContractResolver
     {
         JsonProperty property = base.CreateProperty(member, memberSerialization);
 
-        if (member.DeclaringType is null || !_definitions.TryGetValue(member.DeclaringType, out JsonEntityDefinition? entityDef))
+        // --- Resilience Check ---
+        // Prevent serialization crashes for native types (IntPtr, Pointers, etc.)
+        // unless a custom converter has been explicitly defined.
+        if (property.PropertyType != null &&
+            property.Converter == null &&
+            TypeSafety.IsUnsupported(property.PropertyType))
         {
+            property.Ignored = true;
+            property.ShouldSerialize = _ => false;
             return property;
         }
 
+        if (member.DeclaringType is null || !_definitions.TryGetValue(member.DeclaringType, out JsonEntityDefinition? entityDef))
+        {
+            // Apply global fallback even if no specific entity definition exists
+            ApplyGlobalConverterFallback(property);
+            return property;
+        }
+
+        // Enable writing for properties with private setters if they are not read-only
         if (!property.Writable && member is PropertyInfo pi && pi.GetSetMethod(true) != null)
         {
             property.Writable = true;
         }
 
+        // Apply specific property configuration from Fluent API
         if (entityDef.Properties.TryGetValue(member, out JsonPropertyDefinition? propDef))
         {
             MemberConfigurator.Apply(property, propDef, member, _serviceProvider);
@@ -70,11 +87,13 @@ public class FluentContractResolver : DefaultContractResolver
 
     protected override JsonConverter? ResolveContractConverter(Type objectType)
     {
+        // Handle class-level polymorphism
         if (_definitions.TryGetValue(objectType, out JsonEntityDefinition? def) && def.Polymorphism != null)
         {
             return new PolymorphicJsonConverter(objectType, def.Polymorphism);
         }
 
+        // Handle global converter fallback for the type
         Type targetType = Nullable.GetUnderlyingType(objectType) ?? objectType;
         if (_globalConverters.TryGetValue(targetType, out JsonConverter? globalConverter))
         {
@@ -88,7 +107,7 @@ public class FluentContractResolver : DefaultContractResolver
     {
         IList<JsonProperty> properties = base.CreateProperties(type, memberSerialization);
 
-        // Polymorphism Discriminator Injection
+        // Polymorphism Discriminator Injection for SubTypes
         if (_discriminatorValues.TryGetValue(type, out (string PropName, object Value) discriminatorInfo))
         {
             JsonProperty? discriminatorProp = properties.FirstOrDefault(p => p.UnderlyingName == discriminatorInfo.PropName);
@@ -97,6 +116,7 @@ public class FluentContractResolver : DefaultContractResolver
                 PropertyInfo? underlyingMember = type.GetProperty(discriminatorProp.UnderlyingName!,
                     BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
+                // Use FixedValueProvider to inject the discriminator value during serialization/deserialization
                 discriminatorProp.ValueProvider = new FixedValueProvider(discriminatorInfo.Value, underlyingMember);
                 discriminatorProp.Ignored = false;
                 discriminatorProp.Readable = true;
