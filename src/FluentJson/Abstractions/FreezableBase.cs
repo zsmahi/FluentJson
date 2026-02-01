@@ -1,4 +1,4 @@
-using System;
+using FluentJson.Exceptions;
 
 namespace FluentJson.Abstractions;
 
@@ -50,14 +50,15 @@ public abstract class FreezableBase
     /// <remarks>
     /// Call this method at the beginning of any property setter or state-mutating operation.
     /// </remarks>
-    /// <exception cref="InvalidOperationException">
+    /// <exception cref="FluentJsonConfigurationException">
     /// Thrown if the object has already been frozen (i.e., <see cref="Build"/> has been called on the builder).
     /// </exception>
     protected void ThrowIfFrozen()
     {
         if (_isFrozen)
         {
-            throw new InvalidOperationException("Configuration is frozen and cannot be modified after Build() has been called.");
+            throw new FluentJsonConfigurationException(
+                "Configuration is frozen and cannot be modified after Build() has been called.");
         }
     }
 }

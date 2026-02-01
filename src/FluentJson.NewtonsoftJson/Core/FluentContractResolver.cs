@@ -29,6 +29,9 @@ public class FluentContractResolver : DefaultContractResolver
     private Dictionary<Type, JsonConverter> _globalConverters = [];
     private readonly Dictionary<Type, (string PropName, object Value)> _discriminatorValues = [];
 
+    // Captured DI provider to resolve converter dependencies
+    private IServiceProvider? _serviceProvider;
+
     /// <summary>
     /// Initializes a new instance of the fluent contract resolver.
     /// </summary>
@@ -37,6 +40,12 @@ public class FluentContractResolver : DefaultContractResolver
         // Default to CamelCase for modern JSON standards
         NamingStrategy = new CamelCaseNamingStrategy();
     }
+
+    /// <summary>
+    /// Injects the service provider used to resolve dependencies within converters.
+    /// </summary>
+    /// <param name="provider">The DI container.</param>
+    internal void SetServiceProvider(IServiceProvider? provider) => _serviceProvider = provider;
 
     /// <summary>
     /// Registers a set of global converters to be used as fallbacks when no specific configuration exists.
@@ -80,7 +89,8 @@ public class FluentContractResolver : DefaultContractResolver
         // Apply Specific Configuration (Name, Order, Ignore, Converters)
         if (entityDef.Properties.TryGetValue(member, out JsonPropertyDefinition? propDef))
         {
-            MemberConfigurator.Apply(property, propDef, member);
+            // Update: Pass the captured ServiceProvider to the configurator
+            MemberConfigurator.Apply(property, propDef, member, _serviceProvider);
         }
 
         // Fallback to Global Converters if no specific converter was applied

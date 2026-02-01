@@ -162,10 +162,13 @@ public sealed class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerSettin
     /// Implementation of the Template Method hook.
     /// Configures the Newtonsoft-specific settings using the frozen definitions from the base class.
     /// </summary>
-    /// <param name="serviceProvider">The DI provider (not fully utilized in this adapter version yet).</param>
+    /// <param name="serviceProvider">The DI provider used to resolve converter dependencies.</param>
     /// <returns>The configured JsonSerializerSettings.</returns>
     protected override JsonSerializerSettings BuildEngineSettings(IServiceProvider? serviceProvider)
     {
+        // 0. Inject Provider into Resolver (Critical for DI support in converters)
+        _resolver.SetServiceProvider(serviceProvider);
+
         // 1. Configure Naming Strategy
         _resolver.NamingStrategy = _namingConvention switch
         {

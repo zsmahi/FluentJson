@@ -23,27 +23,51 @@ internal static class ConverterFactory
     /// Creates a compatible <see cref="JsonConverter"/> instance based on the provided definition.
     /// </summary>
     /// <param name="definition">The abstract converter definition.</param>
+    /// <param name="serviceProvider">The DI provider used to resolve converter dependencies (optional).</param>
     /// <returns>A configured <see cref="JsonConverter"/> or <c>null</c> if the definition type is unknown.</returns>
-    public static JsonConverter? Create(IConverterDefinition definition)
+    public static JsonConverter? Create(IConverterDefinition definition, IServiceProvider? serviceProvider)
     {
         return definition switch
         {
-            TypeConverterDefinition typeDef => CreateFromType(typeDef),
+            TypeConverterDefinition typeDef => CreateFromType(typeDef, serviceProvider),
             LambdaConverterDefinition lambdaDef => CreateFromLambda(lambdaDef),
             _ => null
         };
     }
 
     /// <summary>
-    /// Instantiates a standard class-based converter.
+    /// Instantiates a standard class-based converter, attempting resolution via DI first.
     /// </summary>
-    private static JsonConverter? CreateFromType(TypeConverterDefinition def)
+    private static JsonConverter? CreateFromType(TypeConverterDefinition def, IServiceProvider? serviceProvider)
     {
         // Validation: Ensure the target type actually inherits from JsonConverter
         if (typeof(JsonConverter).IsAssignableFrom(def.ConverterType))
         {
-            // Note: This uses the default parameterless constructor. 
-            // Dependency Injection inside Converters is not currently supported in this factory method.
+            // 1. Dependency Injection Strategy
+            // If a service provider is available, we attempt to resolve the converter from the container.
+            // This enables constructor injection for complex converters.
+            if (serviceProvider != null)
+            {
+                try
+                {
+                    object? service = serviceProvider.GetService(def.ConverterType);
+                    if (service is JsonConverter converter)
+                    {
+                        return converter;
+                    }
+                }
+                catch
+                {
+                    // Architectural Decision:
+                    // If DI resolution fails (e.g. service not registered, scoping issues), 
+                    // we silently swallow the error and fallback to the Activator strategy.
+                    // This ensures robustness for converters that don't strictly require DI.
+                }
+            }
+
+            // 2. Default Activator Strategy (Fallback)
+            // If DI is unavailable or failed, we instantiate the type directly.
+            // Requirement: The converter must have a public parameterless constructor in this scenario.
             return (JsonConverter)Activator.CreateInstance(def.ConverterType);
         }
         return null;

@@ -1,6 +1,7 @@
 using FluentJson.Definitions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System;
 using System.Reflection;
 
 namespace FluentJson.NewtonsoftJson.Internal;
@@ -26,7 +27,8 @@ internal static class MemberConfigurator
     /// <param name="property">The target Newtonsoft property object to configure.</param>
     /// <param name="def">The source configuration definition containing user rules.</param>
     /// <param name="currentMember">The original member (property) being processed.</param>
-    public static void Apply(JsonProperty property, JsonPropertyDefinition def, MemberInfo currentMember)
+    /// <param name="serviceProvider">The DI provider used to resolve dependencies for converters (optional).</param>
+    public static void Apply(JsonProperty property, JsonPropertyDefinition def, MemberInfo currentMember, IServiceProvider? serviceProvider)
     {
         // 1. Check for exclusion first
         if (def.Ignored)
@@ -54,7 +56,8 @@ internal static class MemberConfigurator
         // 3. Instantiate and assign converters
         if (def.ConverterDefinition != null)
         {
-            property.Converter = ConverterFactory.Create(def.ConverterDefinition);
+            // Update: Pass the ServiceProvider down to the factory
+            property.Converter = ConverterFactory.Create(def.ConverterDefinition, serviceProvider);
         }
 
         // 4. Configure Data Access (Value Provider)
