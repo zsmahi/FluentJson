@@ -32,7 +32,7 @@ internal static class ModelValidator
         ValidateJsonNameUniqueness(entityType, definition.Properties.Values);
 
         // 3. Individual Property Validation
-        foreach (var kvp in definition.Properties)
+        foreach (KeyValuePair<MemberInfo, JsonPropertyDefinition> kvp in definition.Properties)
         {
             ValidateProperty(entityType, kvp.Key, kvp.Value);
         }
@@ -100,17 +100,9 @@ internal static class ModelValidator
     private static void ValidateConverter(Type entityType, MemberInfo member, IConverterDefinition converterDef)
     {
         // 1. Structural Integrity Check (for Type-based converters)
-        // We ensure that the type provided can be instantiated by the Activator (requires a public parameterless constructor).
-        // Note: In a pure DI scenario, this might be too strict, but for a library ensuring stability, we enforce it.
-        if (converterDef is TypeConverterDefinition typeDef)
-        {
-            if (typeDef.ConverterType.GetConstructor(Type.EmptyTypes) == null)
-            {
-                throw new FluentJsonValidationException(
-                   $"Configuration error on '{entityType.Name}.{member.Name}': " +
-                   $"The converter '{typeDef.ConverterType.Name}' must have a public parameterless constructor.");
-            }
-        }
+        // UPDATE (Phase 2): We removed the check for "public parameterless constructor".
+        // With Dependency Injection support, a converter is valid even without a default constructor,
+        // provided it is registered in the DI container. The validation is deferred to the runtime instantiation phase.
 
         // 2. Type Safety Check (Polymorphic)
         // Instead of casting to specific implementations, we rely on the interface contract.
@@ -119,7 +111,11 @@ internal static class ModelValidator
         {
             Type actualPropertyType = (member is PropertyInfo p) ? p.PropertyType : ((FieldInfo)member).FieldType;
 
-            if (converterDef.ModelType != actualPropertyType)
+            // Handle Nullable types (e.g., allow Converter<int> for int?)
+            Type corePropertyType = Nullable.GetUnderlyingType(actualPropertyType) ?? actualPropertyType;
+            Type coreModelType = Nullable.GetUnderlyingType(converterDef.ModelType) ?? converterDef.ModelType;
+
+            if (coreModelType != corePropertyType && !coreModelType.IsAssignableFrom(corePropertyType))
             {
                 throw new FluentJsonValidationException(
                     $"Type mismatch on '{entityType.Name}.{member.Name}': " +
@@ -128,6 +124,7 @@ internal static class ModelValidator
             }
         }
     }
+
     private static void ValidatePolymorphism(Type entityType, PolymorphismDefinition poly)
     {
         if (poly.SubTypes.Count == 0)
@@ -140,14 +137,9 @@ internal static class ModelValidator
         if (!poly.IsShadowProperty)
         {
             PropertyInfo? discriminatorProp = entityType.GetProperty(poly.DiscriminatorProperty,
-                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-
-            if (discriminatorProp is null)
-            {
-                throw new FluentJsonValidationException(
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) ?? throw new FluentJsonValidationException(
                     $"The discriminator property '{poly.DiscriminatorProperty}' defined for '{entityType.Name}' does not exist on the class. " +
                     "Use 'HasShadowDiscriminator' if this property only exists in JSON.");
-            }
         }
 
         // Type Consistency check

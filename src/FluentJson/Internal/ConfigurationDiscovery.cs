@@ -30,9 +30,9 @@ internal static class ConfigurationDiscovery
     {
         foreach (Assembly assembly in assemblies)
         {
-            var configTypes = FindConfigurationTypes(assembly);
+            IEnumerable<(Type ConfigType, Type EntityType)> configTypes = FindConfigurationTypes(assembly);
 
-            foreach (var (configType, entityType) in configTypes)
+            foreach ((Type configType, Type entityType) in configTypes)
             {
                 object configInstance = CreateConfigurationInstance(configType, serviceProvider);
                 yield return new DiscoveredConfiguration(configInstance, configType, entityType);
@@ -74,7 +74,7 @@ internal static class ConfigurationDiscovery
         {
             try
             {
-                var instance = serviceProvider(configType);
+                object instance = serviceProvider(configType);
                 if (instance != null)
                 {
                     return instance;

@@ -1,47 +1,24 @@
 using Newtonsoft.Json.Serialization;
+using System.Reflection;
 
 namespace FluentJson.NewtonsoftJson.Internal;
 
 /// <summary>
-/// A specialized value provider that bypasses the object instance and always returns a constant, pre-defined value.
+/// A value provider that forces a specific value during serialization (Get),
+/// but delegates to the underlying member during deserialization (Set).
 /// </summary>
-/// <remarks>
-/// <para>
-/// <strong>Design Pattern:</strong> Virtual Property / Constant Injection.
-/// </para>
-/// <para>
-/// This provider is used exclusively during the **Serialization** phase of polymorphic hierarchies. 
-/// It allows the serializer to "inject" the discriminator value (e.g., <c>"type": "circle"</c>) into the generated JSON, 
-/// even if the underlying CLR object (<c>Circle</c> class) does not strictly contain a property holding that value.
-/// </para>
-/// </remarks>
-/// <param name="value">The constant value to be returned by <see cref="GetValue(object)"/>.</param>
-internal class FixedValueProvider(object value) : IValueProvider
+internal class FixedValueProvider(object fixedValue, PropertyInfo? underlyingProperty) : IValueProvider
 {
-    private readonly object _value = value;
+    private readonly object _fixedValue = fixedValue;
+    private readonly PropertyInfo? _underlyingProperty = underlyingProperty;
 
-    /// <summary>
-    /// Returns the configured constant value, ignoring the target object instance entirely.
-    /// </summary>
-    /// <param name="target">The object being serialized (ignored).</param>
-    /// <returns>The fixed constant value.</returns>
-    public object? GetValue(object target) => _value;
+    public object? GetValue(object target) => _fixedValue;
 
-    /// <summary>
-    /// Intentionally performs no operation.
-    /// </summary>
-    /// <param name="target">The target object.</param>
-    /// <param name="value">The value to set.</param>
-    /// <remarks>
-    /// <para>
-    /// <strong>Architectural Note:</strong>
-    /// This method is a No-Op because this provider is designed for 'Output Injection' only. 
-    /// We assume the discriminator is derived from the type itself, not stored in a mutable field 
-    /// that needs to be updated during deserialization.
-    /// </para>
-    /// </remarks>
     public void SetValue(object target, object? value)
     {
-        // No-Op: We do not write fixed values back to the entity.
+        if (_underlyingProperty != null && _underlyingProperty.CanWrite)
+        {
+            _underlyingProperty.SetValue(target, value);
+        }
     }
 }

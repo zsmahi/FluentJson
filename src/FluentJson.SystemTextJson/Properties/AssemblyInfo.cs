@@ -1,3 +1,4 @@
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("FluentJson.SystemTextJson.Tests")]
+[assembly: InternalsVisibleTo("FluentJson.Tests")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]

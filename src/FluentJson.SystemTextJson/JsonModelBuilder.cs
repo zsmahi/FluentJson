@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -12,39 +14,26 @@ using FluentJson.SystemTextJson.Converters;
 
 namespace FluentJson.SystemTextJson;
 
-/// <summary>
-/// A fluent builder for configuring and creating a System.Text.Json <see cref="JsonSerializerOptions"/> object.
-/// Leverages the <see cref="IJsonTypeInfoResolver"/> modifiers to inject configuration into the STJ pipeline.
-/// </summary>
 public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
 {
     private readonly JsonSerializerOptions _options;
-
-    // Instance-level cache to support DI scopes and prevent leakage between different builder instances.
     private readonly ConcurrentDictionary<Type, JsonConverter> _converterInstanceCache = new();
-
-    // Captured provider to resolve dependencies inside the Modifier callback.
     private IServiceProvider? _runtimeServiceProvider;
 
-    /// <summary>
-    /// Initializes a new instance of the builder with default modern options.
-    /// </summary>
     public JsonModelBuilder()
     {
         _options = new JsonSerializerOptions
         {
-            PropertyNamingPolicy = null, // Defaults to PascalCase (null), overridden by UseCamelCase...
+            PropertyNamingPolicy = null,
             WriteIndented = false,
             PropertyNameCaseInsensitive = true,
-            IncludeFields = false
+            IncludeFields = false,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
     }
 
-    #region Fluent API Wrappers (Chaining Support)
+    #region Fluent API Wrappers
 
-    /// <summary>
-    /// Configures the serializer to use camelCase naming (e.g., "firstName").
-    /// </summary>
     public JsonModelBuilder UseCamelCaseNamingConvention()
     {
         EnsureNotBuilt();
@@ -52,9 +41,6 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
         return this;
     }
 
-    /// <summary>
-    /// Configures the serializer to use snake_case naming (e.g., "first_name").
-    /// </summary>
     public JsonModelBuilder UseSnakeCaseNamingConvention()
     {
         EnsureNotBuilt();
@@ -62,9 +48,6 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
         return this;
     }
 
-    /// <summary>
-    /// Enables pretty-printing (indented JSON).
-    /// </summary>
     public JsonModelBuilder UsePrettyPrinting()
     {
         EnsureNotBuilt();
@@ -74,18 +57,10 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
 
     #endregion
 
-    /// <summary>
-    /// Implementation of the Template Method hook.
-    /// Configures the System.Text.Json options using the frozen definitions.
-    /// </summary>
-    /// <param name="serviceProvider">The provider for resolving runtime dependencies (e.g., Converters).</param>
-    /// <returns>The configured JsonSerializerOptions.</returns>
     protected override JsonSerializerOptions BuildEngineSettings(IServiceProvider? serviceProvider)
     {
-        // Capture provider for the ModifyTypeInfo callback
         _runtimeServiceProvider = serviceProvider;
 
-        // 1. Configure Global Naming Policy
         _options.PropertyNamingPolicy = _namingConvention switch
         {
             NamingConvention.CamelCase => JsonNamingPolicy.CamelCase,
@@ -93,8 +68,6 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
             _ => null
         };
 
-        // 2. Register the Modifier Strategy
-        // We hook into the TypeInfoResolver to apply our configurations dynamically.
         _options.TypeInfoResolver = new DefaultJsonTypeInfoResolver
         {
             Modifiers = { ModifyTypeInfo }
@@ -102,29 +75,88 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
 
         return _options;
     }
-    /// <summary>
-    /// The callback method invoked by STJ for every type it encounters.
-    /// Injects FluentJson metadata (definitions) into the STJ model.
-    /// </summary>
+
     private void ModifyTypeInfo(JsonTypeInfo typeInfo)
     {
-        // Skip types that haven't been configured via FluentJson
-        // _scannedDefinitions is accessible from the base class
-        if (!_scannedDefinitions.TryGetValue(typeInfo.Type, out JsonEntityDefinition? def))
+        // 1. Direct Definition (Base Class or specific config)
+        if (_scannedDefinitions.TryGetValue(typeInfo.Type, out JsonEntityDefinition? def))
         {
-            return;
+            ApplyDefinition(typeInfo, def);
         }
 
-        // Apply Polymorphism Settings (Native STJ Support)
+        // 2. Inheritance Logic (Find Polymorphism configuration in hierarchy)
+        Type? currentBase = typeInfo.Type.BaseType;
+        PolymorphismDefinition? polyDef = null;
+
+        while (currentBase != null && currentBase != typeof(object))
+        {
+            if (_scannedDefinitions.TryGetValue(currentBase, out JsonEntityDefinition? baseDef) && baseDef.Polymorphism != null)
+            {
+                polyDef = baseDef.Polymorphism;
+                break;
+            }
+            currentBase = currentBase.BaseType;
+        }
+
+        if (polyDef != null)
+        {
+            // A. Suppress Serialization of the Discriminator Property (avoid duplication)
+            foreach (JsonPropertyInfo jsonProp in typeInfo.Properties)
+            {
+                if (jsonProp.Name == polyDef.DiscriminatorProperty)
+                {
+                    jsonProp.ShouldSerialize = static (obj, val) => false;
+                }
+            }
+
+            // B. Fix Deserialization: Force the discriminator value on the object
+            object? discriminatorValue = null;
+            foreach (KeyValuePair<Type, object> kvp in polyDef.SubTypes)
+            {
+                if (kvp.Key == typeInfo.Type)
+                {
+                    discriminatorValue = kvp.Value;
+                    break;
+                }
+            }
+
+            if (discriminatorValue != null && typeInfo.CreateObject != null)
+            {
+                Func<object>? originalFactory = typeInfo.CreateObject;
+                string discriminatorPropName = polyDef.DiscriminatorProperty;
+
+                // Wrap factory to inject value immediately after creation
+                typeInfo.CreateObject = () =>
+                {
+                    object obj = originalFactory();
+
+                    PropertyInfo? prop = typeInfo.Type.GetProperty(discriminatorPropName,
+                        BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+                    if (prop != null && prop.CanWrite)
+                    {
+                        try
+                        {
+                            prop.SetValue(obj, discriminatorValue);
+                        }
+                        catch { /* Ignore conversion errors */ }
+                    }
+
+                    return obj;
+                };
+            }
+        }
+    }
+
+    private void ApplyDefinition(JsonTypeInfo typeInfo, JsonEntityDefinition def)
+    {
         if (def.Polymorphism != null)
         {
-            ConfigurePolymorphism(typeInfo, def.Polymorphism);
+            JsonModelBuilder.ConfigurePolymorphism(typeInfo, def.Polymorphism);
         }
 
-        // Apply Property Settings
         foreach (JsonPropertyInfo jsonProp in typeInfo.Properties)
         {
-            // Link STJ property to our definition via Reflection metadata
             if (jsonProp.AttributeProvider is not MemberInfo member)
             {
                 continue;
@@ -137,10 +169,7 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
         }
     }
 
-    /// <summary>
-    /// Maps FluentJson polymorphism definitions to STJ's <see cref="JsonPolymorphismOptions"/>.
-    /// </summary>
-    private void ConfigurePolymorphism(JsonTypeInfo typeInfo, PolymorphismDefinition polyDef)
+    private static void ConfigurePolymorphism(JsonTypeInfo typeInfo, PolymorphismDefinition polyDef)
     {
         typeInfo.PolymorphismOptions = new JsonPolymorphismOptions
         {
@@ -157,27 +186,20 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
             }
             else
             {
-                // Ensure culture-invariant string conversion for discriminators
                 string strVal = Convert.ToString(subType.Value, System.Globalization.CultureInfo.InvariantCulture)!;
                 typeInfo.PolymorphismOptions.DerivedTypes.Add(new JsonDerivedType(subType.Key, strVal));
             }
         }
     }
 
-    /// <summary>
-    /// Maps individual property configurations (renaming, ignoring, converters, private fields).
-    /// </summary>
     private void ApplyPropertyConfiguration(JsonPropertyInfo jsonProp, JsonPropertyDefinition def)
     {
-        // 1. Ignore
         if (def.Ignored)
         {
-            // Conditional serialization delegate that always returns false
             jsonProp.ShouldSerialize = static (obj, val) => false;
             return;
         }
 
-        // 2. Metadata Overrides
         if (def.JsonName != null)
         {
             jsonProp.Name = def.JsonName;
@@ -193,14 +215,11 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
             jsonProp.IsRequired = true;
         }
 
-        // 3. Converters
         if (def.ConverterDefinition != null)
         {
             ApplyConverter(jsonProp, def.ConverterDefinition);
         }
 
-        // 4. Performance & Private Field Access
-        // We replace STJ's native accessors only if necessary (e.g. BackingField or non-public property).
         MemberInfo targetMember = (MemberInfo?)def.BackingField ?? def.Member;
         bool needsRedirect = def.BackingField != null;
 
@@ -215,23 +234,17 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
         }
     }
 
-    /// <summary>
-    /// Instantiates and assigns the appropriate JsonConverter to the property.
-    /// Handles Dependency Injection if a provider is available.
-    /// </summary>
     private void ApplyConverter(JsonPropertyInfo jsonProp, IConverterDefinition converterDef)
     {
         if (converterDef is TypeConverterDefinition typeDef)
         {
-            // Use GetOrAdd to reuse instances within this Options context.
             JsonConverter converter = _converterInstanceCache.GetOrAdd(typeDef.ConverterType, t =>
             {
-                // 1. Try DI Resolution
                 if (_runtimeServiceProvider != null)
                 {
                     try
                     {
-                        var service = _runtimeServiceProvider.GetService(t);
+                        object? service = _runtimeServiceProvider.GetService(t);
                         if (service is JsonConverter diConverter)
                         {
                             return diConverter;
@@ -244,7 +257,6 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
                     }
                 }
 
-                // 2. Fallback to Activator
                 try
                 {
                     return (JsonConverter)Activator.CreateInstance(t)!;
@@ -260,7 +272,6 @@ public class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerOptions>
         }
         else if (converterDef is LambdaConverterDefinition lambdaDef)
         {
-            // Lambda converters are specific to the property/types and cannot be easily cached globally.
             Type converterType = typeof(LambdaJsonConverter<,>)
                 .MakeGenericType(lambdaDef.ModelType, lambdaDef.JsonType);
 

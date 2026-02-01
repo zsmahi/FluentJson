@@ -4,33 +4,25 @@ using System.Linq;
 using System.Reflection;
 using FluentJson.Builders;
 using FluentJson.Definitions;
+using FluentJson.NewtonsoftJson.Converters;
 using FluentJson.NewtonsoftJson.Core;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
 namespace FluentJson.NewtonsoftJson;
 
-/// <summary>
-/// A fluent builder for configuring and creating a Newtonsoft.Json <see cref="JsonSerializerSettings"/> object.
-/// Adapts the agnostic configuration model to the Newtonsoft engine.
-/// </summary>
 public sealed class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerSettings>
 {
-    // Specific storage for global Newtonsoft converters
     private readonly Dictionary<Type, JsonConverter> _globalConverters = [];
     private readonly List<JsonConverter> _standardConverters = [];
 
     private readonly FluentContractResolver _resolver;
     private readonly JsonSerializerSettings _settings;
 
-    /// <summary>
-    /// Initializes a new instance of the builder with default settings.
-    /// </summary>
     public JsonModelBuilder()
     {
         _resolver = new FluentContractResolver();
 
-        // Initialize with sensible defaults for modern APIs
         _settings = new JsonSerializerSettings
         {
             ContractResolver = _resolver,
@@ -43,11 +35,8 @@ public sealed class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerSettin
         };
     }
 
-    #region Fluent API Wrappers (Chaining Support)
+    #region Fluent API Wrappers
 
-    /// <summary>
-    /// Configures the serializer to use camelCase naming (e.g., "firstName") for all properties.
-    /// </summary>
     public JsonModelBuilder UseCamelCaseNamingConvention()
     {
         EnsureNotBuilt();
@@ -55,9 +44,6 @@ public sealed class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerSettin
         return this;
     }
 
-    /// <summary>
-    /// Configures the serializer to use snake_case naming (e.g., "first_name") for all properties.
-    /// </summary>
     public JsonModelBuilder UseSnakeCaseNamingConvention()
     {
         EnsureNotBuilt();
@@ -65,9 +51,6 @@ public sealed class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerSettin
         return this;
     }
 
-    /// <summary>
-    /// Enables indented formatting (pretty printing) for the JSON output.
-    /// </summary>
     public JsonModelBuilder UsePrettyPrinting()
     {
         EnsureNotBuilt();
@@ -75,9 +58,6 @@ public sealed class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerSettin
         return this;
     }
 
-    /// <summary>
-    /// Disables formatting to produce compact (minified) JSON output.
-    /// </summary>
     public JsonModelBuilder UseMinification()
     {
         EnsureNotBuilt();
@@ -87,17 +67,11 @@ public sealed class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerSettin
 
     #endregion
 
-    #region Converters (Newtonsoft Specifics)
+    #region Converters
 
-    /// <summary>
-    /// Scans the specified assemblies for <see cref="JsonConverter"/> implementations and registers them.
-    /// </summary>
     public void ApplyConvertersFromAssemblies(params Assembly[] assemblies)
         => ApplyConvertersFromAssemblies(null, assemblies);
 
-    /// <summary>
-    /// Scans assemblies for converters, using an optional service provider for instantiation.
-    /// </summary>
     public void ApplyConvertersFromAssemblies(Func<Type, object>? serviceFactory, params Assembly[] assemblies)
     {
         EnsureNotBuilt();
@@ -108,9 +82,8 @@ public sealed class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerSettin
 
             foreach (Type type in types)
             {
-                // Instantiate via Factory or Activator
                 JsonConverter? instance = serviceFactory != null
-                    ? (JsonConverter)serviceFactory(type)
+                    ? (JsonConverter?)serviceFactory(type)
                     : (JsonConverter?)Activator.CreateInstance(type);
 
                 if (instance is null)
@@ -118,7 +91,6 @@ public sealed class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerSettin
                     continue;
                 }
 
-                // Auto-detection: Does this converter target a specific generic type? (e.g., JsonConverter<T>)
                 Type? targetType = GetTargetTypeFromJsonConverter(type);
                 if (targetType != null)
                 {
@@ -132,9 +104,6 @@ public sealed class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerSettin
         }
     }
 
-    /// <summary>
-    /// Registers a specific global converter for a target type.
-    /// </summary>
     public void HasConversion(Type type, JsonConverter converter)
     {
         EnsureNotBuilt();
@@ -158,18 +127,10 @@ public sealed class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerSettin
 
     #endregion
 
-    /// <summary>
-    /// Implementation of the Template Method hook.
-    /// Configures the Newtonsoft-specific settings using the frozen definitions from the base class.
-    /// </summary>
-    /// <param name="serviceProvider">The DI provider used to resolve converter dependencies.</param>
-    /// <returns>The configured JsonSerializerSettings.</returns>
     protected override JsonSerializerSettings BuildEngineSettings(IServiceProvider? serviceProvider)
     {
-        // 0. Inject Provider into Resolver (Critical for DI support in converters)
         _resolver.SetServiceProvider(serviceProvider);
 
-        // 1. Configure Naming Strategy
         _resolver.NamingStrategy = _namingConvention switch
         {
             NamingConvention.CamelCase => new CamelCaseNamingStrategy(),
@@ -177,24 +138,23 @@ public sealed class JsonModelBuilder : JsonModelBuilderBase<JsonSerializerSettin
             _ => null
         };
 
-        // 2. Register Definitions (Validated and Frozen by Base)
-        // _scannedDefinitions is accessible from the base class
         foreach (KeyValuePair<Type, JsonEntityDefinition> kvp in _scannedDefinitions)
         {
-            // Register with the resolver
-            _resolver.RegisterDefinition(kvp.Key, kvp.Value);
+            JsonEntityDefinition def = kvp.Value;
 
-            // Register polymorphic discriminator values
-            if (kvp.Value.Polymorphism != null)
+            _resolver.RegisterDefinition(kvp.Key, def);
+
+            if (def.Polymorphism != null)
             {
-                foreach (KeyValuePair<Type, object> sub in kvp.Value.Polymorphism.SubTypes)
+                foreach (KeyValuePair<Type, object> sub in def.Polymorphism.SubTypes)
                 {
-                    _resolver.RegisterDiscriminatorValue(sub.Key, kvp.Value.Polymorphism.DiscriminatorProperty, sub.Value);
+                    _resolver.RegisterDiscriminatorValue(sub.Key, def.Polymorphism.DiscriminatorProperty, sub.Value);
                 }
+
+                _settings.Converters.Add(new PolymorphicJsonConverter(kvp.Key, def.Polymorphism));
             }
         }
 
-        // 3. Register Converters
         _resolver.RegisterGlobalConverters(_globalConverters);
 
         if (_standardConverters.Count > 0)

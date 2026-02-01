@@ -72,7 +72,7 @@ public class JsonPropertyBuilder<T, TProp> : IJsonPropertyBuilderAccessor
         return this;
     }
 
-    public JsonPropertyBuilder<T, TProp> HasJsonPropertyName(string name)
+    public JsonPropertyBuilder<T, TProp> HasPropertyName(string name)
     {
         _jsonName = name;
         return this;
