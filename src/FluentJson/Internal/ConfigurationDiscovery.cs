@@ -75,7 +75,10 @@ internal static class ConfigurationDiscovery
             try
             {
                 var instance = serviceProvider(configType);
-                if (instance != null) return instance;
+                if (instance != null)
+                {
+                    return instance;
+                }
             }
             catch (Exception ex)
             {

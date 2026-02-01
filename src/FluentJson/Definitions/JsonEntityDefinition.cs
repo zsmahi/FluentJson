@@ -18,7 +18,11 @@ public class JsonEntityDefinition : FreezableBase
 
     public JsonEntityDefinition(Type entityType)
     {
-        if (entityType is null) throw new ArgumentNullException(nameof(entityType));
+        if (entityType is null)
+        {
+            throw new ArgumentNullException(nameof(entityType));
+        }
+
         EntityType = entityType;
     }
 
@@ -42,8 +46,15 @@ public class JsonEntityDefinition : FreezableBase
 
     public override void Freeze()
     {
-        if (EntityType == null) throw new FluentJsonConfigurationException("EntityType metadata must be present to freeze.");
-        if (IsFrozen) return;
+        if (EntityType == null)
+        {
+            throw new FluentJsonConfigurationException("EntityType metadata must be present to freeze.");
+        }
+
+        if (IsFrozen)
+        {
+            return;
+        }
 
         base.Freeze();
 

@@ -49,7 +49,9 @@ public class PolymorphismDefinition : FreezableBase
         ThrowIfFrozen();
 
         if (value == null)
+        {
             throw new ArgumentNullException(nameof(value));
+        }
 
         // 1. Validate Discriminator Type
         Type vType = value.GetType();

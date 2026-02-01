@@ -1,13 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
+  <PropertyGroup Label="Build">
     <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
-
     <LangVersion>latest</LangVersion>
-
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <WarningsAsErrors>$(WarningsAsErrors);CS8600;CS8601;CS8602;CS8603;CS8604;CS8618</WarningsAsErrors>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Package">
+    <PackageId>FluentJson.SystemTextJson</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Zakaria SMAHI</Authors>
+    <Company>FluentJson</Company>
+    <Description>A Fluent Configuration library for System.Text.Json (EF Core style). Native AOT compatible.</Description>
+    <PackageTags>json;stj;systemtextjson;fluent;configuration;builder;ddd;polymorphism;aot</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/zsmahi/FluentJson</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Documentation">
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

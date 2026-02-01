@@ -20,7 +20,10 @@ public static class AccessorFactory
     /// </summary>
     public static Func<object, object?> CreateGetter(MemberInfo member)
     {
-        if (member == null) throw new ArgumentNullException(nameof(member));
+        if (member == null)
+        {
+            throw new ArgumentNullException(nameof(member));
+        }
 
         return _getters.GetOrAdd(member, static m =>
         {
@@ -46,7 +49,10 @@ public static class AccessorFactory
     /// </summary>
     public static Action<object, object?> CreateSetter(MemberInfo member)
     {
-        if (member == null) throw new ArgumentNullException(nameof(member));
+        if (member == null)
+        {
+            throw new ArgumentNullException(nameof(member));
+        }
 
         return _setters.GetOrAdd(member, static m =>
         {
