@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -8,7 +6,6 @@ using System.Text.Json.Serialization.Metadata;
 using FluentJson.Abstractions;
 using FluentJson.Builders;
 using FluentJson.Definitions;
-using FluentJson.Exceptions;
 using FluentJson.Internal;
 using FluentJson.SystemTextJson.Converters;
 

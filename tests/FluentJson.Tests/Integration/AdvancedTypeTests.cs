@@ -24,7 +24,7 @@ public class AdvancedTypeTests
     [Fact]
     public void SystemTextJson_Should_Handle_Enum_Discriminators()
     {
-        var builder = new FluentJson.SystemTextJson.JsonModelBuilder();
+        var builder = new SystemTextJson.JsonModelBuilder();
         builder.ApplyConfiguration(new AccountConfiguration());
         JsonSerializerOptions options = builder.Build();
 
