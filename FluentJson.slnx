@@ -1,0 +1,17 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/FluentJson.Core/FluentJson.Core.csproj" />
+    <Project Path="src/FluentJson.DependencyInjection/FluentJson.DependencyInjection.csproj" />
+    <Project Path="src/FluentJson.Newtonsoft/FluentJson.Newtonsoft.csproj" />
+    <Project Path="src/FluentJson.SystemTextJson/FluentJson.SystemTextJson.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/FluentJson.Architecture.Tests/FluentJson.Architecture.Tests.csproj" />
+    <Project Path="tests/FluentJson.Benchmarks/FluentJson.Benchmarks.csproj" />
+    <Project Path="tests/FluentJson.Core.Tests/FluentJson.Core.Tests.csproj" />
+    <Project Path="tests/FluentJson.DependencyInjection.Tests/FluentJson.DependencyInjection.Tests.csproj" />
+    <Project Path="tests/FluentJson.FunctionalTests/FluentJson.FunctionalTests.csproj" />
+    <Project Path="tests/FluentJson.Newtonsoft.Tests/FluentJson.Newtonsoft.Tests.csproj" />
+    <Project Path="tests/FluentJson.SystemTextJson.Tests/FluentJson.SystemTextJson.Tests.csproj" />
+  </Folder>
+</Solution>
