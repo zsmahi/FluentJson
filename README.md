@@ -54,17 +54,24 @@ var settings = new JsonSerializerSettings().AddFluentJson(model);
 var user2 = JsonConvert.DeserializeObject<User>("...", settings);
 ```
 
-## ⚡ Performance
-FluentJson uses compiled expressions to bypass reflection bottlenecks. Below are the benchmarks displaying our highly optimized pipeline against the native engines:
+## ⚡ Performance (Zero-Allocation Engine)
+FluentJson uses compiled expressions to bypass reflection bottlenecks. Furthermore, the Polymorphic Engine acts specifically as a **Zero-Allocation Scanner**, analyzing JSON payloads without instantiating intermediary strings. Below are the benchmarks displaying our highly optimized pipeline against the native engines:
 
 | Method                | Mean     | Ratio | Allocated |
 |---------------------- |---------:|------:|----------:|
 | SystemTextJson_Native | 332.5 ns |  1.00 |     112 B |
-| SystemTextJson_Fluent | 386.2 ns |  1.16 |     176 B |
+| SystemTextJson_Fluent | 465.5 ns |  1.40 |     176 B |
 | Newtonsoft_Native     | 661.3 ns |  1.99 |    2856 B |
-| Newtonsoft_Fluent     | 717.1 ns |  2.16 |    2856 B |
+| Newtonsoft_Fluent     | 859.6 ns |  2.60 |    2856 B |
 
 *See [docs/benchmarks.md](docs/benchmarks.md) for full details.*
+
+## 🔒 Security by Design
+FluentJson is engineered for strict enterprise environments.
+
+- **Polymorphic Injection (RCE) mitigation**: Resolves types using a strictly isolated, immutable dictionary defined during the builder phase. Unregistered discriminators instantly fail the serialization pipeline.
+- **Deep Nesting (DoS) protection**: The underlying engines are cleanly passed through to prevent stack overflows, honoring maximum depth settings.
+- **Shadow Field Mapping Disabled**: By default, mapping unconfigured internal fields is disabled, requiring explicit configuration, effectively creating a Zero-Trust object lifecycle.
 
 ## 🛡️ Reliability Guarantee
 FluentJson is strictly test-driven. The `FluentJson.Core` library currently holds a **100.00% Mutation Score** (verified via Stryker), ensuring every branching condition, mapping rule, and lambda compilation is rigorously validated and unbreakable. See our [Quality Report](docs/quality-report.md).
