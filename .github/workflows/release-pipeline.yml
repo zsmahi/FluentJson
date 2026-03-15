@@ -1,0 +1,134 @@
+name: FluentJson RC1 Release Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+    tags: [ "v*" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  lint-and-format:
+    name: Linting & Formatting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+          
+      - name: Restore dependencies
+        run: dotnet restore
+        
+      - name: Verify code formatting
+        run: dotnet format --verify-no-changes
+        # This will fail the pipeline if any files do not match the formatting rules.
+
+  security-scan:
+    name: Security Scan
+    needs: [lint-and-format]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+          
+      - name: Restore dependencies
+        run: dotnet restore
+        
+      - name: Check for vulnerable packages
+        run: dotnet list package --vulnerable
+
+  ci-build-and-test:
+    name: Build & Test (${{ matrix.os }})
+    needs: [lint-and-format]
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+          
+      - name: Restore dependencies
+        run: dotnet restore
+        
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+        
+      - name: Run Unit and Functional Tests
+        run: dotnet test --configuration Release --no-build --verbosity normal
+
+  mutation-gate:
+    name: Mutation Testing (Stryker.NET)
+    needs: [ci-build-and-test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Install Stryker CLI
+        run: dotnet tool install -g dotnet-stryker
+        
+      - name: Run Stryker on Core
+        run: dotnet stryker --project src/FluentJson.Core/FluentJson.Core.csproj --break-at 100
+        working-directory: .
+
+  cd-release:
+    name: Continuous Deployment (NuGet & GitHub Release)
+    needs: [ci-build-and-test, mutation-gate, security-scan]
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Needed for comprehensive changelog generation
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+          
+      - name: Pack NuGet packages
+        run: dotnet pack --configuration Release /p:Version=${GITHUB_REF_NAME#v} --output ./nupkg_artifacts
+        
+      # Sign NuGet Packages 
+      # Note: Requires importing a valid code signing certificate via Secrets
+      - name: Sign NuGet Packages
+        run: |
+          # Example signature command - adjust certificate path and timestamper as needed
+          # dotnet nuget sign ./nupkg_artifacts/*.nupkg --certificate-path ${{ secrets.CERT_PATH }} --certificate-password ${{ secrets.CERT_PASSWORD }} --timestamper http://timestamp.digicert.com
+          echo "Placeholder for Nuget Signing. Modify with actual cert secrets."
+
+      - name: Push Core to NuGet
+        run: dotnet nuget push ./nupkg_artifacts/FluentJson.Core.*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+
+      - name: Push STJ to NuGet
+        run: dotnet nuget push ./nupkg_artifacts/FluentJson.SystemTextJson.*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+
+      - name: Push Newtonsoft to NuGet
+        run: dotnet nuget push ./nupkg_artifacts/FluentJson.Newtonsoft.*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: ./nupkg_artifacts/*.nupkg
