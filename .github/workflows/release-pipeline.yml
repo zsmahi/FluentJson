@@ -222,32 +222,29 @@ jobs:
       - name: Build Documentation
         run: docfx docfx.json
 
-      - name: Pure Git Deployment (Strict)
+      - name: Pure Git Deployment
         run: |
           set -e
-          
-          OUTPUT_DIR="./_site"
-          if [ ! -d "$OUTPUT_DIR" ]; then
-            OUTPUT_DIR="./docs/_site"
-          fi
-          
-          echo "Target DocFX folder: $OUTPUT_DIR"
-          ls -la $OUTPUT_DIR
-          
           git clone --branch gh-pages https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git /tmp/gh-pages
           
-          cp -R $OUTPUT_DIR/* /tmp/gh-pages/
+          rm -rf /tmp/gh-pages/_site
+          rm -rf /tmp/gh-pages/docs
           
+          if [ -d "./_site" ]; then
+            cp -a ./_site/. /tmp/gh-pages/
+          elif [ -d "./docs/_site" ]; then
+            cp -a ./docs/_site/. /tmp/gh-pages/
+          else
+            exit 1
+          fi
+          
+          touch /tmp/gh-pages/.nojekyll
           cd /tmp/gh-pages
-          touch .nojekyll
+          
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add --all
-          
-          echo "--- Files ready to push ---"
-          git status
-          
-          git commit -m "docs: strict deployment"
+          git commit -m "docs: clean root deployment" || true
           git push origin gh-pages
 
   cd-release:
