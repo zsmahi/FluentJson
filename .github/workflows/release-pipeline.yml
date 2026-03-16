@@ -212,8 +212,9 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site
-          keep_files: true # CRITICAL: Don't delete benchmark results on gh-pages!
+          publish_dir: _site
+          destination_dir: .
+          keep_files: true # CRITICAL: Don't delete benchmark results (dev/bench)!
 
   cd-release:
     name: Continuous Deployment (NuGet & GitHub Release)

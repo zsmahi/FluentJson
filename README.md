@@ -1,5 +1,7 @@
 # FluentJson
 
+[![Documentation](https://img.shields.io/badge/docs-Technical%20Bible-brightgreen.svg)](https://zsmahi.github.io/FluentJson/)
+
 > **Decoupled, high-performance JSON serialization for .NET DDD models. 100% Mutation Tested.**
 
 FluentJson allows true separation of Domain Models (DDD) from serialization concerns, bringing the beauty of the Builder Pattern to `System.Text.Json` and `Newtonsoft.Json`.
