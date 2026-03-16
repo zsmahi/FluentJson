@@ -110,6 +110,8 @@ jobs:
   performance-benchmarks:
     name: Performance Benchmarks
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # Needed to push to gh-pages branch
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -137,11 +139,12 @@ jobs:
           tool: 'benchmarkdotnet'
           output-file-path: BenchmarkDotNet.Artifacts/results/FluentJson.Benchmarks.DeserializationBenchmarks-report-brief.json
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          auto-push: false
+          auto-push: true
           alert-threshold: '110%' # Fails if degradation > 10%
           fail-on-alert: true
           comment-on-alert: true
           summary-always: true
+          skip-fetch-gh-pages: true # Skip fetching branch if it doesn't exist yet
 
   mutation-gate:
     name: Mutation Testing (Stryker.NET)
