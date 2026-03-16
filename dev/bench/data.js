@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1773655720153,
+  "lastUpdate": 1773656099636,
   "repoUrl": "https://github.com/zsmahi/FluentJson",
   "entries": {
     "BenchmarkDotNet Benchmarks": [
@@ -216,6 +216,78 @@ window.BENCHMARK_DATA = {
             "value": 1033.108668899536,
             "unit": "ns",
             "range": "± 7.2982224177423465"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "zakaria.smahi@gmail.com",
+            "name": "Zakaria SMAHI",
+            "username": "zsmahi"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "5b4e2654dec593079f4f5942d29ab58940fab96b",
+          "message": "Refactor Pure Git Deployment step in release pipeline\n\nUpdated Pure Git Deployment step to simplify directory handling and improve error management.",
+          "timestamp": "2026-03-16T11:13:14+01:00",
+          "tree_id": "7ff4077ec3850c9c67f269ac38f33f55cc04f952",
+          "url": "https://github.com/zsmahi/FluentJson/commit/5b4e2654dec593079f4f5942d29ab58940fab96b"
+        },
+        "date": 1773656099594,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "FluentJson.Benchmarks.DeserializationBenchmarks.SystemTextJson_Native",
+            "value": 495.94753551483154,
+            "unit": "ns",
+            "range": "± 11.314959991879565"
+          },
+          {
+            "name": "FluentJson.Benchmarks.DeserializationBenchmarks.SystemTextJson_Fluent",
+            "value": 614.6033863067627,
+            "unit": "ns",
+            "range": "± 3.303226899923805"
+          },
+          {
+            "name": "FluentJson.Benchmarks.DeserializationBenchmarks.Newtonsoft_Native",
+            "value": 964.2436423301697,
+            "unit": "ns",
+            "range": "± 11.407788182228684"
+          },
+          {
+            "name": "FluentJson.Benchmarks.DeserializationBenchmarks.Newtonsoft_Fluent",
+            "value": 1099.1688468933105,
+            "unit": "ns",
+            "range": "± 14.654661546436655"
+          },
+          {
+            "name": "FluentJson.Benchmarks.DeserializationBenchmarks.Poly_SystemTextJson_Fluent",
+            "value": 1198.8903412818909,
+            "unit": "ns",
+            "range": "± 3.742456551599834"
+          },
+          {
+            "name": "FluentJson.Benchmarks.DeserializationBenchmarks.Poly_Newtonsoft_Fluent",
+            "value": 3003.2230239868163,
+            "unit": "ns",
+            "range": "± 23.626259260131008"
+          },
+          {
+            "name": "FluentJson.Benchmarks.DeserializationBenchmarks.Flat_SystemTextJson_Fluent",
+            "value": 652.6916423797608,
+            "unit": "ns",
+            "range": "± 6.676835980283807"
+          },
+          {
+            "name": "FluentJson.Benchmarks.DeserializationBenchmarks.Flat_Newtonsoft_Fluent",
+            "value": 1026.8041416168212,
+            "unit": "ns",
+            "range": "± 7.868873570566268"
           }
         ]
       }
