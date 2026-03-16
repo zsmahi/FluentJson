@@ -1,8 +1,12 @@
 using System;
+
 using FluentAssertions;
+
 using FluentJson.Core.Builder;
 using FluentJson.Newtonsoft;
+
 using Newtonsoft.Json;
+
 using Xunit;
 
 namespace FluentJson.Newtonsoft.Tests;
@@ -24,13 +28,13 @@ public class ValueConverterTests
     public void Converter_Should_WriteNull_WhenValueIsNull()
     {
         var converter = new FluentJsonNwValueConverter<string, string>(s => s, s => s);
-        
+
         var settings = new JsonSerializerSettings();
         settings.Converters.Add(converter);
-        
+
         var json = JsonConvert.SerializeObject(null, typeof(string), settings);
         json.Should().Be("null");
-        
+
         // Invoke ReadJson correctly via the engine
         var obj = JsonConvert.DeserializeObject<string>("null", settings);
         obj.Should().BeNull();

@@ -1,7 +1,10 @@
 using System;
+
 using FluentAssertions;
+
 using FluentJson.Core.Builder;
 using FluentJson.Core.Metadata;
+
 using Xunit;
 
 namespace FluentJson.Core.Tests;

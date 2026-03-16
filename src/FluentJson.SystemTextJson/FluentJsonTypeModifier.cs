@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json.Serialization.Metadata;
+
 using FluentJson.Core.Metadata;
 
 namespace FluentJson.SystemTextJson;
@@ -114,7 +115,7 @@ public class FluentJsonTypeModifier
                         propertyInfo.Set = (obj, value) => { };
                     }
                 }
-                
+
                 // Allow getting values from fields and private getters as well
                 propertyInfo.Get = (obj) =>
                 {

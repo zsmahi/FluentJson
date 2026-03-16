@@ -1,8 +1,9 @@
 using System;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
+
 using FluentJson.Core.Metadata;
-using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("FluentJson.SystemTextJson.Tests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")] // For mocking if necessary
@@ -33,7 +34,7 @@ public static class FluentJsonSerializerOptionsExtensions
         resolver.Modifiers.Add(modifier.Modify);
 
         options.TypeInfoResolver = resolver;
-        
+
         // Add custom polymorphic converter factory to handle exception sanitization
         options.Converters.Add(new FluentJsonStjPolymorphicConverterFactory(model));
 

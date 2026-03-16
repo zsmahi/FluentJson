@@ -14,5 +14,5 @@ public interface IJsonModel
     /// <summary>
     /// Gets the read-only collection of entities tracked by this model.
     /// </summary>
-    IReadOnlyList<IJsonEntity> Entities { get; }
+    public IReadOnlyList<IJsonEntity> Entities { get; }
 }

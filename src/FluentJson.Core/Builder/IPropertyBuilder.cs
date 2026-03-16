@@ -1,4 +1,5 @@
 using System.Reflection;
+
 using FluentJson.Core.Metadata;
 
 namespace FluentJson.Core.Builder;
@@ -8,6 +9,6 @@ namespace FluentJson.Core.Builder;
 /// </summary>
 internal interface IPropertyBuilder
 {
-    IJsonProperty Build(MemberInfo memberInfo, string defaultName);
-    void SetIgnored(bool ignored);
+    public IJsonProperty Build(MemberInfo memberInfo, string defaultName);
+    public void SetIgnored(bool ignored);
 }

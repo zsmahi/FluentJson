@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Generic;
+
 using FluentAssertions;
+
 using FluentJson.Core.Builder;
 using FluentJson.Newtonsoft;
 using FluentJson.SystemTextJson;
+
 using Newtonsoft.Json;
+
 using Xunit;
 
 namespace FluentJson.FunctionalTests;
@@ -52,7 +56,7 @@ public class CircularReferenceTests
         // 3. System.Text.Json Serialization & Deserialization
         var stjOptions = new System.Text.Json.JsonSerializerOptions();
         stjOptions.AddFluentJson(model);
-        
+
         string stjJson = System.Text.Json.JsonSerializer.Serialize(dept, stjOptions);
         var stjResult = System.Text.Json.JsonSerializer.Deserialize<Department>(stjJson, stjOptions);
 

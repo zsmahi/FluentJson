@@ -1,9 +1,8 @@
 using System;
 
-namespace FluentJson.Core
-{
-    public class Class1
-    {
+namespace FluentJson.Core;
 
-    }
+public class Class1
+{
+
 }

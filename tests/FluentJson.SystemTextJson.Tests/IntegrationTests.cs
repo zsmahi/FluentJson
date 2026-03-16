@@ -1,9 +1,12 @@
 using System;
 using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
+
 using FluentAssertions;
+
 using FluentJson.Core.Builder;
 using FluentJson.Core.Metadata;
+
 using Xunit;
 
 namespace FluentJson.SystemTextJson.Tests;
@@ -81,7 +84,7 @@ public class IntegrationTests
     {
         var builder = new JsonModelBuilder();
         var options = new JsonSerializerOptions().AddFluentJson(builder.Build());
-        
+
         var json = """{"Name":"Unmapped"}""";
         var result = JsonSerializer.Deserialize<UnmappedClass>(json, options);
 
@@ -94,9 +97,9 @@ public class IntegrationTests
     {
         var modifier = new FluentJsonTypeModifier(new ThrowingModel());
         var resolver = new DefaultJsonTypeInfoResolver();
-        
+
         var typeInfo = resolver.GetTypeInfo(typeof(int[]), new JsonSerializerOptions());
-        
+
         modifier.Modify(typeInfo);
     }
 
@@ -116,7 +119,7 @@ public class IntegrationTests
     public class ClassA
     {
         public string Name { get; private set; }
-        
+
         private ClassA() { Name = string.Empty; }
         public ClassA(string name) { Name = name; }
     }
@@ -136,15 +139,15 @@ public class IntegrationTests
     {
         // Arrange
         var builder = new JsonModelBuilder();
-        
+
         builder.Entity<ClassA>()
             .Property(x => x.Name).HasName("a_name");
-            
+
         var entityB = builder.Entity<ClassB>();
         entityB.Property(x => x.Id).HasName("b_id");
         entityB.Property(x => x.A).HasName("nested_a");
         entityB.Ignore(x => x.Secret);
-            
+
         var options = new JsonSerializerOptions().AddFluentJson(builder.Build());
 
         var bId = Guid.NewGuid();
@@ -166,7 +169,7 @@ public class IntegrationTests
         deserializedB!.Id.Should().Be(bId);
         deserializedB.A.Should().NotBeNull();
         deserializedB.A.Name.Should().Be("TestName");
-        
+
         // Secret is ignored, so it shouldn't be serialized or deserialized
         deserializedB.Secret.Should().Be(string.Empty);
     }

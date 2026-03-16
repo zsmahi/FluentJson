@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+
 using FluentJson.Core.Builder;
 
 namespace FluentJson.FunctionalTests;
@@ -9,7 +10,7 @@ public class OrderConfiguration : IJsonTypeConfiguration<Order>
     {
         builder.Property(x => x.OrderNumber).HasName("order_number").IsRequired();
         builder.Ignore(x => x.CalculatedTotal);
-        
+
         // Map the private backing field for Lines
         builder.Property<List<OrderLine>>("_lines").HasName("lines");
     }

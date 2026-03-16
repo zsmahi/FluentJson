@@ -1,7 +1,9 @@
 using System;
 using System.Linq;
-using FluentJson.Core.Metadata;
 using System.Reflection;
+
+using FluentJson.Core.Metadata;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -29,7 +31,7 @@ public class FluentJsonContractResolver : DefaultContractResolver
     protected override JsonObjectContract CreateObjectContract(Type objectType)
     {
         var contract = base.CreateObjectContract(objectType);
-        
+
         var entity = _model.Entities.FirstOrDefault(e => e.EntityType == objectType);
         if (entity != null)
         {
@@ -59,7 +61,7 @@ public class FluentJsonContractResolver : DefaultContractResolver
     protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
     {
         var properties = base.CreateProperties(type, memberSerialization);
-        
+
         var entity = _model.Entities.FirstOrDefault(e => e.EntityType == type);
         if (entity != null)
         {
@@ -78,19 +80,19 @@ public class FluentJsonContractResolver : DefaultContractResolver
                 }
             }
         }
-        
+
         return properties;
     }
 
     protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
     {
         var property = base.CreateProperty(member, memberSerialization);
-        
+
         var entity = _model.Entities.FirstOrDefault(e => e.EntityType == member.DeclaringType);
         if (entity != null)
         {
             var fluentProperty = entity.Properties.FirstOrDefault(p => p.MemberInfo.Name == property.UnderlyingName);
-            
+
             if (fluentProperty == null || fluentProperty.IsIgnored)
             {
                 property.Ignored = true;
@@ -101,7 +103,7 @@ public class FluentJsonContractResolver : DefaultContractResolver
                 property.Readable = true;
                 property.PropertyName = fluentProperty.Name;
                 property.Required = fluentProperty.IsRequired ? Required.Always : Required.Default;
-                
+
                 if (memberSerialization != global::Newtonsoft.Json.MemberSerialization.OptIn)
                 {
                     // Force Newtonsoft to map fields and properties with private setters

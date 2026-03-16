@@ -1,11 +1,15 @@
 using System;
 using System.Reflection;
 using System.Text.Json;
+
 using FluentAssertions;
+
 using FluentJson.Core.Builder;
 using FluentJson.Newtonsoft;
 using FluentJson.SystemTextJson;
+
 using Newtonsoft.Json.Linq;
+
 using Xunit;
 
 namespace FluentJson.FunctionalTests;
@@ -23,7 +27,7 @@ public class EngineParityTests
 
         // System.Text.Json Configuration
         var stjOptions = new JsonSerializerOptions().AddFluentJson(model);
-        
+
         // Newtonsoft.Json Configuration
         var nwSettings = new global::Newtonsoft.Json.JsonSerializerSettings().AddFluentJson(model);
 
@@ -41,7 +45,7 @@ public class EngineParityTests
         // Parse to JToken to compare structure and values irrespective of formatting or property order
         var stjToken = JToken.Parse(stjJson);
         var nwToken = JToken.Parse(nwJson);
-        
+
         // Print for debugging if they don't match
         JToken.DeepEquals(stjToken, nwToken).Should().BeTrue("System.Text.Json and Newtonsoft.Json should produce semantically identical output based on the same FluentJson model.");
 

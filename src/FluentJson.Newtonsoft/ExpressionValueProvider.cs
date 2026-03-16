@@ -1,4 +1,5 @@
 using System.Reflection;
+
 using Newtonsoft.Json.Serialization;
 
 namespace FluentJson.Newtonsoft;

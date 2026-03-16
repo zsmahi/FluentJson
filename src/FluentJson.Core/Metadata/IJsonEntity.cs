@@ -14,31 +14,31 @@ public interface IJsonEntity
     /// <summary>
     /// Gets the CLR type of the configured entity.
     /// </summary>
-    Type EntityType { get; }
+    public Type EntityType { get; }
     /// <summary>
     /// Gets the read-only list of configured properties and fields for this entity.
     /// </summary>
-    IReadOnlyList<IJsonProperty> Properties { get; }
+    public IReadOnlyList<IJsonProperty> Properties { get; }
     /// <summary>
     /// Gets a pre-compiled expression factory to instantiate the entity without using <see cref="System.Runtime.Serialization.FormatterServices.GetUninitializedObject(Type)"/>.
     /// </summary>
     /// <remarks>
     /// This is the core piece that enables safe DDD instantiation with private parameterless constructors.
     /// </remarks>
-    Func<object> ConstructorFactory { get; }
-    
+    public Func<object> ConstructorFactory { get; }
+
     /// <summary>
     /// Gets the JSON property name used to discriminate derived types.
     /// </summary>
-    string? DiscriminatorPropertyName { get; }
+    public string? DiscriminatorPropertyName { get; }
 
     /// <summary>
     /// Gets the read-only dictionary mapping discriminator values to their concrete derived types.
     /// </summary>
-    IReadOnlyDictionary<object, Type> DerivedTypes { get; }
+    public IReadOnlyDictionary<object, Type> DerivedTypes { get; }
 
     /// <summary>
     /// Indicates whether circular references in this entity should be preserved during serialization.
     /// </summary>
-    bool ShouldPreserveReferences { get; }
+    public bool ShouldPreserveReferences { get; }
 }

@@ -1,7 +1,10 @@
 using System;
 using System.Text.Json;
+
 using FluentAssertions;
+
 using FluentJson.Core.Builder;
+
 using Xunit;
 
 namespace FluentJson.SystemTextJson.Tests;
@@ -11,7 +14,7 @@ public class PolymorphicConverterTests
     private abstract class Shape { }
     private class Circle : Shape { public int Radius { get; set; } }
     private class Square : Shape { public int Side { get; set; } }
-    
+
     [Fact]
     public void Factory_Should_ThrowArgumentNullException_WhenModelIsNull()
     {

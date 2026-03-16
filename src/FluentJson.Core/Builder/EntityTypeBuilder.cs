@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+
 using FluentJson.Core.Exceptions;
 using FluentJson.Core.Metadata;
 
@@ -26,12 +27,12 @@ public class EntityTypeBuilder<TEntity> : IEntityTypeBuilder
     IJsonEntity IEntityTypeBuilder.Build()
     {
         var properties = new List<IJsonProperty>();
-        
+
         foreach (var kvp in _propertyBuilders)
         {
             var memberInfo = kvp.Key;
             var builder = (IPropertyBuilder)kvp.Value;
-            
+
             // Allow mapping both Properties and Fields
             Type memberType = memberInfo switch
             {
@@ -174,7 +175,7 @@ public class EntityTypeBuilder<TEntity> : IEntityTypeBuilder
     {
         if (string.IsNullOrWhiteSpace(propertyName))
             throw new ArgumentException("Discriminator property name cannot be null or empty.", nameof(propertyName));
-            
+
         _discriminatorPropertyName = propertyName;
         return this;
     }

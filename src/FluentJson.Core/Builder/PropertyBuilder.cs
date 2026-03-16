@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+
 using FluentJson.Core.Metadata;
 
 namespace FluentJson.Core.Builder;
@@ -84,9 +85,9 @@ public class PropertyBuilder<TProperty> : IPropertyBuilder
         // Default json name is just the property name for now
         // A real builder would allow overriding this via this.HasName("...")
         return new JsonProperty(
-            _jsonName ?? defaultName, 
-            memberInfo, 
-            _isRequired, 
+            _jsonName ?? defaultName,
+            memberInfo,
+            _isRequired,
             _isIgnored,
             _convertedType,
             _serializeFunc,

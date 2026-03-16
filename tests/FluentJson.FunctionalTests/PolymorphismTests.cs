@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Generic;
+
 using FluentAssertions;
+
 using FluentJson.Core.Builder;
 using FluentJson.Newtonsoft;
 using FluentJson.SystemTextJson;
+
 using Newtonsoft.Json;
+
 using Xunit;
 
 namespace FluentJson.FunctionalTests;
@@ -16,7 +20,7 @@ public class PolymorphismTests
     {
         public Guid Id { get; protected set; }
         public decimal Amount { get; protected set; }
-        
+
         // Private parameterless constructor for DDD framework binding
         protected Payment() { }
 
@@ -30,7 +34,7 @@ public class PolymorphismTests
     public class CreditCardPayment : Payment
     {
         private CreditCardPayment() { CardNumber = string.Empty; }
-        
+
         public CreditCardPayment(decimal amount, string cardNumber) : base(amount)
         {
             CardNumber = cardNumber ?? throw new ArgumentNullException(nameof(cardNumber));
@@ -42,7 +46,7 @@ public class PolymorphismTests
     public class PaypalPayment : Payment
     {
         private PaypalPayment() { EmailAddress = string.Empty; }
-        
+
         public PaypalPayment(decimal amount, string email) : base(amount)
         {
             EmailAddress = email ?? throw new ArgumentNullException(nameof(email));
@@ -62,12 +66,12 @@ public class PolymorphismTests
     {
         // 1. Configure the immutable model
         var builder = new JsonModelBuilder();
-        
+
         builder.Entity<Order>().Property(x => x.Payments).HasName("transactions");
 
         builder.Entity<Payment>().Property(x => x.Id).HasName("id");
         builder.Entity<Payment>().Property(x => x.Amount).HasName("amt");
-        
+
         builder.Entity<Payment>()
             .HasDiscriminator("type")
             .HasDerivedType<CreditCardPayment>("cc")

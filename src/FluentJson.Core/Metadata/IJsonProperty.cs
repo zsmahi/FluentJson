@@ -1,5 +1,5 @@
-using System.Reflection;
 using System; // Added for Type
+using System.Reflection;
 
 namespace FluentJson.Core.Metadata;
 
@@ -11,39 +11,39 @@ public interface IJsonProperty
     /// <summary>
     /// Gets the overridden JSON string name, or the default member name if not overridden.
     /// </summary>
-    string Name { get; }
-    
+    public string Name { get; }
+
     /// <summary>
     /// Gets the underlying reflection <see cref="System.Reflection.MemberInfo"/> representing the property or field.
     /// </summary>
-    MemberInfo MemberInfo { get; }
-    
+    public MemberInfo MemberInfo { get; }
+
     /// <summary>
     /// Gets the precise CLR type of the property or field.
     /// </summary>
-    Type PropertyType { get; }
+    public Type PropertyType { get; }
     /// <summary>
     /// Indicates whether the deserializer should throw an error if this property is missing from the JSON payload.
     /// </summary>
-    bool IsRequired { get; }
-    
+    public bool IsRequired { get; }
+
     /// <summary>
     /// Indicates whether this specific member should be completely skipped by the serialization engine.
     /// </summary>
-    bool IsIgnored { get; }
+    public bool IsIgnored { get; }
 
     /// <summary>
     /// Gets the scalar type that this complex property unwrap/flattens to. Null if no conversion is requested.
     /// </summary>
-    Type? ConvertedType { get; }
+    public Type? ConvertedType { get; }
 
     /// <summary>
     /// A delegate used to extract the flat scalar value from the complex property.
     /// </summary>
-    Delegate? SerializeFunc { get; }
+    public Delegate? SerializeFunc { get; }
 
     /// <summary>
     /// A delegate used to reconstruct the complex property from the flat scalar value.
     /// </summary>
-    Delegate? DeserializeFunc { get; }
+    public Delegate? DeserializeFunc { get; }
 }

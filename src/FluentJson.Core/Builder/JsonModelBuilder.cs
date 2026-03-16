@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using FluentJson.Core.Metadata;
 
 namespace FluentJson.Core.Builder;
@@ -88,11 +89,11 @@ public class JsonModelBuilder
                 var instance = Activator.CreateInstance(typeInfo.Type);
 
                 var entityType = typeInfo.Interface.GetGenericArguments()[0];
-                
+
                 var applyConfigMethod = typeof(JsonModelBuilder)
                     .GetMethod(nameof(ApplyConfiguration))!
                     .MakeGenericMethod(entityType);
-                    
+
                 applyConfigMethod.Invoke(this, new[] { instance });
             }
             catch (MissingMethodException ex)

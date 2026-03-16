@@ -1,8 +1,11 @@
 using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+
 using FluentAssertions;
+
 using FluentJson.Core.Builder;
+
 using Xunit;
 
 namespace FluentJson.SystemTextJson.Tests;
@@ -54,11 +57,11 @@ public class SecurityAuditTests
     public class UserProfile
     {
         public string Username { get; set; } = "";
-        
-        private bool _isAdmin = false;
+
+        private readonly bool _isAdmin = false;
         // Also add auto-property with private setter just to be thorough
         public bool IsSuperUser { get; private set; }
-        
+
         public bool IsAdmin => _isAdmin;
         public bool GetIsAdminField() => _isAdmin;
     }
@@ -68,7 +71,7 @@ public class SecurityAuditTests
     {
         var builder = new JsonModelBuilder();
         builder.Entity<UserProfile>().Property(x => x.Username);
-        
+
         var options = new JsonSerializerOptions().AddFluentJson(builder.Build());
 
         var json = """
@@ -103,7 +106,7 @@ public class SecurityAuditTests
         Action act = () => JsonSerializer.Deserialize<Animal>(maliciousJson, options);
 
         var ex = act.Should().Throw<Exception>().And;
-        
+
         // Assert it doesn't contain server paths
         ex.Message.Should().NotContain(":\\").And.NotContain("/");
         // Should not have the full namespace if possible, but definitely not paths

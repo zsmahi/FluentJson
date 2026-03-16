@@ -14,5 +14,5 @@ public interface IJsonTypeConfiguration<TEntity> where TEntity : class
     /// Configures the entity utilizing the provided builder API.
     /// </summary>
     /// <param name="builder">The builder to be used to map and configure the JSON entity.</param>
-    void Configure(EntityTypeBuilder<TEntity> builder);
+    public void Configure(EntityTypeBuilder<TEntity> builder);
 }

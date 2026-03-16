@@ -9,7 +9,7 @@ public class Order
 
     public string OrderNumber { get; }
     public IReadOnlyCollection<OrderLine> Lines => _lines.AsReadOnly();
-    
+
     // Ignored in JSON
     public decimal CalculatedTotal
     {
@@ -34,7 +34,7 @@ public class Order
     {
         if (string.IsNullOrWhiteSpace(orderNumber))
             throw new ArgumentException("Order number cannot be empty.", nameof(orderNumber));
-            
+
         OrderNumber = orderNumber;
         _lines = new List<OrderLine>();
     }

@@ -1,7 +1,10 @@
 using System;
 using System.Text.Json;
+
 using FluentAssertions;
+
 using FluentJson.Core.Builder;
+
 using Xunit;
 
 namespace FluentJson.SystemTextJson.Tests;
@@ -23,7 +26,7 @@ public class ValueConverterTests
     public void Converter_Should_WriteNull_WhenValueIsNull()
     {
         var converter = new FluentJsonStjValueConverter<string, string>(s => s, s => s);
-        
+
         var options = new JsonSerializerOptions();
         var json = JsonSerializer.Serialize<string>(null!, options);
         json.Should().Be("null");

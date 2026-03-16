@@ -18,9 +18,9 @@ internal class JsonProperty : IJsonProperty
     public Delegate? DeserializeFunc { get; }
 
     public JsonProperty(
-        string name, 
-        MemberInfo memberInfo, 
-        bool isRequired, 
+        string name,
+        MemberInfo memberInfo,
+        bool isRequired,
         bool isIgnored,
         Type? convertedType,
         Delegate? serializeFunc,

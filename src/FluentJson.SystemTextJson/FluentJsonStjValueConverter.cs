@@ -24,9 +24,9 @@ internal class FluentJsonStjValueConverter<TProperty, TUnwrapped> : JsonConverte
     {
         // Deserialize the flat value
         var flatValue = JsonSerializer.Deserialize<TUnwrapped>(ref reader, options);
-        
+
         if (flatValue == null) return default;
-        
+
         // Wrap it back into the complex type
         return _deserializeFunc(flatValue);
     }

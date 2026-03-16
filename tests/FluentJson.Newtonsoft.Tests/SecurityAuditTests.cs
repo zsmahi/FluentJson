@@ -1,7 +1,11 @@
 using System;
-using Newtonsoft.Json;
+
 using FluentAssertions;
+
 using FluentJson.Core.Builder;
+
+using Newtonsoft.Json;
+
 using Xunit;
 
 namespace FluentJson.Newtonsoft.Tests;
@@ -54,11 +58,11 @@ public class SecurityAuditTests
     public class UserProfile
     {
         public string Username { get; set; } = "";
-        
-        private bool _isAdmin = false;
+
+        private readonly bool _isAdmin = false;
         // Also add auto-property with private setter just to be thorough
         public bool IsSuperUser { get; private set; }
-        
+
         public bool IsAdmin => _isAdmin;
         public bool GetIsAdminField() => _isAdmin;
     }
@@ -68,7 +72,7 @@ public class SecurityAuditTests
     {
         var builder = new JsonModelBuilder();
         builder.Entity<UserProfile>().Property(x => x.Username);
-        
+
         var settings = new JsonSerializerSettings().AddFluentJson(builder.Build());
 
         var json = """
@@ -103,7 +107,7 @@ public class SecurityAuditTests
         Action act = () => JsonConvert.DeserializeObject<Animal>(maliciousJson, settings);
 
         var ex = act.Should().Throw<Exception>().And;
-        
+
         ex.Message.Should().NotContain(":\\").And.NotContain("/");
     }
 }

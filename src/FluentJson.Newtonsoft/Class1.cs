@@ -1,9 +1,8 @@
 using System;
 
-namespace FluentJson.Newtonsoft
-{
-    public class Class1
-    {
+namespace FluentJson.Newtonsoft;
 
-    }
+public class Class1
+{
+
 }

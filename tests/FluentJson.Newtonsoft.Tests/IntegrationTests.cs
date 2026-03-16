@@ -1,8 +1,12 @@
 using System;
-using Newtonsoft.Json;
+
 using FluentAssertions;
+
 using FluentJson.Core.Builder;
 using FluentJson.Core.Metadata;
+
+using Newtonsoft.Json;
+
 using Xunit;
 
 namespace FluentJson.Newtonsoft.Tests;
@@ -80,7 +84,7 @@ public class IntegrationTests
     {
         var builder = new JsonModelBuilder();
         var settings = new JsonSerializerSettings().AddFluentJson(builder.Build());
-        
+
         var json = """{"Name":"Unmapped"}""";
         var result = JsonConvert.DeserializeObject<UnmappedClass>(json, settings);
 
@@ -104,7 +108,7 @@ public class IntegrationTests
     public class ClassA
     {
         public string Name { get; private set; }
-        
+
         private ClassA() { Name = string.Empty; }
         public ClassA(string name) { Name = name; }
     }
@@ -124,15 +128,15 @@ public class IntegrationTests
     {
         // Arrange
         var builder = new JsonModelBuilder();
-        
+
         builder.Entity<ClassA>()
             .Property(x => x.Name).HasName("a_name");
-            
+
         var entityB = builder.Entity<ClassB>();
         entityB.Property(x => x.Id).HasName("b_id");
         entityB.Property(x => x.A).HasName("nested_a");
         entityB.Ignore(x => x.Secret);
-            
+
         var settings = new JsonSerializerSettings().AddFluentJson(builder.Build());
 
         var bId = Guid.NewGuid();
@@ -154,7 +158,7 @@ public class IntegrationTests
         deserializedB!.Id.Should().Be(bId);
         deserializedB.A.Should().NotBeNull();
         deserializedB.A.Name.Should().Be("TestName");
-        
+
         // Secret is ignored, so it shouldn't be serialized or deserialized
         deserializedB.Secret.Should().Be(string.Empty);
     }
@@ -165,14 +169,14 @@ public class IntegrationTests
     {
         var builder = new JsonModelBuilder();
         builder.Entity<Order>().Property(x => x.CustomerName).IsRequired();
-        
+
         var settings = new JsonSerializerSettings().AddFluentJson(builder.Build());
 
         // This JSON is missing CustomerName
         var json = """{"Id": "00000000-0000-0000-0000-000000000000", "Total": 0}""";
-        
+
         Action act = () => JsonConvert.DeserializeObject<Order>(json, settings);
-        
+
         act.Should().Throw<JsonSerializationException>()
            .WithMessage("*Required property 'CustomerName'*");
     }
@@ -183,14 +187,14 @@ public class IntegrationTests
     {
         var builder = new JsonModelBuilder();
         builder.Entity<Order>().Property(x => x.CustomerName); // Not required
-        
+
         var settings = new JsonSerializerSettings().AddFluentJson(builder.Build());
 
         // This JSON is missing CustomerName, but it's not required
         var json = """{"Id": "00000000-0000-0000-0000-000000000000", "Total": 0}""";
-        
+
         var result = JsonConvert.DeserializeObject<Order>(json, settings);
-        
+
         result.Should().NotBeNull();
         result!.CustomerName.Should().BeEmpty();
     }

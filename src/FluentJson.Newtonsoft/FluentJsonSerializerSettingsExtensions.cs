@@ -1,7 +1,9 @@
 using System;
-using Newtonsoft.Json;
-using FluentJson.Core.Metadata;
 using System.Runtime.CompilerServices;
+
+using FluentJson.Core.Metadata;
+
+using Newtonsoft.Json;
 
 [assembly: InternalsVisibleTo("FluentJson.Newtonsoft.Tests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]

@@ -1,9 +1,13 @@
 using System;
+
 using FluentAssertions;
+
 using FluentJson.Core.Builder;
 using FluentJson.Newtonsoft;
 using FluentJson.SystemTextJson;
+
 using Newtonsoft.Json;
+
 using Xunit;
 
 namespace FluentJson.FunctionalTests;
@@ -39,7 +43,7 @@ public class FlatteningTests
         stjOptions.AddFluentJson(model);
 
         string stjJson = System.Text.Json.JsonSerializer.Serialize(user, stjOptions);
-        
+
         // Assert JSON is flat
         stjJson.Should().Contain($"\"id\":\"{expectedGuid}\"");
         stjJson.Should().NotContain("Value");

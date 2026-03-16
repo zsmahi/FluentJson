@@ -16,8 +16,8 @@ internal class JsonEntity : IJsonEntity
     public bool ShouldPreserveReferences { get; }
 
     public JsonEntity(
-        Type entityType, 
-        IReadOnlyList<IJsonProperty> properties, 
+        Type entityType,
+        IReadOnlyList<IJsonProperty> properties,
         Func<object> constructorFactory,
         string? discriminatorPropertyName,
         IReadOnlyDictionary<object, Type> derivedTypes,

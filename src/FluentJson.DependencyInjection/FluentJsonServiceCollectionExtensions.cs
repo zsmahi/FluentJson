@@ -1,7 +1,9 @@
 using System;
-using Microsoft.Extensions.DependencyInjection;
+
 using FluentJson.Core.Builder;
 using FluentJson.Core.Metadata;
+
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FluentJson.DependencyInjection;
 

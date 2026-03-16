@@ -1,6 +1,9 @@
 using System;
+
 using FluentAssertions;
+
 using FluentJson.Core.Builder;
+
 using Xunit;
 
 namespace FluentJson.Core.Tests;
@@ -55,11 +58,11 @@ public class JsonModelBuilderTests
         // Assert
         model.Should().NotBeNull();
         model.Entities.Should().HaveCount(1);
-        
+
         var entity = model.Entities[0];
         entity.EntityType.Should().Be(typeof(Customer));
         entity.Properties.Should().HaveCount(2);
-        
+
         entity.Properties.Should().Contain(p => p.Name == "Name" && p.MemberInfo.Name == "Name");
         entity.Properties.Should().Contain(p => p.Name == "Id" && p.MemberInfo.Name == "Id");
     }
@@ -91,7 +94,7 @@ public class JsonModelBuilderTests
     public void JsonProperty_Should_ThrowArgumentNullException_WhenParametersAreNull()
     {
         var dummyProperty = typeof(Customer).GetProperty(nameof(Customer.Name))!;
-        
+
         Action act1 = () => new FluentJson.Core.Metadata.JsonProperty("Name", null!, false, false, null, null, null);
         act1.Should().Throw<ArgumentNullException>();
 
@@ -103,7 +106,7 @@ public class JsonModelBuilderTests
     public void JsonProperty_Should_ThrowArgumentException_WhenMemberIsNotPropertyOrField()
     {
         var dummyMethod = typeof(Customer).GetMethod(nameof(Customer.ToString))!;
-        
+
         Action act = () => new FluentJson.Core.Metadata.JsonProperty("Name", dummyMethod, false, false, null, null, null);
         act.Should().Throw<ArgumentException>()
            .WithParameterName("memberInfo")

@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Linq;
+using System.Reflection;
+
 using FluentAssertions;
+
 using FluentJson.Core.Builder;
 using FluentJson.Core.Metadata;
+
 using Xunit;
 
 namespace FluentJson.Core.Tests;
@@ -22,21 +25,21 @@ public class MetadataImmutabilityTests
         // Arrange
         var builder = new JsonModelBuilder();
         builder.Entity<Dummy>().Property(x => x.Id).HasName("id1");
-        
+
         // Act
         var model = builder.Build();
-        
+
         // Attempt to mutate the builder after building
         builder.Entity<Dummy>().Property(x => x.Id).HasName("id2");
         var newModel = builder.Build();
 
         // Assert
         model.Should().NotBeSameAs(newModel);
-        
+
         var originalEntity = model.Entities.Single();
         var originalProperty = originalEntity.Properties.Single();
         originalProperty.Name.Should().Be("id1");
-        
+
         var newEntity = newModel.Entities.Single();
         var newProperty = newEntity.Properties.Single();
         newProperty.Name.Should().Be("id2");

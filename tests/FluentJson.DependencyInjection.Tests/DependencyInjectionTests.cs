@@ -1,9 +1,13 @@
 using System;
 using System.Linq;
+
 using FluentAssertions;
+
 using FluentJson.Core.Builder;
 using FluentJson.Core.Metadata;
+
 using Microsoft.Extensions.DependencyInjection;
+
 using Xunit;
 
 namespace FluentJson.DependencyInjection.Tests;
@@ -17,9 +21,9 @@ public class DependencyInjectionTests
     {
         IServiceCollection services = null!;
         bool configureCalled = false;
-        
+
         Action act = () => services.AddFluentJson(b => { configureCalled = true; });
-        
+
         act.Should().Throw<ArgumentNullException>().WithParameterName("services");
         configureCalled.Should().BeFalse();
     }
@@ -36,15 +40,15 @@ public class DependencyInjectionTests
     public void AddFluentJson_ShouldRegisterJsonModelAsSingleton()
     {
         var services = new ServiceCollection();
-        
-        services.AddFluentJson(builder => 
+
+        services.AddFluentJson(builder =>
         {
             builder.Entity<DummyEntity>();
         });
 
         // Add Microsoft.Extensions.DependencyInjection handles BuildServiceProvider
         var serviceProvider = services.BuildServiceProvider();
-        
+
         // Assert resolution
         var model1 = serviceProvider.GetService<IJsonModel>();
         var model2 = serviceProvider.GetService<IJsonModel>();

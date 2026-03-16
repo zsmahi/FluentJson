@@ -30,7 +30,7 @@ internal class FluentJsonStjPolymorphicConverter<T> : JsonConverter<T>
     public override T? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null) return default;
-        
+
         if (reader.TokenType != JsonTokenType.StartObject)
         {
             throw new JsonException($"Expected StartObject token, got {reader.TokenType}");
@@ -49,11 +49,11 @@ internal class FluentJsonStjPolymorphicConverter<T> : JsonConverter<T>
 
             if (readerClone.TokenType == JsonTokenType.PropertyName)
             {
-                if (readerClone.ValueTextEquals(_discriminatorPropertyUtf8) || 
+                if (readerClone.ValueTextEquals(_discriminatorPropertyUtf8) ||
                     string.Equals(readerClone.GetString(), _discriminatorProperty, StringComparison.OrdinalIgnoreCase))
                 {
                     readerClone.Read();
-                    
+
                     // Zero-allocation loop check for derived types
                     for (int i = 0; i < _derivedTypesUtf8.Length; i++)
                     {

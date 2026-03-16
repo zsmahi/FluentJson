@@ -1,9 +1,12 @@
 using System;
 using System.Text.Json;
+
 using BenchmarkDotNet.Attributes;
+
 using FluentJson.Core.Builder;
 using FluentJson.Newtonsoft;
 using FluentJson.SystemTextJson;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 

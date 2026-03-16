@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -56,7 +57,7 @@ internal class FluentJsonPolymorphicConverter : JsonConverter
         string discriminatorValue = discriminatorToken.Value<string>() ?? string.Empty;
 
         Type? targetType = null;
-        
+
         // Find the matching derived type based on the key
         foreach (var kvp in _derivedTypes)
         {

@@ -1,8 +1,11 @@
 using System;
 using System.Linq;
 using System.Reflection;
+
 using FluentAssertions;
+
 using FluentJson.Core.Builder;
+
 using Xunit;
 
 namespace FluentJson.Core.Tests.Builder;
@@ -90,7 +93,7 @@ public class JsonModelBuilderConfigurationTests
     public void ApplyConfigurationsFromAssembly_Should_ScanAndRegisterAllConfigurations()
     {
         var builder = new JsonModelBuilder();
-        
+
         // Pass a mock assembly so we only scan valid classes, avoiding MissingConstructorConfiguration
         // Includes an abstract class to ensure !t.IsAbstract is correctly covered
         var mockAssembly = new MockAssembly(typeof(DummyConfiguration), typeof(AnotherConfiguration), typeof(AbstractConfiguration));
@@ -99,7 +102,7 @@ public class JsonModelBuilderConfigurationTests
         var model = builder.Build();
 
         model.Entities.Should().HaveCount(2);
-        
+
         var dummyEntity = model.Entities.FirstOrDefault(e => e.EntityType == typeof(DummyClass));
         dummyEntity.Should().NotBeNull();
         dummyEntity!.Properties.Should().Contain(p => p.Name == "dummy_name");
@@ -113,12 +116,12 @@ public class JsonModelBuilderConfigurationTests
     public void ApplyConfigurationsFromAssembly_Should_ThrowArgumentException_WhenClassLacksParameterlessConstructor()
     {
         var builder = new JsonModelBuilder();
-        
+
         // Pass a mock assembly that ONLY has the missing constructor config
         var mockAssembly = new MockAssembly(typeof(MissingConstructorConfiguration));
-        
+
         Action act = () => builder.ApplyConfigurationsFromAssembly(mockAssembly);
-        
+
         act.Should().Throw<ArgumentException>()
             .WithMessage("*does not have a public parameterless constructor*")
             .WithParameterName("assembly");

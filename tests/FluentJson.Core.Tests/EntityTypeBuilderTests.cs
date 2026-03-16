@@ -1,7 +1,10 @@
 using System;
+
 using FluentAssertions;
+
 using FluentJson.Core.Builder;
 using FluentJson.Core.Exceptions;
+
 using Xunit;
 
 namespace FluentJson.Core.Tests;
@@ -165,11 +168,11 @@ public class EntityTypeBuilderTests
     {
         // Arrange
         var builder = new EntityTypeBuilder<Customer>();
-        
+
         // Act
         var resultBuilder = builder.Ignore(x => x.Name);
         var entity = ((IEntityTypeBuilder)builder).Build();
-        
+
         // Assert
         resultBuilder.Should().BeSameAs(builder);
         var property = entity.Properties.Should().ContainSingle().Subject;
@@ -181,10 +184,10 @@ public class EntityTypeBuilderTests
     public void Ignore_Should_HandleValueTypeProperties_WithUnaryBoxingExpression()
     {
         var builder = new EntityTypeBuilder<Customer>();
-        
+
         var resultBuilder = builder.Ignore(x => x.Id);
         var entity = ((IEntityTypeBuilder)builder).Build();
-        
+
         resultBuilder.Should().BeSameAs(builder);
         var property = entity.Properties.Should().ContainSingle().Subject;
         property.MemberInfo.Name.Should().Be(nameof(Customer.Id));
@@ -195,12 +198,12 @@ public class EntityTypeBuilderTests
     public void Ignore_Should_UpdateExistingPropertyBuilder_WhenAlreadyConfigured()
     {
         var builder = new EntityTypeBuilder<Customer>();
-        
+
         builder.Property(x => x.Name).HasName("customer_name").IsRequired();
         builder.Ignore(x => x.Name);
 
         var entity = ((IEntityTypeBuilder)builder).Build();
-        
+
         var property = entity.Properties.Should().ContainSingle().Subject;
         property.Name.Should().Be("customer_name");
         property.IsRequired.Should().BeTrue();
@@ -267,7 +270,7 @@ public class EntityTypeBuilderTests
     public void HasDerivedType_Should_RegisterDerivedType_And_ReturnSameBuilder()
     {
         var builder = new EntityTypeBuilder<BasePerson>();
-        
+
         var resultBuilder = builder.HasDerivedType<VipPerson>("vip");
         var entity = ((IEntityTypeBuilder)builder).Build();
 
@@ -299,7 +302,7 @@ public class EntityTypeBuilderTests
     public void PreserveReferences_Should_SetPreserveReferencesFlag_ToTrueByDefault()
     {
         var builder = new EntityTypeBuilder<Customer>();
-        
+
         var resultBuilder = builder.PreserveReferences();
         var entity = ((IEntityTypeBuilder)builder).Build();
 
@@ -335,10 +338,10 @@ public class EntityTypeBuilderTests
            .WithMessage($"Cannot instantiate abstract class {typeof(BaseClass)}");
     }
 
-    private class FieldModel 
+    private class FieldModel
     {
 #pragma warning disable 0169
-        private int _privateField;
+        private readonly int _privateField;
 #pragma warning restore 0169
         public int PublicProperty { get; set; }
         public void SomeMethod() { }
@@ -348,7 +351,7 @@ public class EntityTypeBuilderTests
     public void PropertyString_Should_MapPrivateFieldsAndProperties()
     {
         var builder = new EntityTypeBuilder<FieldModel>();
-        
+
         var fieldBuilder = builder.Property<int>("_privateField");
         var propBuilder = builder.Property<int>("PublicProperty");
 
@@ -382,7 +385,7 @@ public class EntityTypeBuilderTests
         // Using reflection to bypass builder mapping logic and force method info into Dictionary
         var dictField = typeof(EntityTypeBuilder<FieldModel>).GetField("_propertyBuilders", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!;
         var dict = (System.Collections.Generic.Dictionary<System.Reflection.MemberInfo, object>)dictField.GetValue(builder)!;
-        
+
         var methodInfo = typeof(FieldModel).GetMethod(nameof(FieldModel.SomeMethod))!;
         dict[methodInfo] = new PropertyBuilder<int>();
 

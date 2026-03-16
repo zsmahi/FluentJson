@@ -1,4 +1,5 @@
 using System;
+
 using Newtonsoft.Json;
 
 namespace FluentJson.Newtonsoft;
@@ -25,7 +26,7 @@ internal class FluentJsonNwValueConverter<TProperty, TUnwrapped> : JsonConverter
 
         // Deserialize the flat value
         var flatValue = serializer.Deserialize<TUnwrapped>(reader);
-        
+
         if (flatValue == null) return default;
 
         // Wrap it back into the complex type

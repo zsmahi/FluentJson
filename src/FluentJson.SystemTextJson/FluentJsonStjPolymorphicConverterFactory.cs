@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+
 using FluentJson.Core.Metadata;
 
 namespace FluentJson.SystemTextJson;
@@ -20,7 +21,7 @@ internal class FluentJsonStjPolymorphicConverterFactory : JsonConverterFactory
 
     public override bool CanConvert(Type typeToConvert)
     {
-        return _canConvertCache.GetOrAdd(typeToConvert, t => 
+        return _canConvertCache.GetOrAdd(typeToConvert, t =>
             _model.Entities.Any(e => e.EntityType == t && e.DiscriminatorPropertyName != null));
     }
 
@@ -32,7 +33,7 @@ internal class FluentJsonStjPolymorphicConverterFactory : JsonConverterFactory
         }
 
         var entity = _model.Entities.First(e => e.EntityType == typeToConvert && e.DiscriminatorPropertyName != null);
-        
+
         var converterType = typeof(FluentJsonStjPolymorphicConverter<>).MakeGenericType(typeToConvert);
         var converter = (JsonConverter)Activator.CreateInstance(converterType, entity.DiscriminatorPropertyName, entity.DerivedTypes)!;
         _converterCache.TryAdd(typeToConvert, converter);

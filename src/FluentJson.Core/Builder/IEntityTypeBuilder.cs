@@ -11,5 +11,5 @@ internal interface IEntityTypeBuilder
     /// Finalizes the configuration for this entity type into an immutable representation.
     /// </summary>
     /// <returns>The fully configured <see cref="IJsonEntity"/>.</returns>
-    IJsonEntity Build();
+    public IJsonEntity Build();
 }
