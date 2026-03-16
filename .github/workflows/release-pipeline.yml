@@ -1,4 +1,4 @@
-name: FluentJson RC1 Release Pipeline
+name: FluentJson Release Pipeline
 
 on:
   push:
@@ -133,7 +133,7 @@ jobs:
             git add index.html .nojekyll
             git commit -m "chore: bootstrap gh-pages branch"
             git push origin gh-pages
-            git checkout -
+            git checkout ${{ github.sha }}
           fi
         
       - name: Setup .NET
