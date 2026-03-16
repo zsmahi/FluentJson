@@ -1,0 +1,405 @@
+{
+  "source_base_path": "/home/runner/work/FluentJson/FluentJson",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Resource",
+      "output": {
+        "resource": {
+          "relative_path": "index.json"
+        }
+      }
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "README.md",
+      "output": {
+        ".html": {
+          "relative_path": "README.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "docs/api/FluentJson.Core.Builder.EntityTypeBuilder-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "docs/api/FluentJson.Core.Builder.EntityTypeBuilder-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "FluentJson.Core.Builder.EntityTypeBuilder<TEntity>",
+      "Summary": "<p sourcefile=\"docs/api/FluentJson.Core.Builder.EntityTypeBuilder-1.yml\" sourcestartlinenumber=\"1\">Provides a fluent API to configure JSON serialization rules for a specific entity type.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "docs/api/FluentJson.Core.Builder.IJsonTypeConfiguration-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "docs/api/FluentJson.Core.Builder.IJsonTypeConfiguration-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "FluentJson.Core.Builder.IJsonTypeConfiguration<TEntity>",
+      "Summary": "<p sourcefile=\"docs/api/FluentJson.Core.Builder.IJsonTypeConfiguration-1.yml\" sourcestartlinenumber=\"1\">Allows configuration for an entity type to be factored into a separate class, promoting modularity and Clean Architecture.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "docs/api/FluentJson.Core.Builder.JsonModelBuilder.yml",
+      "output": {
+        ".html": {
+          "relative_path": "docs/api/FluentJson.Core.Builder.JsonModelBuilder.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "FluentJson.Core.Builder.JsonModelBuilder",
+      "Summary": "<p sourcefile=\"docs/api/FluentJson.Core.Builder.JsonModelBuilder.yml\" sourcestartlinenumber=\"1\">The root builder used to configure the JSON serialization model.\nIt acts as the entry point to define entities, apply configurations, and eventually build the immutable <xref href=\"FluentJson.Core.Metadata.IJsonModel\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "docs/api/FluentJson.Core.Builder.PropertyBuilder-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "docs/api/FluentJson.Core.Builder.PropertyBuilder-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "FluentJson.Core.Builder.PropertyBuilder<TProperty>",
+      "Summary": "<p sourcefile=\"docs/api/FluentJson.Core.Builder.PropertyBuilder-1.yml\" sourcestartlinenumber=\"1\">Configures the serialization rules for a specific property or field.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "docs/api/FluentJson.Core.Builder.yml",
+      "output": {
+        ".html": {
+          "relative_path": "docs/api/FluentJson.Core.Builder.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "FluentJson.Core.Builder",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "docs/api/FluentJson.Core.Exceptions.FluentJsonConfigurationException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "docs/api/FluentJson.Core.Exceptions.FluentJsonConfigurationException.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "FluentJson.Core.Exceptions.FluentJsonConfigurationException",
+      "Summary": "<p sourcefile=\"docs/api/FluentJson.Core.Exceptions.FluentJsonConfigurationException.yml\" sourcestartlinenumber=\"1\">Represents errors that occur during the configuration and compilation phases of FluentJson.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "docs/api/FluentJson.Core.Exceptions.FluentJsonExpressionException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "docs/api/FluentJson.Core.Exceptions.FluentJsonExpressionException.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "FluentJson.Core.Exceptions.FluentJsonExpressionException",
+      "Summary": "<p sourcefile=\"docs/api/FluentJson.Core.Exceptions.FluentJsonExpressionException.yml\" sourcestartlinenumber=\"1\">Represents errors that occur when an invalid lambda expression is passed to the Fluent API.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "docs/api/FluentJson.Core.Exceptions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "docs/api/FluentJson.Core.Exceptions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "FluentJson.Core.Exceptions",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "docs/api/FluentJson.Core.Metadata.IJsonEntity.yml",
+      "output": {
+        ".html": {
+          "relative_path": "docs/api/FluentJson.Core.Metadata.IJsonEntity.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "FluentJson.Core.Metadata.IJsonEntity",
+      "Summary": "<p sourcefile=\"docs/api/FluentJson.Core.Metadata.IJsonEntity.yml\" sourcestartlinenumber=\"1\">Represents the compiled metadata for a specific entity type, containing all its properties and mapping rules.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "docs/api/FluentJson.Core.Metadata.IJsonModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "docs/api/FluentJson.Core.Metadata.IJsonModel.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "FluentJson.Core.Metadata.IJsonModel",
+      "Summary": "<p sourcefile=\"docs/api/FluentJson.Core.Metadata.IJsonModel.yml\" sourcestartlinenumber=\"1\">Represents the compiled, read-only metadata model containing all JSON serialization rules.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "docs/api/FluentJson.Core.Metadata.IJsonProperty.yml",
+      "output": {
+        ".html": {
+          "relative_path": "docs/api/FluentJson.Core.Metadata.IJsonProperty.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "FluentJson.Core.Metadata.IJsonProperty",
+      "Summary": "<p sourcefile=\"docs/api/FluentJson.Core.Metadata.IJsonProperty.yml\" sourcestartlinenumber=\"1\">Represents the compiled metadata for a specific mapped member (property or field).</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "docs/api/FluentJson.Core.Metadata.yml",
+      "output": {
+        ".html": {
+          "relative_path": "docs/api/FluentJson.Core.Metadata.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "FluentJson.Core.Metadata",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "docs/api/FluentJson.DependencyInjection.FluentJsonServiceCollectionExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "docs/api/FluentJson.DependencyInjection.FluentJsonServiceCollectionExtensions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "FluentJson.DependencyInjection.FluentJsonServiceCollectionExtensions",
+      "Summary": "<p sourcefile=\"docs/api/FluentJson.DependencyInjection.FluentJsonServiceCollectionExtensions.yml\" sourcestartlinenumber=\"1\">Extension methods for registering FluentJson with standard Microsoft Dependency Injection containers.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "docs/api/FluentJson.DependencyInjection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "docs/api/FluentJson.DependencyInjection.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "FluentJson.DependencyInjection",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "docs/api/FluentJson.Newtonsoft.FluentJsonContractResolver.yml",
+      "output": {
+        ".html": {
+          "relative_path": "docs/api/FluentJson.Newtonsoft.FluentJsonContractResolver.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "FluentJson.Newtonsoft.FluentJsonContractResolver",
+      "Summary": "<p sourcefile=\"docs/api/FluentJson.Newtonsoft.FluentJsonContractResolver.yml\" sourcestartlinenumber=\"1\">A custom Newtonsoft.Json contract resolver that integrates FluentJson metadata conventions.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "docs/api/FluentJson.Newtonsoft.FluentJsonSerializerSettingsExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "docs/api/FluentJson.Newtonsoft.FluentJsonSerializerSettingsExtensions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "FluentJson.Newtonsoft.FluentJsonSerializerSettingsExtensions",
+      "Summary": "<p sourcefile=\"docs/api/FluentJson.Newtonsoft.FluentJsonSerializerSettingsExtensions.yml\" sourcestartlinenumber=\"1\">Provides extension methods to easily integrate FluentJson into Newtonsoft.Json's native settings.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "docs/api/FluentJson.Newtonsoft.yml",
+      "output": {
+        ".html": {
+          "relative_path": "docs/api/FluentJson.Newtonsoft.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "FluentJson.Newtonsoft",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "docs/api/FluentJson.SystemTextJson.FluentJsonSerializerOptionsExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "docs/api/FluentJson.SystemTextJson.FluentJsonSerializerOptionsExtensions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "FluentJson.SystemTextJson.FluentJsonSerializerOptionsExtensions",
+      "Summary": "<p sourcefile=\"docs/api/FluentJson.SystemTextJson.FluentJsonSerializerOptionsExtensions.yml\" sourcestartlinenumber=\"1\">Provides extension methods to easily integrate FluentJson into System.Text.Json's native options.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "docs/api/FluentJson.SystemTextJson.FluentJsonTypeModifier.yml",
+      "output": {
+        ".html": {
+          "relative_path": "docs/api/FluentJson.SystemTextJson.FluentJsonTypeModifier.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "FluentJson.SystemTextJson.FluentJsonTypeModifier",
+      "Summary": "<p sourcefile=\"docs/api/FluentJson.SystemTextJson.FluentJsonTypeModifier.yml\" sourcestartlinenumber=\"1\">A System.Text.Json type modifier that injects FluentJson configuration into the native JSON resolution process.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "docs/api/FluentJson.SystemTextJson.yml",
+      "output": {
+        ".html": {
+          "relative_path": "docs/api/FluentJson.SystemTextJson.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "FluentJson.SystemTextJson",
+      "Summary": null
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "docs/api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "docs/api/toc.html"
+        },
+        ".json": {
+          "relative_path": "docs/api/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/arch/engine.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/arch/engine.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/arch/metadata.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/arch/metadata.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/arch/performance.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/arch/performance.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/arch/security.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/arch/security.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/benchmarks.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/benchmarks.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/ddd-guide.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/ddd-guide.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/quality-report.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/quality-report.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "docs/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "docs/toc.html"
+        },
+        ".json": {
+          "relative_path": "docs/toc.json"
+        }
+      },
+      "version": ""
+    }
+  ],
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}

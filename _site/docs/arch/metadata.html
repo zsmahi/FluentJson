@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>The Metadata Model | FluentJson Technical Bible </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="The Metadata Model | FluentJson Technical Bible ">
+    
+    
+      <link rel="shortcut icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="">
+      <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first=First data-prev=Previous data-next=Next data-last=Last></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="the-metadata-model">The Metadata Model</h1>
+
+<p>The lifeblood of FluentJson is the <code>IJsonModel</code>. This rigid abstraction provides a cohesive map for all the underlying engine adapters.</p>
+<h2 id="immutability-and-the-freeze-pattern">Immutability and the Freeze Pattern</h2>
+<p>The framework lifecycle comprises two distinct phases: Configuration and Execution.</p>
+<ol>
+<li><strong>Configuration</strong>: Developers construct rules using <code>JsonModelBuilder</code> and <code>EntityTypeBuilder&lt;T&gt;</code>. This phase is mutable, stateful, and intended entirely for application startup.</li>
+<li><strong>Execution</strong>: Upon invoking <code>.Build()</code>, the builder creates an <code>IJsonModel</code>.</li>
+</ol>
+<p>The resulting <code>IJsonModel</code>, <code>IJsonEntity</code>, and <code>IJsonProperty</code> instances are deeply immutable. We call this the <strong>Freeze Pattern</strong>.
+Why is freezing necessary? High-concurrency environments process thousands of serialization requests simultaneously. Using immutable mapping structures guarantees absolute thread safety during lookup phases without the immense overhead of <code>lock()</code> statements, reader-writer locks, or ConcurrentDictionaries during serialization mapping.</p>
+<h2 id="high-concurrency-pre-compilation">High-Concurrency Pre-compilation</h2>
+<p>During the final <code>Build</code> phase, heavy reflective operations are performed <em>exactly once</em>:</p>
+<ul>
+<li>Property/Field metadata lookups.</li>
+<li>Constructor and Conversion lambda compilation (<code>Expression.Compile</code>).</li>
+<li>Discriminator dictionary compilation.</li>
+</ul>
+<p>The resulting metadata model is then injected statically into the DI container as a Singleton.</p>
+<h2 id="serialization-lifecycle">Serialization Lifecycle</h2>
+<pre><code class="lang-mermaid">sequenceDiagram
+    participant AppStartup
+    participant JsonModelBuilder
+    participant IJsonModel (Singleton)
+    participant STJ / Newtonsoft
+    participant Json Stream
+    
+    AppStartup-&gt;&gt;JsonModelBuilder: new JsonModelBuilder()
+    AppStartup-&gt;&gt;JsonModelBuilder: builder.ApplyConfigurationsFromAssembly()
+    AppStartup-&gt;&gt;JsonModelBuilder: builder.Build()
+    
+    JsonModelBuilder-&gt;&gt;JsonModelBuilder: Compile Expressions &amp; Fields
+    JsonModelBuilder--&gt;&gt;IJsonModel (Singleton): Freeze to Immutable IJsonModel
+    
+    Note over IJsonModel (Singleton), STJ / Newtonsoft: Native Options Pipeline Integration
+    
+    STJ / Newtonsoft-&gt;&gt;IJsonModel (Singleton): Retrieve `ConstructorFactory`
+    IJsonModel (Singleton)--&gt;&gt;STJ / Newtonsoft: Func&lt;object&gt; 
+    STJ / Newtonsoft-&gt;&gt;Json Stream: Serialize / Deserialize Properties
+</code></pre>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/zsmahi/FluentJson/blob/main/docs/arch/metadata.md/#L1" class="contribution-link">Edit this page</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>
