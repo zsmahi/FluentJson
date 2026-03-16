@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1773629707875,
+  "lastUpdate": 1773655720153,
   "repoUrl": "https://github.com/zsmahi/FluentJson",
   "entries": {
     "BenchmarkDotNet Benchmarks": [
@@ -144,6 +144,78 @@ window.BENCHMARK_DATA = {
             "value": 1011.7030944824219,
             "unit": "ns",
             "range": "± 11.851824608147512"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "zakaria.smahi@gmail.com",
+            "name": "Zakaria SMAHI",
+            "username": "zsmahi"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "18b8a47f543f35da4fad568003753986d58911cf",
+          "message": "update pipeline",
+          "timestamp": "2026-03-16T11:06:53+01:00",
+          "tree_id": "e16d65bf5faa111b029042b5e94f1182dc939280",
+          "url": "https://github.com/zsmahi/FluentJson/commit/18b8a47f543f35da4fad568003753986d58911cf"
+        },
+        "date": 1773655720135,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "FluentJson.Benchmarks.DeserializationBenchmarks.SystemTextJson_Native",
+            "value": 486.61041736602783,
+            "unit": "ns",
+            "range": "± 2.244233360710258"
+          },
+          {
+            "name": "FluentJson.Benchmarks.DeserializationBenchmarks.SystemTextJson_Fluent",
+            "value": 612.822526550293,
+            "unit": "ns",
+            "range": "± 2.1737152601024468"
+          },
+          {
+            "name": "FluentJson.Benchmarks.DeserializationBenchmarks.Newtonsoft_Native",
+            "value": 1004.5687149047851,
+            "unit": "ns",
+            "range": "± 19.17644247089556"
+          },
+          {
+            "name": "FluentJson.Benchmarks.DeserializationBenchmarks.Newtonsoft_Fluent",
+            "value": 1056.81001701355,
+            "unit": "ns",
+            "range": "± 16.451626261466174"
+          },
+          {
+            "name": "FluentJson.Benchmarks.DeserializationBenchmarks.Poly_SystemTextJson_Fluent",
+            "value": 1182.0670852661133,
+            "unit": "ns",
+            "range": "± 9.689493288269185"
+          },
+          {
+            "name": "FluentJson.Benchmarks.DeserializationBenchmarks.Poly_Newtonsoft_Fluent",
+            "value": 2955.129342651367,
+            "unit": "ns",
+            "range": "± 18.11545669455022"
+          },
+          {
+            "name": "FluentJson.Benchmarks.DeserializationBenchmarks.Flat_SystemTextJson_Fluent",
+            "value": 635.7194931507111,
+            "unit": "ns",
+            "range": "± 0.6388565662042023"
+          },
+          {
+            "name": "FluentJson.Benchmarks.DeserializationBenchmarks.Flat_Newtonsoft_Fluent",
+            "value": 1033.108668899536,
+            "unit": "ns",
+            "range": "± 7.2982224177423465"
           }
         ]
       }
