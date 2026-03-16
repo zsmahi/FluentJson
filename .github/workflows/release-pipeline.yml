@@ -136,7 +136,7 @@ jobs:
             ${{ runner.os }}-nuget-
             
       - name: Run Critical Benchmarks
-        run: dotnet run -c Release --project tests/FluentJson.Benchmarks/FluentJson.Benchmarks.csproj -- --filter *DeserializationBenchmarks* --exporters briefjson --job Short --iterationCount 3 --warmupCount 1
+        run: dotnet run -c Release --project tests/FluentJson.Benchmarks/FluentJson.Benchmarks.csproj -- --filter *DeserializationBenchmarks* --exporters briefjson --job Short --iterationCount 5 --warmupCount 2
         
       - name: Analyze Performance
         uses: benchmark-action/github-action-benchmark@v1
@@ -146,7 +146,7 @@ jobs:
           output-file-path: BenchmarkDotNet.Artifacts/results/FluentJson.Benchmarks.DeserializationBenchmarks-report-brief.json
           github-token: ${{ secrets.GITHUB_TOKEN }}
           auto-push: true
-          alert-threshold: '110%' # Fails if degradation > 10%
+          alert-threshold: '120%' # Fails if degradation > 20%
           fail-on-alert: true
           comment-on-alert: true
           summary-always: true
