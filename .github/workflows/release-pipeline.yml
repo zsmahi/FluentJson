@@ -208,12 +208,14 @@ jobs:
       - name: Build Documentation
         run: docfx docfx.json
         
+      - name: Create .nojekyll
+        run: touch _site/.nojekyll
+        
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: _site
-          destination_dir: .
+          publish_dir: ./_site
           keep_files: true # CRITICAL: Don't delete benchmark results (dev/bench)!
 
   cd-release:
