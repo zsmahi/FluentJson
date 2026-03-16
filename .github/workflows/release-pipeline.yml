@@ -18,6 +18,10 @@ on:
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
+concurrency:
+  group: "gh-pages-publish-${{ github.ref }}"
+  cancel-in-progress: false
+
 jobs:
   lint-and-format:
     name: Linting & Formatting
@@ -182,6 +186,7 @@ jobs:
 
   publish-docs:
     name: Publish Documentation (Docfx)
+    needs: [ci-build-and-test, performance-benchmarks]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
     permissions:
