@@ -222,18 +222,18 @@ jobs:
       - name: Build Documentation
         run: docfx docfx.json
 
-      - name: Prepare Deployment Payload
+      - name: Pure Git Deployment
         run: |
-          mkdir -p ./publish_payload
-          cp -a ./_site/. ./publish_payload/
-          touch ./publish_payload/.nojekyll
-        
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./publish_payload
-          keep_files: true
+          git clone --branch gh-pages https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git /tmp/gh-pages
+          cp -a ./_site/. /tmp/gh-pages/
+          touch /tmp/gh-pages/.nojekyll
+          rm -rf /tmp/gh-pages/_site
+          cd /tmp/gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "docs: deterministic flatten deployment" || echo "Aucun changement à déployer"
+          git push origin gh-pages
 
   cd-release:
     name: Continuous Deployment (NuGet & GitHub Release)
