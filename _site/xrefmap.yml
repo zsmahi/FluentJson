@@ -1,0 +1,762 @@
+### YamlMime:XRefMap
+sorted: true
+references:
+- uid: FluentJson.Core.Builder
+  name: FluentJson.Core.Builder
+  href: docs/api/FluentJson.Core.Builder.html
+  commentId: N:FluentJson.Core.Builder
+  fullName: FluentJson.Core.Builder
+  nameWithType: FluentJson.Core.Builder
+- uid: FluentJson.Core.Builder.EntityTypeBuilder`1
+  name: EntityTypeBuilder<TEntity>
+  href: docs/api/FluentJson.Core.Builder.EntityTypeBuilder-1.html
+  commentId: T:FluentJson.Core.Builder.EntityTypeBuilder`1
+  name.vb: EntityTypeBuilder(Of TEntity)
+  fullName: FluentJson.Core.Builder.EntityTypeBuilder<TEntity>
+  fullName.vb: FluentJson.Core.Builder.EntityTypeBuilder(Of TEntity)
+  nameWithType: EntityTypeBuilder<TEntity>
+  nameWithType.vb: EntityTypeBuilder(Of TEntity)
+- uid: FluentJson.Core.Builder.EntityTypeBuilder`1.HasDerivedType*
+  name: HasDerivedType
+  href: docs/api/FluentJson.Core.Builder.EntityTypeBuilder-1.html#FluentJson_Core_Builder_EntityTypeBuilder_1_HasDerivedType_
+  commentId: Overload:FluentJson.Core.Builder.EntityTypeBuilder`1.HasDerivedType
+  isSpec: "True"
+  fullName: FluentJson.Core.Builder.EntityTypeBuilder<TEntity>.HasDerivedType
+  fullName.vb: FluentJson.Core.Builder.EntityTypeBuilder(Of TEntity).HasDerivedType
+  nameWithType: EntityTypeBuilder<TEntity>.HasDerivedType
+  nameWithType.vb: EntityTypeBuilder(Of TEntity).HasDerivedType
+- uid: FluentJson.Core.Builder.EntityTypeBuilder`1.HasDerivedType``1(System.Object)
+  name: HasDerivedType<TDerived>(object)
+  href: docs/api/FluentJson.Core.Builder.EntityTypeBuilder-1.html#FluentJson_Core_Builder_EntityTypeBuilder_1_HasDerivedType__1_System_Object_
+  commentId: M:FluentJson.Core.Builder.EntityTypeBuilder`1.HasDerivedType``1(System.Object)
+  name.vb: HasDerivedType(Of TDerived)(Object)
+  fullName: FluentJson.Core.Builder.EntityTypeBuilder<TEntity>.HasDerivedType<TDerived>(object)
+  fullName.vb: FluentJson.Core.Builder.EntityTypeBuilder(Of TEntity).HasDerivedType(Of TDerived)(Object)
+  nameWithType: EntityTypeBuilder<TEntity>.HasDerivedType<TDerived>(object)
+  nameWithType.vb: EntityTypeBuilder(Of TEntity).HasDerivedType(Of TDerived)(Object)
+- uid: FluentJson.Core.Builder.EntityTypeBuilder`1.HasDiscriminator(System.String)
+  name: HasDiscriminator(string)
+  href: docs/api/FluentJson.Core.Builder.EntityTypeBuilder-1.html#FluentJson_Core_Builder_EntityTypeBuilder_1_HasDiscriminator_System_String_
+  commentId: M:FluentJson.Core.Builder.EntityTypeBuilder`1.HasDiscriminator(System.String)
+  name.vb: HasDiscriminator(String)
+  fullName: FluentJson.Core.Builder.EntityTypeBuilder<TEntity>.HasDiscriminator(string)
+  fullName.vb: FluentJson.Core.Builder.EntityTypeBuilder(Of TEntity).HasDiscriminator(String)
+  nameWithType: EntityTypeBuilder<TEntity>.HasDiscriminator(string)
+  nameWithType.vb: EntityTypeBuilder(Of TEntity).HasDiscriminator(String)
+- uid: FluentJson.Core.Builder.EntityTypeBuilder`1.HasDiscriminator*
+  name: HasDiscriminator
+  href: docs/api/FluentJson.Core.Builder.EntityTypeBuilder-1.html#FluentJson_Core_Builder_EntityTypeBuilder_1_HasDiscriminator_
+  commentId: Overload:FluentJson.Core.Builder.EntityTypeBuilder`1.HasDiscriminator
+  isSpec: "True"
+  fullName: FluentJson.Core.Builder.EntityTypeBuilder<TEntity>.HasDiscriminator
+  fullName.vb: FluentJson.Core.Builder.EntityTypeBuilder(Of TEntity).HasDiscriminator
+  nameWithType: EntityTypeBuilder<TEntity>.HasDiscriminator
+  nameWithType.vb: EntityTypeBuilder(Of TEntity).HasDiscriminator
+- uid: FluentJson.Core.Builder.EntityTypeBuilder`1.Ignore(System.Linq.Expressions.Expression{System.Func{`0,System.Object}})
+  name: Ignore(Expression<Func<TEntity, object?>>)
+  href: docs/api/FluentJson.Core.Builder.EntityTypeBuilder-1.html#FluentJson_Core_Builder_EntityTypeBuilder_1_Ignore_System_Linq_Expressions_Expression_System_Func__0_System_Object___
+  commentId: M:FluentJson.Core.Builder.EntityTypeBuilder`1.Ignore(System.Linq.Expressions.Expression{System.Func{`0,System.Object}})
+  name.vb: Ignore(Expression(Of Func(Of TEntity, Object)))
+  fullName: FluentJson.Core.Builder.EntityTypeBuilder<TEntity>.Ignore(System.Linq.Expressions.Expression<System.Func<TEntity, object?>>)
+  fullName.vb: FluentJson.Core.Builder.EntityTypeBuilder(Of TEntity).Ignore(System.Linq.Expressions.Expression(Of System.Func(Of TEntity, Object)))
+  nameWithType: EntityTypeBuilder<TEntity>.Ignore(Expression<Func<TEntity, object?>>)
+  nameWithType.vb: EntityTypeBuilder(Of TEntity).Ignore(Expression(Of Func(Of TEntity, Object)))
+- uid: FluentJson.Core.Builder.EntityTypeBuilder`1.Ignore*
+  name: Ignore
+  href: docs/api/FluentJson.Core.Builder.EntityTypeBuilder-1.html#FluentJson_Core_Builder_EntityTypeBuilder_1_Ignore_
+  commentId: Overload:FluentJson.Core.Builder.EntityTypeBuilder`1.Ignore
+  isSpec: "True"
+  fullName: FluentJson.Core.Builder.EntityTypeBuilder<TEntity>.Ignore
+  fullName.vb: FluentJson.Core.Builder.EntityTypeBuilder(Of TEntity).Ignore
+  nameWithType: EntityTypeBuilder<TEntity>.Ignore
+  nameWithType.vb: EntityTypeBuilder(Of TEntity).Ignore
+- uid: FluentJson.Core.Builder.EntityTypeBuilder`1.PreserveReferences(System.Boolean)
+  name: PreserveReferences(bool)
+  href: docs/api/FluentJson.Core.Builder.EntityTypeBuilder-1.html#FluentJson_Core_Builder_EntityTypeBuilder_1_PreserveReferences_System_Boolean_
+  commentId: M:FluentJson.Core.Builder.EntityTypeBuilder`1.PreserveReferences(System.Boolean)
+  name.vb: PreserveReferences(Boolean)
+  fullName: FluentJson.Core.Builder.EntityTypeBuilder<TEntity>.PreserveReferences(bool)
+  fullName.vb: FluentJson.Core.Builder.EntityTypeBuilder(Of TEntity).PreserveReferences(Boolean)
+  nameWithType: EntityTypeBuilder<TEntity>.PreserveReferences(bool)
+  nameWithType.vb: EntityTypeBuilder(Of TEntity).PreserveReferences(Boolean)
+- uid: FluentJson.Core.Builder.EntityTypeBuilder`1.PreserveReferences*
+  name: PreserveReferences
+  href: docs/api/FluentJson.Core.Builder.EntityTypeBuilder-1.html#FluentJson_Core_Builder_EntityTypeBuilder_1_PreserveReferences_
+  commentId: Overload:FluentJson.Core.Builder.EntityTypeBuilder`1.PreserveReferences
+  isSpec: "True"
+  fullName: FluentJson.Core.Builder.EntityTypeBuilder<TEntity>.PreserveReferences
+  fullName.vb: FluentJson.Core.Builder.EntityTypeBuilder(Of TEntity).PreserveReferences
+  nameWithType: EntityTypeBuilder<TEntity>.PreserveReferences
+  nameWithType.vb: EntityTypeBuilder(Of TEntity).PreserveReferences
+- uid: FluentJson.Core.Builder.EntityTypeBuilder`1.Property*
+  name: Property
+  href: docs/api/FluentJson.Core.Builder.EntityTypeBuilder-1.html#FluentJson_Core_Builder_EntityTypeBuilder_1_Property_
+  commentId: Overload:FluentJson.Core.Builder.EntityTypeBuilder`1.Property
+  isSpec: "True"
+  fullName: FluentJson.Core.Builder.EntityTypeBuilder<TEntity>.Property
+  fullName.vb: FluentJson.Core.Builder.EntityTypeBuilder(Of TEntity).Property
+  nameWithType: EntityTypeBuilder<TEntity>.Property
+  nameWithType.vb: EntityTypeBuilder(Of TEntity).Property
+- uid: FluentJson.Core.Builder.EntityTypeBuilder`1.Property``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})
+  name: Property<TProperty>(Expression<Func<TEntity, TProperty>>)
+  href: docs/api/FluentJson.Core.Builder.EntityTypeBuilder-1.html#FluentJson_Core_Builder_EntityTypeBuilder_1_Property__1_System_Linq_Expressions_Expression_System_Func__0___0___
+  commentId: M:FluentJson.Core.Builder.EntityTypeBuilder`1.Property``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})
+  name.vb: Property(Of TProperty)(Expression(Of Func(Of TEntity, TProperty)))
+  fullName: FluentJson.Core.Builder.EntityTypeBuilder<TEntity>.Property<TProperty>(System.Linq.Expressions.Expression<System.Func<TEntity, TProperty>>)
+  fullName.vb: FluentJson.Core.Builder.EntityTypeBuilder(Of TEntity).Property(Of TProperty)(System.Linq.Expressions.Expression(Of System.Func(Of TEntity, TProperty)))
+  nameWithType: EntityTypeBuilder<TEntity>.Property<TProperty>(Expression<Func<TEntity, TProperty>>)
+  nameWithType.vb: EntityTypeBuilder(Of TEntity).Property(Of TProperty)(Expression(Of Func(Of TEntity, TProperty)))
+- uid: FluentJson.Core.Builder.EntityTypeBuilder`1.Property``1(System.String)
+  name: Property<TProperty>(string)
+  href: docs/api/FluentJson.Core.Builder.EntityTypeBuilder-1.html#FluentJson_Core_Builder_EntityTypeBuilder_1_Property__1_System_String_
+  commentId: M:FluentJson.Core.Builder.EntityTypeBuilder`1.Property``1(System.String)
+  name.vb: Property(Of TProperty)(String)
+  fullName: FluentJson.Core.Builder.EntityTypeBuilder<TEntity>.Property<TProperty>(string)
+  fullName.vb: FluentJson.Core.Builder.EntityTypeBuilder(Of TEntity).Property(Of TProperty)(String)
+  nameWithType: EntityTypeBuilder<TEntity>.Property<TProperty>(string)
+  nameWithType.vb: EntityTypeBuilder(Of TEntity).Property(Of TProperty)(String)
+- uid: FluentJson.Core.Builder.IJsonTypeConfiguration`1
+  name: IJsonTypeConfiguration<TEntity>
+  href: docs/api/FluentJson.Core.Builder.IJsonTypeConfiguration-1.html
+  commentId: T:FluentJson.Core.Builder.IJsonTypeConfiguration`1
+  name.vb: IJsonTypeConfiguration(Of TEntity)
+  fullName: FluentJson.Core.Builder.IJsonTypeConfiguration<TEntity>
+  fullName.vb: FluentJson.Core.Builder.IJsonTypeConfiguration(Of TEntity)
+  nameWithType: IJsonTypeConfiguration<TEntity>
+  nameWithType.vb: IJsonTypeConfiguration(Of TEntity)
+- uid: FluentJson.Core.Builder.IJsonTypeConfiguration`1.Configure(FluentJson.Core.Builder.EntityTypeBuilder{`0})
+  name: Configure(EntityTypeBuilder<TEntity>)
+  href: docs/api/FluentJson.Core.Builder.IJsonTypeConfiguration-1.html#FluentJson_Core_Builder_IJsonTypeConfiguration_1_Configure_FluentJson_Core_Builder_EntityTypeBuilder__0__
+  commentId: M:FluentJson.Core.Builder.IJsonTypeConfiguration`1.Configure(FluentJson.Core.Builder.EntityTypeBuilder{`0})
+  name.vb: Configure(EntityTypeBuilder(Of TEntity))
+  fullName: FluentJson.Core.Builder.IJsonTypeConfiguration<TEntity>.Configure(FluentJson.Core.Builder.EntityTypeBuilder<TEntity>)
+  fullName.vb: FluentJson.Core.Builder.IJsonTypeConfiguration(Of TEntity).Configure(FluentJson.Core.Builder.EntityTypeBuilder(Of TEntity))
+  nameWithType: IJsonTypeConfiguration<TEntity>.Configure(EntityTypeBuilder<TEntity>)
+  nameWithType.vb: IJsonTypeConfiguration(Of TEntity).Configure(EntityTypeBuilder(Of TEntity))
+- uid: FluentJson.Core.Builder.IJsonTypeConfiguration`1.Configure*
+  name: Configure
+  href: docs/api/FluentJson.Core.Builder.IJsonTypeConfiguration-1.html#FluentJson_Core_Builder_IJsonTypeConfiguration_1_Configure_
+  commentId: Overload:FluentJson.Core.Builder.IJsonTypeConfiguration`1.Configure
+  isSpec: "True"
+  fullName: FluentJson.Core.Builder.IJsonTypeConfiguration<TEntity>.Configure
+  fullName.vb: FluentJson.Core.Builder.IJsonTypeConfiguration(Of TEntity).Configure
+  nameWithType: IJsonTypeConfiguration<TEntity>.Configure
+  nameWithType.vb: IJsonTypeConfiguration(Of TEntity).Configure
+- uid: FluentJson.Core.Builder.JsonModelBuilder
+  name: JsonModelBuilder
+  href: docs/api/FluentJson.Core.Builder.JsonModelBuilder.html
+  commentId: T:FluentJson.Core.Builder.JsonModelBuilder
+  fullName: FluentJson.Core.Builder.JsonModelBuilder
+  nameWithType: JsonModelBuilder
+- uid: FluentJson.Core.Builder.JsonModelBuilder.ApplyConfiguration*
+  name: ApplyConfiguration
+  href: docs/api/FluentJson.Core.Builder.JsonModelBuilder.html#FluentJson_Core_Builder_JsonModelBuilder_ApplyConfiguration_
+  commentId: Overload:FluentJson.Core.Builder.JsonModelBuilder.ApplyConfiguration
+  isSpec: "True"
+  fullName: FluentJson.Core.Builder.JsonModelBuilder.ApplyConfiguration
+  nameWithType: JsonModelBuilder.ApplyConfiguration
+- uid: FluentJson.Core.Builder.JsonModelBuilder.ApplyConfiguration``1(FluentJson.Core.Builder.IJsonTypeConfiguration{``0})
+  name: ApplyConfiguration<TEntity>(IJsonTypeConfiguration<TEntity>)
+  href: docs/api/FluentJson.Core.Builder.JsonModelBuilder.html#FluentJson_Core_Builder_JsonModelBuilder_ApplyConfiguration__1_FluentJson_Core_Builder_IJsonTypeConfiguration___0__
+  commentId: M:FluentJson.Core.Builder.JsonModelBuilder.ApplyConfiguration``1(FluentJson.Core.Builder.IJsonTypeConfiguration{``0})
+  name.vb: ApplyConfiguration(Of TEntity)(IJsonTypeConfiguration(Of TEntity))
+  fullName: FluentJson.Core.Builder.JsonModelBuilder.ApplyConfiguration<TEntity>(FluentJson.Core.Builder.IJsonTypeConfiguration<TEntity>)
+  fullName.vb: FluentJson.Core.Builder.JsonModelBuilder.ApplyConfiguration(Of TEntity)(FluentJson.Core.Builder.IJsonTypeConfiguration(Of TEntity))
+  nameWithType: JsonModelBuilder.ApplyConfiguration<TEntity>(IJsonTypeConfiguration<TEntity>)
+  nameWithType.vb: JsonModelBuilder.ApplyConfiguration(Of TEntity)(IJsonTypeConfiguration(Of TEntity))
+- uid: FluentJson.Core.Builder.JsonModelBuilder.ApplyConfigurationsFromAssembly(System.Reflection.Assembly)
+  name: ApplyConfigurationsFromAssembly(Assembly)
+  href: docs/api/FluentJson.Core.Builder.JsonModelBuilder.html#FluentJson_Core_Builder_JsonModelBuilder_ApplyConfigurationsFromAssembly_System_Reflection_Assembly_
+  commentId: M:FluentJson.Core.Builder.JsonModelBuilder.ApplyConfigurationsFromAssembly(System.Reflection.Assembly)
+  fullName: FluentJson.Core.Builder.JsonModelBuilder.ApplyConfigurationsFromAssembly(System.Reflection.Assembly)
+  nameWithType: JsonModelBuilder.ApplyConfigurationsFromAssembly(Assembly)
+- uid: FluentJson.Core.Builder.JsonModelBuilder.ApplyConfigurationsFromAssembly*
+  name: ApplyConfigurationsFromAssembly
+  href: docs/api/FluentJson.Core.Builder.JsonModelBuilder.html#FluentJson_Core_Builder_JsonModelBuilder_ApplyConfigurationsFromAssembly_
+  commentId: Overload:FluentJson.Core.Builder.JsonModelBuilder.ApplyConfigurationsFromAssembly
+  isSpec: "True"
+  fullName: FluentJson.Core.Builder.JsonModelBuilder.ApplyConfigurationsFromAssembly
+  nameWithType: JsonModelBuilder.ApplyConfigurationsFromAssembly
+- uid: FluentJson.Core.Builder.JsonModelBuilder.Build
+  name: Build()
+  href: docs/api/FluentJson.Core.Builder.JsonModelBuilder.html#FluentJson_Core_Builder_JsonModelBuilder_Build
+  commentId: M:FluentJson.Core.Builder.JsonModelBuilder.Build
+  fullName: FluentJson.Core.Builder.JsonModelBuilder.Build()
+  nameWithType: JsonModelBuilder.Build()
+- uid: FluentJson.Core.Builder.JsonModelBuilder.Build*
+  name: Build
+  href: docs/api/FluentJson.Core.Builder.JsonModelBuilder.html#FluentJson_Core_Builder_JsonModelBuilder_Build_
+  commentId: Overload:FluentJson.Core.Builder.JsonModelBuilder.Build
+  isSpec: "True"
+  fullName: FluentJson.Core.Builder.JsonModelBuilder.Build
+  nameWithType: JsonModelBuilder.Build
+- uid: FluentJson.Core.Builder.JsonModelBuilder.Entity*
+  name: Entity
+  href: docs/api/FluentJson.Core.Builder.JsonModelBuilder.html#FluentJson_Core_Builder_JsonModelBuilder_Entity_
+  commentId: Overload:FluentJson.Core.Builder.JsonModelBuilder.Entity
+  isSpec: "True"
+  fullName: FluentJson.Core.Builder.JsonModelBuilder.Entity
+  nameWithType: JsonModelBuilder.Entity
+- uid: FluentJson.Core.Builder.JsonModelBuilder.Entity``1
+  name: Entity<TEntity>()
+  href: docs/api/FluentJson.Core.Builder.JsonModelBuilder.html#FluentJson_Core_Builder_JsonModelBuilder_Entity__1
+  commentId: M:FluentJson.Core.Builder.JsonModelBuilder.Entity``1
+  name.vb: Entity(Of TEntity)()
+  fullName: FluentJson.Core.Builder.JsonModelBuilder.Entity<TEntity>()
+  fullName.vb: FluentJson.Core.Builder.JsonModelBuilder.Entity(Of TEntity)()
+  nameWithType: JsonModelBuilder.Entity<TEntity>()
+  nameWithType.vb: JsonModelBuilder.Entity(Of TEntity)()
+- uid: FluentJson.Core.Builder.PropertyBuilder`1
+  name: PropertyBuilder<TProperty>
+  href: docs/api/FluentJson.Core.Builder.PropertyBuilder-1.html
+  commentId: T:FluentJson.Core.Builder.PropertyBuilder`1
+  name.vb: PropertyBuilder(Of TProperty)
+  fullName: FluentJson.Core.Builder.PropertyBuilder<TProperty>
+  fullName.vb: FluentJson.Core.Builder.PropertyBuilder(Of TProperty)
+  nameWithType: PropertyBuilder<TProperty>
+  nameWithType.vb: PropertyBuilder(Of TProperty)
+- uid: FluentJson.Core.Builder.PropertyBuilder`1.HasConversion*
+  name: HasConversion
+  href: docs/api/FluentJson.Core.Builder.PropertyBuilder-1.html#FluentJson_Core_Builder_PropertyBuilder_1_HasConversion_
+  commentId: Overload:FluentJson.Core.Builder.PropertyBuilder`1.HasConversion
+  isSpec: "True"
+  fullName: FluentJson.Core.Builder.PropertyBuilder<TProperty>.HasConversion
+  fullName.vb: FluentJson.Core.Builder.PropertyBuilder(Of TProperty).HasConversion
+  nameWithType: PropertyBuilder<TProperty>.HasConversion
+  nameWithType.vb: PropertyBuilder(Of TProperty).HasConversion
+- uid: FluentJson.Core.Builder.PropertyBuilder`1.HasConversion``1(System.Func{`0,``0},System.Func{``0,`0})
+  name: HasConversion<TUnwrapped>(Func<TProperty, TUnwrapped>, Func<TUnwrapped, TProperty>)
+  href: docs/api/FluentJson.Core.Builder.PropertyBuilder-1.html#FluentJson_Core_Builder_PropertyBuilder_1_HasConversion__1_System_Func__0___0__System_Func___0__0__
+  commentId: M:FluentJson.Core.Builder.PropertyBuilder`1.HasConversion``1(System.Func{`0,``0},System.Func{``0,`0})
+  name.vb: HasConversion(Of TUnwrapped)(Func(Of TProperty, TUnwrapped), Func(Of TUnwrapped, TProperty))
+  fullName: FluentJson.Core.Builder.PropertyBuilder<TProperty>.HasConversion<TUnwrapped>(System.Func<TProperty, TUnwrapped>, System.Func<TUnwrapped, TProperty>)
+  fullName.vb: FluentJson.Core.Builder.PropertyBuilder(Of TProperty).HasConversion(Of TUnwrapped)(System.Func(Of TProperty, TUnwrapped), System.Func(Of TUnwrapped, TProperty))
+  nameWithType: PropertyBuilder<TProperty>.HasConversion<TUnwrapped>(Func<TProperty, TUnwrapped>, Func<TUnwrapped, TProperty>)
+  nameWithType.vb: PropertyBuilder(Of TProperty).HasConversion(Of TUnwrapped)(Func(Of TProperty, TUnwrapped), Func(Of TUnwrapped, TProperty))
+- uid: FluentJson.Core.Builder.PropertyBuilder`1.HasName(System.String)
+  name: HasName(string)
+  href: docs/api/FluentJson.Core.Builder.PropertyBuilder-1.html#FluentJson_Core_Builder_PropertyBuilder_1_HasName_System_String_
+  commentId: M:FluentJson.Core.Builder.PropertyBuilder`1.HasName(System.String)
+  name.vb: HasName(String)
+  fullName: FluentJson.Core.Builder.PropertyBuilder<TProperty>.HasName(string)
+  fullName.vb: FluentJson.Core.Builder.PropertyBuilder(Of TProperty).HasName(String)
+  nameWithType: PropertyBuilder<TProperty>.HasName(string)
+  nameWithType.vb: PropertyBuilder(Of TProperty).HasName(String)
+- uid: FluentJson.Core.Builder.PropertyBuilder`1.HasName*
+  name: HasName
+  href: docs/api/FluentJson.Core.Builder.PropertyBuilder-1.html#FluentJson_Core_Builder_PropertyBuilder_1_HasName_
+  commentId: Overload:FluentJson.Core.Builder.PropertyBuilder`1.HasName
+  isSpec: "True"
+  fullName: FluentJson.Core.Builder.PropertyBuilder<TProperty>.HasName
+  fullName.vb: FluentJson.Core.Builder.PropertyBuilder(Of TProperty).HasName
+  nameWithType: PropertyBuilder<TProperty>.HasName
+  nameWithType.vb: PropertyBuilder(Of TProperty).HasName
+- uid: FluentJson.Core.Builder.PropertyBuilder`1.Ignore(System.Boolean)
+  name: Ignore(bool)
+  href: docs/api/FluentJson.Core.Builder.PropertyBuilder-1.html#FluentJson_Core_Builder_PropertyBuilder_1_Ignore_System_Boolean_
+  commentId: M:FluentJson.Core.Builder.PropertyBuilder`1.Ignore(System.Boolean)
+  name.vb: Ignore(Boolean)
+  fullName: FluentJson.Core.Builder.PropertyBuilder<TProperty>.Ignore(bool)
+  fullName.vb: FluentJson.Core.Builder.PropertyBuilder(Of TProperty).Ignore(Boolean)
+  nameWithType: PropertyBuilder<TProperty>.Ignore(bool)
+  nameWithType.vb: PropertyBuilder(Of TProperty).Ignore(Boolean)
+- uid: FluentJson.Core.Builder.PropertyBuilder`1.Ignore*
+  name: Ignore
+  href: docs/api/FluentJson.Core.Builder.PropertyBuilder-1.html#FluentJson_Core_Builder_PropertyBuilder_1_Ignore_
+  commentId: Overload:FluentJson.Core.Builder.PropertyBuilder`1.Ignore
+  isSpec: "True"
+  fullName: FluentJson.Core.Builder.PropertyBuilder<TProperty>.Ignore
+  fullName.vb: FluentJson.Core.Builder.PropertyBuilder(Of TProperty).Ignore
+  nameWithType: PropertyBuilder<TProperty>.Ignore
+  nameWithType.vb: PropertyBuilder(Of TProperty).Ignore
+- uid: FluentJson.Core.Builder.PropertyBuilder`1.IsRequired(System.Boolean)
+  name: IsRequired(bool)
+  href: docs/api/FluentJson.Core.Builder.PropertyBuilder-1.html#FluentJson_Core_Builder_PropertyBuilder_1_IsRequired_System_Boolean_
+  commentId: M:FluentJson.Core.Builder.PropertyBuilder`1.IsRequired(System.Boolean)
+  name.vb: IsRequired(Boolean)
+  fullName: FluentJson.Core.Builder.PropertyBuilder<TProperty>.IsRequired(bool)
+  fullName.vb: FluentJson.Core.Builder.PropertyBuilder(Of TProperty).IsRequired(Boolean)
+  nameWithType: PropertyBuilder<TProperty>.IsRequired(bool)
+  nameWithType.vb: PropertyBuilder(Of TProperty).IsRequired(Boolean)
+- uid: FluentJson.Core.Builder.PropertyBuilder`1.IsRequired*
+  name: IsRequired
+  href: docs/api/FluentJson.Core.Builder.PropertyBuilder-1.html#FluentJson_Core_Builder_PropertyBuilder_1_IsRequired_
+  commentId: Overload:FluentJson.Core.Builder.PropertyBuilder`1.IsRequired
+  isSpec: "True"
+  fullName: FluentJson.Core.Builder.PropertyBuilder<TProperty>.IsRequired
+  fullName.vb: FluentJson.Core.Builder.PropertyBuilder(Of TProperty).IsRequired
+  nameWithType: PropertyBuilder<TProperty>.IsRequired
+  nameWithType.vb: PropertyBuilder(Of TProperty).IsRequired
+- uid: FluentJson.Core.Exceptions
+  name: FluentJson.Core.Exceptions
+  href: docs/api/FluentJson.Core.Exceptions.html
+  commentId: N:FluentJson.Core.Exceptions
+  fullName: FluentJson.Core.Exceptions
+  nameWithType: FluentJson.Core.Exceptions
+- uid: FluentJson.Core.Exceptions.FluentJsonConfigurationException
+  name: FluentJsonConfigurationException
+  href: docs/api/FluentJson.Core.Exceptions.FluentJsonConfigurationException.html
+  commentId: T:FluentJson.Core.Exceptions.FluentJsonConfigurationException
+  fullName: FluentJson.Core.Exceptions.FluentJsonConfigurationException
+  nameWithType: FluentJsonConfigurationException
+- uid: FluentJson.Core.Exceptions.FluentJsonConfigurationException.#ctor(System.String)
+  name: FluentJsonConfigurationException(string)
+  href: docs/api/FluentJson.Core.Exceptions.FluentJsonConfigurationException.html#FluentJson_Core_Exceptions_FluentJsonConfigurationException__ctor_System_String_
+  commentId: M:FluentJson.Core.Exceptions.FluentJsonConfigurationException.#ctor(System.String)
+  name.vb: New(String)
+  fullName: FluentJson.Core.Exceptions.FluentJsonConfigurationException.FluentJsonConfigurationException(string)
+  fullName.vb: FluentJson.Core.Exceptions.FluentJsonConfigurationException.New(String)
+  nameWithType: FluentJsonConfigurationException.FluentJsonConfigurationException(string)
+  nameWithType.vb: FluentJsonConfigurationException.New(String)
+- uid: FluentJson.Core.Exceptions.FluentJsonConfigurationException.#ctor(System.String,System.Exception)
+  name: FluentJsonConfigurationException(string, Exception)
+  href: docs/api/FluentJson.Core.Exceptions.FluentJsonConfigurationException.html#FluentJson_Core_Exceptions_FluentJsonConfigurationException__ctor_System_String_System_Exception_
+  commentId: M:FluentJson.Core.Exceptions.FluentJsonConfigurationException.#ctor(System.String,System.Exception)
+  name.vb: New(String, Exception)
+  fullName: FluentJson.Core.Exceptions.FluentJsonConfigurationException.FluentJsonConfigurationException(string, System.Exception)
+  fullName.vb: FluentJson.Core.Exceptions.FluentJsonConfigurationException.New(String, System.Exception)
+  nameWithType: FluentJsonConfigurationException.FluentJsonConfigurationException(string, Exception)
+  nameWithType.vb: FluentJsonConfigurationException.New(String, Exception)
+- uid: FluentJson.Core.Exceptions.FluentJsonConfigurationException.#ctor*
+  name: FluentJsonConfigurationException
+  href: docs/api/FluentJson.Core.Exceptions.FluentJsonConfigurationException.html#FluentJson_Core_Exceptions_FluentJsonConfigurationException__ctor_
+  commentId: Overload:FluentJson.Core.Exceptions.FluentJsonConfigurationException.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: FluentJson.Core.Exceptions.FluentJsonConfigurationException.FluentJsonConfigurationException
+  fullName.vb: FluentJson.Core.Exceptions.FluentJsonConfigurationException.New
+  nameWithType: FluentJsonConfigurationException.FluentJsonConfigurationException
+  nameWithType.vb: FluentJsonConfigurationException.New
+- uid: FluentJson.Core.Exceptions.FluentJsonExpressionException
+  name: FluentJsonExpressionException
+  href: docs/api/FluentJson.Core.Exceptions.FluentJsonExpressionException.html
+  commentId: T:FluentJson.Core.Exceptions.FluentJsonExpressionException
+  fullName: FluentJson.Core.Exceptions.FluentJsonExpressionException
+  nameWithType: FluentJsonExpressionException
+- uid: FluentJson.Core.Exceptions.FluentJsonExpressionException.#ctor(System.String)
+  name: FluentJsonExpressionException(string)
+  href: docs/api/FluentJson.Core.Exceptions.FluentJsonExpressionException.html#FluentJson_Core_Exceptions_FluentJsonExpressionException__ctor_System_String_
+  commentId: M:FluentJson.Core.Exceptions.FluentJsonExpressionException.#ctor(System.String)
+  name.vb: New(String)
+  fullName: FluentJson.Core.Exceptions.FluentJsonExpressionException.FluentJsonExpressionException(string)
+  fullName.vb: FluentJson.Core.Exceptions.FluentJsonExpressionException.New(String)
+  nameWithType: FluentJsonExpressionException.FluentJsonExpressionException(string)
+  nameWithType.vb: FluentJsonExpressionException.New(String)
+- uid: FluentJson.Core.Exceptions.FluentJsonExpressionException.#ctor(System.String,System.Exception)
+  name: FluentJsonExpressionException(string, Exception)
+  href: docs/api/FluentJson.Core.Exceptions.FluentJsonExpressionException.html#FluentJson_Core_Exceptions_FluentJsonExpressionException__ctor_System_String_System_Exception_
+  commentId: M:FluentJson.Core.Exceptions.FluentJsonExpressionException.#ctor(System.String,System.Exception)
+  name.vb: New(String, Exception)
+  fullName: FluentJson.Core.Exceptions.FluentJsonExpressionException.FluentJsonExpressionException(string, System.Exception)
+  fullName.vb: FluentJson.Core.Exceptions.FluentJsonExpressionException.New(String, System.Exception)
+  nameWithType: FluentJsonExpressionException.FluentJsonExpressionException(string, Exception)
+  nameWithType.vb: FluentJsonExpressionException.New(String, Exception)
+- uid: FluentJson.Core.Exceptions.FluentJsonExpressionException.#ctor*
+  name: FluentJsonExpressionException
+  href: docs/api/FluentJson.Core.Exceptions.FluentJsonExpressionException.html#FluentJson_Core_Exceptions_FluentJsonExpressionException__ctor_
+  commentId: Overload:FluentJson.Core.Exceptions.FluentJsonExpressionException.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: FluentJson.Core.Exceptions.FluentJsonExpressionException.FluentJsonExpressionException
+  fullName.vb: FluentJson.Core.Exceptions.FluentJsonExpressionException.New
+  nameWithType: FluentJsonExpressionException.FluentJsonExpressionException
+  nameWithType.vb: FluentJsonExpressionException.New
+- uid: FluentJson.Core.Metadata
+  name: FluentJson.Core.Metadata
+  href: docs/api/FluentJson.Core.Metadata.html
+  commentId: N:FluentJson.Core.Metadata
+  fullName: FluentJson.Core.Metadata
+  nameWithType: FluentJson.Core.Metadata
+- uid: FluentJson.Core.Metadata.IJsonEntity
+  name: IJsonEntity
+  href: docs/api/FluentJson.Core.Metadata.IJsonEntity.html
+  commentId: T:FluentJson.Core.Metadata.IJsonEntity
+  fullName: FluentJson.Core.Metadata.IJsonEntity
+  nameWithType: IJsonEntity
+- uid: FluentJson.Core.Metadata.IJsonEntity.ConstructorFactory
+  name: ConstructorFactory
+  href: docs/api/FluentJson.Core.Metadata.IJsonEntity.html#FluentJson_Core_Metadata_IJsonEntity_ConstructorFactory
+  commentId: P:FluentJson.Core.Metadata.IJsonEntity.ConstructorFactory
+  fullName: FluentJson.Core.Metadata.IJsonEntity.ConstructorFactory
+  nameWithType: IJsonEntity.ConstructorFactory
+- uid: FluentJson.Core.Metadata.IJsonEntity.ConstructorFactory*
+  name: ConstructorFactory
+  href: docs/api/FluentJson.Core.Metadata.IJsonEntity.html#FluentJson_Core_Metadata_IJsonEntity_ConstructorFactory_
+  commentId: Overload:FluentJson.Core.Metadata.IJsonEntity.ConstructorFactory
+  isSpec: "True"
+  fullName: FluentJson.Core.Metadata.IJsonEntity.ConstructorFactory
+  nameWithType: IJsonEntity.ConstructorFactory
+- uid: FluentJson.Core.Metadata.IJsonEntity.DerivedTypes
+  name: DerivedTypes
+  href: docs/api/FluentJson.Core.Metadata.IJsonEntity.html#FluentJson_Core_Metadata_IJsonEntity_DerivedTypes
+  commentId: P:FluentJson.Core.Metadata.IJsonEntity.DerivedTypes
+  fullName: FluentJson.Core.Metadata.IJsonEntity.DerivedTypes
+  nameWithType: IJsonEntity.DerivedTypes
+- uid: FluentJson.Core.Metadata.IJsonEntity.DerivedTypes*
+  name: DerivedTypes
+  href: docs/api/FluentJson.Core.Metadata.IJsonEntity.html#FluentJson_Core_Metadata_IJsonEntity_DerivedTypes_
+  commentId: Overload:FluentJson.Core.Metadata.IJsonEntity.DerivedTypes
+  isSpec: "True"
+  fullName: FluentJson.Core.Metadata.IJsonEntity.DerivedTypes
+  nameWithType: IJsonEntity.DerivedTypes
+- uid: FluentJson.Core.Metadata.IJsonEntity.DiscriminatorPropertyName
+  name: DiscriminatorPropertyName
+  href: docs/api/FluentJson.Core.Metadata.IJsonEntity.html#FluentJson_Core_Metadata_IJsonEntity_DiscriminatorPropertyName
+  commentId: P:FluentJson.Core.Metadata.IJsonEntity.DiscriminatorPropertyName
+  fullName: FluentJson.Core.Metadata.IJsonEntity.DiscriminatorPropertyName
+  nameWithType: IJsonEntity.DiscriminatorPropertyName
+- uid: FluentJson.Core.Metadata.IJsonEntity.DiscriminatorPropertyName*
+  name: DiscriminatorPropertyName
+  href: docs/api/FluentJson.Core.Metadata.IJsonEntity.html#FluentJson_Core_Metadata_IJsonEntity_DiscriminatorPropertyName_
+  commentId: Overload:FluentJson.Core.Metadata.IJsonEntity.DiscriminatorPropertyName
+  isSpec: "True"
+  fullName: FluentJson.Core.Metadata.IJsonEntity.DiscriminatorPropertyName
+  nameWithType: IJsonEntity.DiscriminatorPropertyName
+- uid: FluentJson.Core.Metadata.IJsonEntity.EntityType
+  name: EntityType
+  href: docs/api/FluentJson.Core.Metadata.IJsonEntity.html#FluentJson_Core_Metadata_IJsonEntity_EntityType
+  commentId: P:FluentJson.Core.Metadata.IJsonEntity.EntityType
+  fullName: FluentJson.Core.Metadata.IJsonEntity.EntityType
+  nameWithType: IJsonEntity.EntityType
+- uid: FluentJson.Core.Metadata.IJsonEntity.EntityType*
+  name: EntityType
+  href: docs/api/FluentJson.Core.Metadata.IJsonEntity.html#FluentJson_Core_Metadata_IJsonEntity_EntityType_
+  commentId: Overload:FluentJson.Core.Metadata.IJsonEntity.EntityType
+  isSpec: "True"
+  fullName: FluentJson.Core.Metadata.IJsonEntity.EntityType
+  nameWithType: IJsonEntity.EntityType
+- uid: FluentJson.Core.Metadata.IJsonEntity.Properties
+  name: Properties
+  href: docs/api/FluentJson.Core.Metadata.IJsonEntity.html#FluentJson_Core_Metadata_IJsonEntity_Properties
+  commentId: P:FluentJson.Core.Metadata.IJsonEntity.Properties
+  fullName: FluentJson.Core.Metadata.IJsonEntity.Properties
+  nameWithType: IJsonEntity.Properties
+- uid: FluentJson.Core.Metadata.IJsonEntity.Properties*
+  name: Properties
+  href: docs/api/FluentJson.Core.Metadata.IJsonEntity.html#FluentJson_Core_Metadata_IJsonEntity_Properties_
+  commentId: Overload:FluentJson.Core.Metadata.IJsonEntity.Properties
+  isSpec: "True"
+  fullName: FluentJson.Core.Metadata.IJsonEntity.Properties
+  nameWithType: IJsonEntity.Properties
+- uid: FluentJson.Core.Metadata.IJsonEntity.ShouldPreserveReferences
+  name: ShouldPreserveReferences
+  href: docs/api/FluentJson.Core.Metadata.IJsonEntity.html#FluentJson_Core_Metadata_IJsonEntity_ShouldPreserveReferences
+  commentId: P:FluentJson.Core.Metadata.IJsonEntity.ShouldPreserveReferences
+  fullName: FluentJson.Core.Metadata.IJsonEntity.ShouldPreserveReferences
+  nameWithType: IJsonEntity.ShouldPreserveReferences
+- uid: FluentJson.Core.Metadata.IJsonEntity.ShouldPreserveReferences*
+  name: ShouldPreserveReferences
+  href: docs/api/FluentJson.Core.Metadata.IJsonEntity.html#FluentJson_Core_Metadata_IJsonEntity_ShouldPreserveReferences_
+  commentId: Overload:FluentJson.Core.Metadata.IJsonEntity.ShouldPreserveReferences
+  isSpec: "True"
+  fullName: FluentJson.Core.Metadata.IJsonEntity.ShouldPreserveReferences
+  nameWithType: IJsonEntity.ShouldPreserveReferences
+- uid: FluentJson.Core.Metadata.IJsonModel
+  name: IJsonModel
+  href: docs/api/FluentJson.Core.Metadata.IJsonModel.html
+  commentId: T:FluentJson.Core.Metadata.IJsonModel
+  fullName: FluentJson.Core.Metadata.IJsonModel
+  nameWithType: IJsonModel
+- uid: FluentJson.Core.Metadata.IJsonModel.Entities
+  name: Entities
+  href: docs/api/FluentJson.Core.Metadata.IJsonModel.html#FluentJson_Core_Metadata_IJsonModel_Entities
+  commentId: P:FluentJson.Core.Metadata.IJsonModel.Entities
+  fullName: FluentJson.Core.Metadata.IJsonModel.Entities
+  nameWithType: IJsonModel.Entities
+- uid: FluentJson.Core.Metadata.IJsonModel.Entities*
+  name: Entities
+  href: docs/api/FluentJson.Core.Metadata.IJsonModel.html#FluentJson_Core_Metadata_IJsonModel_Entities_
+  commentId: Overload:FluentJson.Core.Metadata.IJsonModel.Entities
+  isSpec: "True"
+  fullName: FluentJson.Core.Metadata.IJsonModel.Entities
+  nameWithType: IJsonModel.Entities
+- uid: FluentJson.Core.Metadata.IJsonProperty
+  name: IJsonProperty
+  href: docs/api/FluentJson.Core.Metadata.IJsonProperty.html
+  commentId: T:FluentJson.Core.Metadata.IJsonProperty
+  fullName: FluentJson.Core.Metadata.IJsonProperty
+  nameWithType: IJsonProperty
+- uid: FluentJson.Core.Metadata.IJsonProperty.ConvertedType
+  name: ConvertedType
+  href: docs/api/FluentJson.Core.Metadata.IJsonProperty.html#FluentJson_Core_Metadata_IJsonProperty_ConvertedType
+  commentId: P:FluentJson.Core.Metadata.IJsonProperty.ConvertedType
+  fullName: FluentJson.Core.Metadata.IJsonProperty.ConvertedType
+  nameWithType: IJsonProperty.ConvertedType
+- uid: FluentJson.Core.Metadata.IJsonProperty.ConvertedType*
+  name: ConvertedType
+  href: docs/api/FluentJson.Core.Metadata.IJsonProperty.html#FluentJson_Core_Metadata_IJsonProperty_ConvertedType_
+  commentId: Overload:FluentJson.Core.Metadata.IJsonProperty.ConvertedType
+  isSpec: "True"
+  fullName: FluentJson.Core.Metadata.IJsonProperty.ConvertedType
+  nameWithType: IJsonProperty.ConvertedType
+- uid: FluentJson.Core.Metadata.IJsonProperty.DeserializeFunc
+  name: DeserializeFunc
+  href: docs/api/FluentJson.Core.Metadata.IJsonProperty.html#FluentJson_Core_Metadata_IJsonProperty_DeserializeFunc
+  commentId: P:FluentJson.Core.Metadata.IJsonProperty.DeserializeFunc
+  fullName: FluentJson.Core.Metadata.IJsonProperty.DeserializeFunc
+  nameWithType: IJsonProperty.DeserializeFunc
+- uid: FluentJson.Core.Metadata.IJsonProperty.DeserializeFunc*
+  name: DeserializeFunc
+  href: docs/api/FluentJson.Core.Metadata.IJsonProperty.html#FluentJson_Core_Metadata_IJsonProperty_DeserializeFunc_
+  commentId: Overload:FluentJson.Core.Metadata.IJsonProperty.DeserializeFunc
+  isSpec: "True"
+  fullName: FluentJson.Core.Metadata.IJsonProperty.DeserializeFunc
+  nameWithType: IJsonProperty.DeserializeFunc
+- uid: FluentJson.Core.Metadata.IJsonProperty.IsIgnored
+  name: IsIgnored
+  href: docs/api/FluentJson.Core.Metadata.IJsonProperty.html#FluentJson_Core_Metadata_IJsonProperty_IsIgnored
+  commentId: P:FluentJson.Core.Metadata.IJsonProperty.IsIgnored
+  fullName: FluentJson.Core.Metadata.IJsonProperty.IsIgnored
+  nameWithType: IJsonProperty.IsIgnored
+- uid: FluentJson.Core.Metadata.IJsonProperty.IsIgnored*
+  name: IsIgnored
+  href: docs/api/FluentJson.Core.Metadata.IJsonProperty.html#FluentJson_Core_Metadata_IJsonProperty_IsIgnored_
+  commentId: Overload:FluentJson.Core.Metadata.IJsonProperty.IsIgnored
+  isSpec: "True"
+  fullName: FluentJson.Core.Metadata.IJsonProperty.IsIgnored
+  nameWithType: IJsonProperty.IsIgnored
+- uid: FluentJson.Core.Metadata.IJsonProperty.IsRequired
+  name: IsRequired
+  href: docs/api/FluentJson.Core.Metadata.IJsonProperty.html#FluentJson_Core_Metadata_IJsonProperty_IsRequired
+  commentId: P:FluentJson.Core.Metadata.IJsonProperty.IsRequired
+  fullName: FluentJson.Core.Metadata.IJsonProperty.IsRequired
+  nameWithType: IJsonProperty.IsRequired
+- uid: FluentJson.Core.Metadata.IJsonProperty.IsRequired*
+  name: IsRequired
+  href: docs/api/FluentJson.Core.Metadata.IJsonProperty.html#FluentJson_Core_Metadata_IJsonProperty_IsRequired_
+  commentId: Overload:FluentJson.Core.Metadata.IJsonProperty.IsRequired
+  isSpec: "True"
+  fullName: FluentJson.Core.Metadata.IJsonProperty.IsRequired
+  nameWithType: IJsonProperty.IsRequired
+- uid: FluentJson.Core.Metadata.IJsonProperty.MemberInfo
+  name: MemberInfo
+  href: docs/api/FluentJson.Core.Metadata.IJsonProperty.html#FluentJson_Core_Metadata_IJsonProperty_MemberInfo
+  commentId: P:FluentJson.Core.Metadata.IJsonProperty.MemberInfo
+  fullName: FluentJson.Core.Metadata.IJsonProperty.MemberInfo
+  nameWithType: IJsonProperty.MemberInfo
+- uid: FluentJson.Core.Metadata.IJsonProperty.MemberInfo*
+  name: MemberInfo
+  href: docs/api/FluentJson.Core.Metadata.IJsonProperty.html#FluentJson_Core_Metadata_IJsonProperty_MemberInfo_
+  commentId: Overload:FluentJson.Core.Metadata.IJsonProperty.MemberInfo
+  isSpec: "True"
+  fullName: FluentJson.Core.Metadata.IJsonProperty.MemberInfo
+  nameWithType: IJsonProperty.MemberInfo
+- uid: FluentJson.Core.Metadata.IJsonProperty.Name
+  name: Name
+  href: docs/api/FluentJson.Core.Metadata.IJsonProperty.html#FluentJson_Core_Metadata_IJsonProperty_Name
+  commentId: P:FluentJson.Core.Metadata.IJsonProperty.Name
+  fullName: FluentJson.Core.Metadata.IJsonProperty.Name
+  nameWithType: IJsonProperty.Name
+- uid: FluentJson.Core.Metadata.IJsonProperty.Name*
+  name: Name
+  href: docs/api/FluentJson.Core.Metadata.IJsonProperty.html#FluentJson_Core_Metadata_IJsonProperty_Name_
+  commentId: Overload:FluentJson.Core.Metadata.IJsonProperty.Name
+  isSpec: "True"
+  fullName: FluentJson.Core.Metadata.IJsonProperty.Name
+  nameWithType: IJsonProperty.Name
+- uid: FluentJson.Core.Metadata.IJsonProperty.PropertyType
+  name: PropertyType
+  href: docs/api/FluentJson.Core.Metadata.IJsonProperty.html#FluentJson_Core_Metadata_IJsonProperty_PropertyType
+  commentId: P:FluentJson.Core.Metadata.IJsonProperty.PropertyType
+  fullName: FluentJson.Core.Metadata.IJsonProperty.PropertyType
+  nameWithType: IJsonProperty.PropertyType
+- uid: FluentJson.Core.Metadata.IJsonProperty.PropertyType*
+  name: PropertyType
+  href: docs/api/FluentJson.Core.Metadata.IJsonProperty.html#FluentJson_Core_Metadata_IJsonProperty_PropertyType_
+  commentId: Overload:FluentJson.Core.Metadata.IJsonProperty.PropertyType
+  isSpec: "True"
+  fullName: FluentJson.Core.Metadata.IJsonProperty.PropertyType
+  nameWithType: IJsonProperty.PropertyType
+- uid: FluentJson.Core.Metadata.IJsonProperty.SerializeFunc
+  name: SerializeFunc
+  href: docs/api/FluentJson.Core.Metadata.IJsonProperty.html#FluentJson_Core_Metadata_IJsonProperty_SerializeFunc
+  commentId: P:FluentJson.Core.Metadata.IJsonProperty.SerializeFunc
+  fullName: FluentJson.Core.Metadata.IJsonProperty.SerializeFunc
+  nameWithType: IJsonProperty.SerializeFunc
+- uid: FluentJson.Core.Metadata.IJsonProperty.SerializeFunc*
+  name: SerializeFunc
+  href: docs/api/FluentJson.Core.Metadata.IJsonProperty.html#FluentJson_Core_Metadata_IJsonProperty_SerializeFunc_
+  commentId: Overload:FluentJson.Core.Metadata.IJsonProperty.SerializeFunc
+  isSpec: "True"
+  fullName: FluentJson.Core.Metadata.IJsonProperty.SerializeFunc
+  nameWithType: IJsonProperty.SerializeFunc
+- uid: FluentJson.DependencyInjection
+  name: FluentJson.DependencyInjection
+  href: docs/api/FluentJson.DependencyInjection.html
+  commentId: N:FluentJson.DependencyInjection
+  fullName: FluentJson.DependencyInjection
+  nameWithType: FluentJson.DependencyInjection
+- uid: FluentJson.DependencyInjection.FluentJsonServiceCollectionExtensions
+  name: FluentJsonServiceCollectionExtensions
+  href: docs/api/FluentJson.DependencyInjection.FluentJsonServiceCollectionExtensions.html
+  commentId: T:FluentJson.DependencyInjection.FluentJsonServiceCollectionExtensions
+  fullName: FluentJson.DependencyInjection.FluentJsonServiceCollectionExtensions
+  nameWithType: FluentJsonServiceCollectionExtensions
+- uid: FluentJson.DependencyInjection.FluentJsonServiceCollectionExtensions.AddFluentJson(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{FluentJson.Core.Builder.JsonModelBuilder})
+  name: AddFluentJson(IServiceCollection, Action<JsonModelBuilder>)
+  href: docs/api/FluentJson.DependencyInjection.FluentJsonServiceCollectionExtensions.html#FluentJson_DependencyInjection_FluentJsonServiceCollectionExtensions_AddFluentJson_Microsoft_Extensions_DependencyInjection_IServiceCollection_System_Action_FluentJson_Core_Builder_JsonModelBuilder__
+  commentId: M:FluentJson.DependencyInjection.FluentJsonServiceCollectionExtensions.AddFluentJson(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{FluentJson.Core.Builder.JsonModelBuilder})
+  name.vb: AddFluentJson(IServiceCollection, Action(Of JsonModelBuilder))
+  fullName: FluentJson.DependencyInjection.FluentJsonServiceCollectionExtensions.AddFluentJson(Microsoft.Extensions.DependencyInjection.IServiceCollection, System.Action<FluentJson.Core.Builder.JsonModelBuilder>)
+  fullName.vb: FluentJson.DependencyInjection.FluentJsonServiceCollectionExtensions.AddFluentJson(Microsoft.Extensions.DependencyInjection.IServiceCollection, System.Action(Of FluentJson.Core.Builder.JsonModelBuilder))
+  nameWithType: FluentJsonServiceCollectionExtensions.AddFluentJson(IServiceCollection, Action<JsonModelBuilder>)
+  nameWithType.vb: FluentJsonServiceCollectionExtensions.AddFluentJson(IServiceCollection, Action(Of JsonModelBuilder))
+- uid: FluentJson.DependencyInjection.FluentJsonServiceCollectionExtensions.AddFluentJson*
+  name: AddFluentJson
+  href: docs/api/FluentJson.DependencyInjection.FluentJsonServiceCollectionExtensions.html#FluentJson_DependencyInjection_FluentJsonServiceCollectionExtensions_AddFluentJson_
+  commentId: Overload:FluentJson.DependencyInjection.FluentJsonServiceCollectionExtensions.AddFluentJson
+  isSpec: "True"
+  fullName: FluentJson.DependencyInjection.FluentJsonServiceCollectionExtensions.AddFluentJson
+  nameWithType: FluentJsonServiceCollectionExtensions.AddFluentJson
+- uid: FluentJson.Newtonsoft
+  name: FluentJson.Newtonsoft
+  href: docs/api/FluentJson.Newtonsoft.html
+  commentId: N:FluentJson.Newtonsoft
+  fullName: FluentJson.Newtonsoft
+  nameWithType: FluentJson.Newtonsoft
+- uid: FluentJson.Newtonsoft.FluentJsonContractResolver
+  name: FluentJsonContractResolver
+  href: docs/api/FluentJson.Newtonsoft.FluentJsonContractResolver.html
+  commentId: T:FluentJson.Newtonsoft.FluentJsonContractResolver
+  fullName: FluentJson.Newtonsoft.FluentJsonContractResolver
+  nameWithType: FluentJsonContractResolver
+- uid: FluentJson.Newtonsoft.FluentJsonContractResolver.#ctor(FluentJson.Core.Metadata.IJsonModel)
+  name: FluentJsonContractResolver(IJsonModel)
+  href: docs/api/FluentJson.Newtonsoft.FluentJsonContractResolver.html#FluentJson_Newtonsoft_FluentJsonContractResolver__ctor_FluentJson_Core_Metadata_IJsonModel_
+  commentId: M:FluentJson.Newtonsoft.FluentJsonContractResolver.#ctor(FluentJson.Core.Metadata.IJsonModel)
+  name.vb: New(IJsonModel)
+  fullName: FluentJson.Newtonsoft.FluentJsonContractResolver.FluentJsonContractResolver(FluentJson.Core.Metadata.IJsonModel)
+  fullName.vb: FluentJson.Newtonsoft.FluentJsonContractResolver.New(FluentJson.Core.Metadata.IJsonModel)
+  nameWithType: FluentJsonContractResolver.FluentJsonContractResolver(IJsonModel)
+  nameWithType.vb: FluentJsonContractResolver.New(IJsonModel)
+- uid: FluentJson.Newtonsoft.FluentJsonContractResolver.#ctor*
+  name: FluentJsonContractResolver
+  href: docs/api/FluentJson.Newtonsoft.FluentJsonContractResolver.html#FluentJson_Newtonsoft_FluentJsonContractResolver__ctor_
+  commentId: Overload:FluentJson.Newtonsoft.FluentJsonContractResolver.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: FluentJson.Newtonsoft.FluentJsonContractResolver.FluentJsonContractResolver
+  fullName.vb: FluentJson.Newtonsoft.FluentJsonContractResolver.New
+  nameWithType: FluentJsonContractResolver.FluentJsonContractResolver
+  nameWithType.vb: FluentJsonContractResolver.New
+- uid: FluentJson.Newtonsoft.FluentJsonContractResolver.CreateObjectContract(System.Type)
+  name: CreateObjectContract(Type)
+  href: docs/api/FluentJson.Newtonsoft.FluentJsonContractResolver.html#FluentJson_Newtonsoft_FluentJsonContractResolver_CreateObjectContract_System_Type_
+  commentId: M:FluentJson.Newtonsoft.FluentJsonContractResolver.CreateObjectContract(System.Type)
+  fullName: FluentJson.Newtonsoft.FluentJsonContractResolver.CreateObjectContract(System.Type)
+  nameWithType: FluentJsonContractResolver.CreateObjectContract(Type)
+- uid: FluentJson.Newtonsoft.FluentJsonContractResolver.CreateObjectContract*
+  name: CreateObjectContract
+  href: docs/api/FluentJson.Newtonsoft.FluentJsonContractResolver.html#FluentJson_Newtonsoft_FluentJsonContractResolver_CreateObjectContract_
+  commentId: Overload:FluentJson.Newtonsoft.FluentJsonContractResolver.CreateObjectContract
+  isSpec: "True"
+  fullName: FluentJson.Newtonsoft.FluentJsonContractResolver.CreateObjectContract
+  nameWithType: FluentJsonContractResolver.CreateObjectContract
+- uid: FluentJson.Newtonsoft.FluentJsonContractResolver.CreateProperties(System.Type,Newtonsoft.Json.MemberSerialization)
+  name: CreateProperties(Type, MemberSerialization)
+  href: docs/api/FluentJson.Newtonsoft.FluentJsonContractResolver.html#FluentJson_Newtonsoft_FluentJsonContractResolver_CreateProperties_System_Type_Newtonsoft_Json_MemberSerialization_
+  commentId: M:FluentJson.Newtonsoft.FluentJsonContractResolver.CreateProperties(System.Type,Newtonsoft.Json.MemberSerialization)
+  fullName: FluentJson.Newtonsoft.FluentJsonContractResolver.CreateProperties(System.Type, Newtonsoft.Json.MemberSerialization)
+  nameWithType: FluentJsonContractResolver.CreateProperties(Type, MemberSerialization)
+- uid: FluentJson.Newtonsoft.FluentJsonContractResolver.CreateProperties*
+  name: CreateProperties
+  href: docs/api/FluentJson.Newtonsoft.FluentJsonContractResolver.html#FluentJson_Newtonsoft_FluentJsonContractResolver_CreateProperties_
+  commentId: Overload:FluentJson.Newtonsoft.FluentJsonContractResolver.CreateProperties
+  isSpec: "True"
+  fullName: FluentJson.Newtonsoft.FluentJsonContractResolver.CreateProperties
+  nameWithType: FluentJsonContractResolver.CreateProperties
+- uid: FluentJson.Newtonsoft.FluentJsonContractResolver.CreateProperty(System.Reflection.MemberInfo,Newtonsoft.Json.MemberSerialization)
+  name: CreateProperty(MemberInfo, MemberSerialization)
+  href: docs/api/FluentJson.Newtonsoft.FluentJsonContractResolver.html#FluentJson_Newtonsoft_FluentJsonContractResolver_CreateProperty_System_Reflection_MemberInfo_Newtonsoft_Json_MemberSerialization_
+  commentId: M:FluentJson.Newtonsoft.FluentJsonContractResolver.CreateProperty(System.Reflection.MemberInfo,Newtonsoft.Json.MemberSerialization)
+  fullName: FluentJson.Newtonsoft.FluentJsonContractResolver.CreateProperty(System.Reflection.MemberInfo, Newtonsoft.Json.MemberSerialization)
+  nameWithType: FluentJsonContractResolver.CreateProperty(MemberInfo, MemberSerialization)
+- uid: FluentJson.Newtonsoft.FluentJsonContractResolver.CreateProperty*
+  name: CreateProperty
+  href: docs/api/FluentJson.Newtonsoft.FluentJsonContractResolver.html#FluentJson_Newtonsoft_FluentJsonContractResolver_CreateProperty_
+  commentId: Overload:FluentJson.Newtonsoft.FluentJsonContractResolver.CreateProperty
+  isSpec: "True"
+  fullName: FluentJson.Newtonsoft.FluentJsonContractResolver.CreateProperty
+  nameWithType: FluentJsonContractResolver.CreateProperty
+- uid: FluentJson.Newtonsoft.FluentJsonSerializerSettingsExtensions
+  name: FluentJsonSerializerSettingsExtensions
+  href: docs/api/FluentJson.Newtonsoft.FluentJsonSerializerSettingsExtensions.html
+  commentId: T:FluentJson.Newtonsoft.FluentJsonSerializerSettingsExtensions
+  fullName: FluentJson.Newtonsoft.FluentJsonSerializerSettingsExtensions
+  nameWithType: FluentJsonSerializerSettingsExtensions
+- uid: FluentJson.Newtonsoft.FluentJsonSerializerSettingsExtensions.AddFluentJson(Newtonsoft.Json.JsonSerializerSettings,FluentJson.Core.Metadata.IJsonModel)
+  name: AddFluentJson(JsonSerializerSettings, IJsonModel)
+  href: docs/api/FluentJson.Newtonsoft.FluentJsonSerializerSettingsExtensions.html#FluentJson_Newtonsoft_FluentJsonSerializerSettingsExtensions_AddFluentJson_Newtonsoft_Json_JsonSerializerSettings_FluentJson_Core_Metadata_IJsonModel_
+  commentId: M:FluentJson.Newtonsoft.FluentJsonSerializerSettingsExtensions.AddFluentJson(Newtonsoft.Json.JsonSerializerSettings,FluentJson.Core.Metadata.IJsonModel)
+  fullName: FluentJson.Newtonsoft.FluentJsonSerializerSettingsExtensions.AddFluentJson(Newtonsoft.Json.JsonSerializerSettings, FluentJson.Core.Metadata.IJsonModel)
+  nameWithType: FluentJsonSerializerSettingsExtensions.AddFluentJson(JsonSerializerSettings, IJsonModel)
+- uid: FluentJson.Newtonsoft.FluentJsonSerializerSettingsExtensions.AddFluentJson*
+  name: AddFluentJson
+  href: docs/api/FluentJson.Newtonsoft.FluentJsonSerializerSettingsExtensions.html#FluentJson_Newtonsoft_FluentJsonSerializerSettingsExtensions_AddFluentJson_
+  commentId: Overload:FluentJson.Newtonsoft.FluentJsonSerializerSettingsExtensions.AddFluentJson
+  isSpec: "True"
+  fullName: FluentJson.Newtonsoft.FluentJsonSerializerSettingsExtensions.AddFluentJson
+  nameWithType: FluentJsonSerializerSettingsExtensions.AddFluentJson
+- uid: FluentJson.SystemTextJson
+  name: FluentJson.SystemTextJson
+  href: docs/api/FluentJson.SystemTextJson.html
+  commentId: N:FluentJson.SystemTextJson
+  fullName: FluentJson.SystemTextJson
+  nameWithType: FluentJson.SystemTextJson
+- uid: FluentJson.SystemTextJson.FluentJsonSerializerOptionsExtensions
+  name: FluentJsonSerializerOptionsExtensions
+  href: docs/api/FluentJson.SystemTextJson.FluentJsonSerializerOptionsExtensions.html
+  commentId: T:FluentJson.SystemTextJson.FluentJsonSerializerOptionsExtensions
+  fullName: FluentJson.SystemTextJson.FluentJsonSerializerOptionsExtensions
+  nameWithType: FluentJsonSerializerOptionsExtensions
+- uid: FluentJson.SystemTextJson.FluentJsonSerializerOptionsExtensions.AddFluentJson(System.Text.Json.JsonSerializerOptions,FluentJson.Core.Metadata.IJsonModel)
+  name: AddFluentJson(JsonSerializerOptions, IJsonModel)
+  href: docs/api/FluentJson.SystemTextJson.FluentJsonSerializerOptionsExtensions.html#FluentJson_SystemTextJson_FluentJsonSerializerOptionsExtensions_AddFluentJson_System_Text_Json_JsonSerializerOptions_FluentJson_Core_Metadata_IJsonModel_
+  commentId: M:FluentJson.SystemTextJson.FluentJsonSerializerOptionsExtensions.AddFluentJson(System.Text.Json.JsonSerializerOptions,FluentJson.Core.Metadata.IJsonModel)
+  fullName: FluentJson.SystemTextJson.FluentJsonSerializerOptionsExtensions.AddFluentJson(System.Text.Json.JsonSerializerOptions, FluentJson.Core.Metadata.IJsonModel)
+  nameWithType: FluentJsonSerializerOptionsExtensions.AddFluentJson(JsonSerializerOptions, IJsonModel)
+- uid: FluentJson.SystemTextJson.FluentJsonSerializerOptionsExtensions.AddFluentJson*
+  name: AddFluentJson
+  href: docs/api/FluentJson.SystemTextJson.FluentJsonSerializerOptionsExtensions.html#FluentJson_SystemTextJson_FluentJsonSerializerOptionsExtensions_AddFluentJson_
+  commentId: Overload:FluentJson.SystemTextJson.FluentJsonSerializerOptionsExtensions.AddFluentJson
+  isSpec: "True"
+  fullName: FluentJson.SystemTextJson.FluentJsonSerializerOptionsExtensions.AddFluentJson
+  nameWithType: FluentJsonSerializerOptionsExtensions.AddFluentJson
+- uid: FluentJson.SystemTextJson.FluentJsonTypeModifier
+  name: FluentJsonTypeModifier
+  href: docs/api/FluentJson.SystemTextJson.FluentJsonTypeModifier.html
+  commentId: T:FluentJson.SystemTextJson.FluentJsonTypeModifier
+  fullName: FluentJson.SystemTextJson.FluentJsonTypeModifier
+  nameWithType: FluentJsonTypeModifier
+- uid: FluentJson.SystemTextJson.FluentJsonTypeModifier.#ctor(FluentJson.Core.Metadata.IJsonModel)
+  name: FluentJsonTypeModifier(IJsonModel)
+  href: docs/api/FluentJson.SystemTextJson.FluentJsonTypeModifier.html#FluentJson_SystemTextJson_FluentJsonTypeModifier__ctor_FluentJson_Core_Metadata_IJsonModel_
+  commentId: M:FluentJson.SystemTextJson.FluentJsonTypeModifier.#ctor(FluentJson.Core.Metadata.IJsonModel)
+  name.vb: New(IJsonModel)
+  fullName: FluentJson.SystemTextJson.FluentJsonTypeModifier.FluentJsonTypeModifier(FluentJson.Core.Metadata.IJsonModel)
+  fullName.vb: FluentJson.SystemTextJson.FluentJsonTypeModifier.New(FluentJson.Core.Metadata.IJsonModel)
+  nameWithType: FluentJsonTypeModifier.FluentJsonTypeModifier(IJsonModel)
+  nameWithType.vb: FluentJsonTypeModifier.New(IJsonModel)
+- uid: FluentJson.SystemTextJson.FluentJsonTypeModifier.#ctor*
+  name: FluentJsonTypeModifier
+  href: docs/api/FluentJson.SystemTextJson.FluentJsonTypeModifier.html#FluentJson_SystemTextJson_FluentJsonTypeModifier__ctor_
+  commentId: Overload:FluentJson.SystemTextJson.FluentJsonTypeModifier.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: FluentJson.SystemTextJson.FluentJsonTypeModifier.FluentJsonTypeModifier
+  fullName.vb: FluentJson.SystemTextJson.FluentJsonTypeModifier.New
+  nameWithType: FluentJsonTypeModifier.FluentJsonTypeModifier
+  nameWithType.vb: FluentJsonTypeModifier.New
+- uid: FluentJson.SystemTextJson.FluentJsonTypeModifier.Modify(System.Text.Json.Serialization.Metadata.JsonTypeInfo)
+  name: Modify(JsonTypeInfo)
+  href: docs/api/FluentJson.SystemTextJson.FluentJsonTypeModifier.html#FluentJson_SystemTextJson_FluentJsonTypeModifier_Modify_System_Text_Json_Serialization_Metadata_JsonTypeInfo_
+  commentId: M:FluentJson.SystemTextJson.FluentJsonTypeModifier.Modify(System.Text.Json.Serialization.Metadata.JsonTypeInfo)
+  fullName: FluentJson.SystemTextJson.FluentJsonTypeModifier.Modify(System.Text.Json.Serialization.Metadata.JsonTypeInfo)
+  nameWithType: FluentJsonTypeModifier.Modify(JsonTypeInfo)
+- uid: FluentJson.SystemTextJson.FluentJsonTypeModifier.Modify*
+  name: Modify
+  href: docs/api/FluentJson.SystemTextJson.FluentJsonTypeModifier.html#FluentJson_SystemTextJson_FluentJsonTypeModifier_Modify_
+  commentId: Overload:FluentJson.SystemTextJson.FluentJsonTypeModifier.Modify
+  isSpec: "True"
+  fullName: FluentJson.SystemTextJson.FluentJsonTypeModifier.Modify
+  nameWithType: FluentJsonTypeModifier.Modify

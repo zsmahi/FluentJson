@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Quality Report &amp; Testing Strategy | FluentJson Technical Bible </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Quality Report &amp; Testing Strategy | FluentJson Technical Bible ">
+    
+    
+      <link rel="shortcut icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../styles/docfx.css">
+      <link rel="stylesheet" href="../styles/main.css">
+      <meta property="docfx:navrel" content="">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first=First data-prev=Previous data-next=Next data-last=Last></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="quality-report--testing-strategy">Quality Report &amp; Testing Strategy</h1>
+
+<p>A configuration library dealing with highly dynamic reflection, serialization models, and expression trees must be infallible. FluentJson ensures perfect reliability by enforcing a militant test-driven culture and holding itself to extreme quality constraints.</p>
+<h2 id="1-functional-parity-dual-engine-support">1. Functional Parity (Dual Engine Support)</h2>
+<p>Because FluentJson builds an agnostic metadata <code>IJsonModel</code>, the true test is ensuring the native JSON adapters (Newtonsoft and System.Text.Json) interpret the rules identically.
+Our <code>FluentJson.FunctionalTests</code> project employs a unified test base where complex objects (involving cyclic graphs, flattened strong-ids, and polymorphic payloads) are tested sequentially against <em>both</em> engines using their respective FluentJson adapter implementations.</p>
+<p>This is especially critical regarding security: <code>System.Text.Json</code> and <code>Newtonsoft.Json</code> employ vastly different structural parsing mechanics and security constraints. Despite this, FluentJson bridges the gap perfectly, maintaining <strong>Functional Parity</strong> across security implementations. If a scenario is green in Newtonsoft but fails in STJ, the build fails. By maintaining this parity, we prove the abstraction is leak-proof and equally resilient.</p>
+<h2 id="2-test-driven-development-tdd">2. Test-Driven Development (TDD)</h2>
+<p>Every piece of state behavior within <code>FluentJson.Core</code> (the Builder pattern logic) and the Expression Compiler has been constructed test-first. Features like <code>.HasDerivedType</code> or <code>.HasConversion</code> had unit tests validating constraint failures (like rejecting interface mapping attempts un-backed by dictionaries) before the feature implementation began.</p>
+<h2 id="3-the-ultimate-guarantee-100-mutation-score">3. The Ultimate Guarantee: 100% Mutation Score</h2>
+<p>Line coverage is deceptive; it ignores whether assertion logic is actually validating outcomes effectively.
+To enforce absolute confidence, we utilize <strong>Stryker.NET</strong> for Mutation Testing on <code>FluentJson.Core</code> and the Adapters.</p>
+<p><strong>What is Mutation Testing?</strong>
+Stryker reads the source code and intentionally inserts bugs (mutants): flipping <code>if (x == null)</code> to <code>if (x != null)</code>, altering mathematical logic, removing statements, or clearing string boundaries. It then runs the test suite. If the tests pass despite the core code being deliberately broken, the mutant &quot;survives&quot;, highlighting weak or meaningless unit tests.</p>
+<p><strong>Our Score:</strong>
+<code>FluentJson.Core</code>, along with the newly integrated Zero-Allocation/Security polymorphic converters, achieves a perfect <strong>100.00% Mutation Score</strong>.
+Every single conditional logic block, reflection check, lambda parameter compilation, and state transition rule has been mutated, and our test suite caught and killed 100% of the mutants.</p>
+<p>This guarantees that:</p>
+<ul>
+<li>Every line of configuration logic is explicitly tested.</li>
+<li>Behavior is absolutely immutable against regressions.</li>
+<li>The compiled lambda expressions generated for native JSON instantiation are provably safe.</li>
+</ul>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/zsmahi/FluentJson/blob/main/docs/quality-report.md/#L1" class="contribution-link">Edit this page</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

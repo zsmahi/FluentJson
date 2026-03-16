@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Class EntityTypeBuilder&lt;TEntity&gt; | FluentJson Technical Bible </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Class EntityTypeBuilder&lt;TEntity&gt; | FluentJson Technical Bible ">
+    
+    <meta name="description" content="Provides a fluent API to configure JSON serialization rules for a specific entity type.">
+      <link rel="shortcut icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first=First data-prev=Previous data-next=Next data-last=Last></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="FluentJson.Core.Builder.EntityTypeBuilder`1">
+
+
+
+  <h1 id="FluentJson_Core_Builder_EntityTypeBuilder_1" data-uid="FluentJson.Core.Builder.EntityTypeBuilder`1" class="text-break">Class EntityTypeBuilder&lt;TEntity&gt;</h1>
+  <div class="markdown level0 summary"><p>Provides a fluent API to configure JSON serialization rules for a specific entity type.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+    <div class="level1"><span class="xref">EntityTypeBuilder&lt;TEntity&gt;</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="FluentJson.html">FluentJson</a>.<a class="xref" href="FluentJson.Core.html">Core</a>.<a class="xref" href="FluentJson.Core.Builder.html">Builder</a></h6>
+  <h6><strong>Assembly</strong>: FluentJson.Core.dll</h6>
+  <h5 id="FluentJson_Core_Builder_EntityTypeBuilder_1_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class EntityTypeBuilder&lt;TEntity&gt;</code></pre>
+  </div>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TEntity</span></td>
+        <td><p>The type of the entity being configured.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="FluentJson_Core_Builder_EntityTypeBuilder_1_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks"><p>Use this builder to map properties or fields, enforce required paths, or completely ignore members.
+It allows configuring private state and accessing private parameterless constructors.</p>
+</div>
+  <h3 id="methods">Methods
+</h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/zsmahi/FluentJson/new/main/apiSpec/new?filename=FluentJson_Core_Builder_EntityTypeBuilder_1_HasDerivedType__1_System_Object_.md&amp;value=---%0Auid%3A%20FluentJson.Core.Builder.EntityTypeBuilder%601.HasDerivedType%60%601(System.Object)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Edit this page</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/zsmahi/FluentJson/blob/main/src/FluentJson.Core/Builder/EntityTypeBuilder.cs/#L189">View Source</a>
+  </span>
+  <a id="FluentJson_Core_Builder_EntityTypeBuilder_1_HasDerivedType_" data-uid="FluentJson.Core.Builder.EntityTypeBuilder`1.HasDerivedType*"></a>
+  <h4 id="FluentJson_Core_Builder_EntityTypeBuilder_1_HasDerivedType__1_System_Object_" data-uid="FluentJson.Core.Builder.EntityTypeBuilder`1.HasDerivedType``1(System.Object)">HasDerivedType&lt;TDerived&gt;(object)</h4>
+  <div class="markdown level1 summary"><p>Maps a discriminator value to a concrete derived type for polymorphic deserialization.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public EntityTypeBuilder&lt;TEntity&gt; HasDerivedType&lt;TDerived&gt;(object value) where TDerived : TEntity</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></td>
+        <td><span class="parametername">value</span></td>
+        <td><p>The discriminator value expected in the JSON payload.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="FluentJson.Core.Builder.EntityTypeBuilder-1.html">EntityTypeBuilder</a>&lt;TEntity&gt;</td>
+        <td><p>The same <a class="xref" href="FluentJson.Core.Builder.EntityTypeBuilder-1.html">EntityTypeBuilder&lt;TEntity&gt;</a> instance so that multiple calls can be chained.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TDerived</span></td>
+        <td><p>The concrete type deriving from <code class="typeparamref">TEntity</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/zsmahi/FluentJson/new/main/apiSpec/new?filename=FluentJson_Core_Builder_EntityTypeBuilder_1_HasDiscriminator_System_String_.md&amp;value=---%0Auid%3A%20FluentJson.Core.Builder.EntityTypeBuilder%601.HasDiscriminator(System.String)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Edit this page</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/zsmahi/FluentJson/blob/main/src/FluentJson.Core/Builder/EntityTypeBuilder.cs/#L174">View Source</a>
+  </span>
+  <a id="FluentJson_Core_Builder_EntityTypeBuilder_1_HasDiscriminator_" data-uid="FluentJson.Core.Builder.EntityTypeBuilder`1.HasDiscriminator*"></a>
+  <h4 id="FluentJson_Core_Builder_EntityTypeBuilder_1_HasDiscriminator_System_String_" data-uid="FluentJson.Core.Builder.EntityTypeBuilder`1.HasDiscriminator(System.String)">HasDiscriminator(string)</h4>
+  <div class="markdown level1 summary"><p>Configures the JSON property name used to discriminate derived types during polymorphic deserialization.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public EntityTypeBuilder&lt;TEntity&gt; HasDiscriminator(string propertyName)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td><span class="parametername">propertyName</span></td>
+        <td><p>The name of the discriminator property in the JSON payload.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="FluentJson.Core.Builder.EntityTypeBuilder-1.html">EntityTypeBuilder</a>&lt;TEntity&gt;</td>
+        <td><p>The same <a class="xref" href="FluentJson.Core.Builder.EntityTypeBuilder-1.html">EntityTypeBuilder&lt;TEntity&gt;</a> instance so that multiple calls can be chained.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/zsmahi/FluentJson/new/main/apiSpec/new?filename=FluentJson_Core_Builder_EntityTypeBuilder_1_Ignore_System_Linq_Expressions_Expression_System_Func__0_System_Object___.md&amp;value=---%0Auid%3A%20FluentJson.Core.Builder.EntityTypeBuilder%601.Ignore(System.Linq.Expressions.Expression%7BSystem.Func%7B%600%2CSystem.Object%7D%7D)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Edit this page</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/zsmahi/FluentJson/blob/main/src/FluentJson.Core/Builder/EntityTypeBuilder.cs/#L142">View Source</a>
+  </span>
+  <a id="FluentJson_Core_Builder_EntityTypeBuilder_1_Ignore_" data-uid="FluentJson.Core.Builder.EntityTypeBuilder`1.Ignore*"></a>
+  <h4 id="FluentJson_Core_Builder_EntityTypeBuilder_1_Ignore_System_Linq_Expressions_Expression_System_Func__0_System_Object___" data-uid="FluentJson.Core.Builder.EntityTypeBuilder`1.Ignore(System.Linq.Expressions.Expression{System.Func{`0,System.Object}})">Ignore(Expression&lt;Func&lt;TEntity, object?&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Instructs the framework to completely ignore a specific property or field during serialization and deserialization.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public EntityTypeBuilder&lt;TEntity&gt; Ignore(Expression&lt;Func&lt;TEntity, object?&gt;&gt; propertyExpression)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expression-1">Expression</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.func-2">Func</a>&lt;TEntity, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a>&gt;&gt;</td>
+        <td><span class="parametername">propertyExpression</span></td>
+        <td><p>A lambda expression representing the member to ignore.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="FluentJson.Core.Builder.EntityTypeBuilder-1.html">EntityTypeBuilder</a>&lt;TEntity&gt;</td>
+        <td><p>The same <a class="xref" href="FluentJson.Core.Builder.EntityTypeBuilder-1.html">EntityTypeBuilder&lt;TEntity&gt;</a> instance so that multiple calls can be chained.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/zsmahi/FluentJson/new/main/apiSpec/new?filename=FluentJson_Core_Builder_EntityTypeBuilder_1_PreserveReferences_System_Boolean_.md&amp;value=---%0Auid%3A%20FluentJson.Core.Builder.EntityTypeBuilder%601.PreserveReferences(System.Boolean)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Edit this page</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/zsmahi/FluentJson/blob/main/src/FluentJson.Core/Builder/EntityTypeBuilder.cs/#L207">View Source</a>
+  </span>
+  <a id="FluentJson_Core_Builder_EntityTypeBuilder_1_PreserveReferences_" data-uid="FluentJson.Core.Builder.EntityTypeBuilder`1.PreserveReferences*"></a>
+  <h4 id="FluentJson_Core_Builder_EntityTypeBuilder_1_PreserveReferences_System_Boolean_" data-uid="FluentJson.Core.Builder.EntityTypeBuilder`1.PreserveReferences(System.Boolean)">PreserveReferences(bool)</h4>
+  <div class="markdown level1 summary"><p>Configures the entity to preserve object references and properly handle circular references during serialization and deserialization.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public EntityTypeBuilder&lt;TEntity&gt; PreserveReferences(bool preserve = true)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td><span class="parametername">preserve</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="FluentJson.Core.Builder.EntityTypeBuilder-1.html">EntityTypeBuilder</a>&lt;TEntity&gt;</td>
+        <td><p>The same <a class="xref" href="FluentJson.Core.Builder.EntityTypeBuilder-1.html">EntityTypeBuilder&lt;TEntity&gt;</a> instance so that multiple calls can be chained.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/zsmahi/FluentJson/new/main/apiSpec/new?filename=FluentJson_Core_Builder_EntityTypeBuilder_1_Property__1_System_Linq_Expressions_Expression_System_Func__0___0___.md&amp;value=---%0Auid%3A%20FluentJson.Core.Builder.EntityTypeBuilder%601.Property%60%601(System.Linq.Expressions.Expression%7BSystem.Func%7B%600%2C%60%600%7D%7D)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Edit this page</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/zsmahi/FluentJson/blob/main/src/FluentJson.Core/Builder/EntityTypeBuilder.cs/#L80">View Source</a>
+  </span>
+  <a id="FluentJson_Core_Builder_EntityTypeBuilder_1_Property_" data-uid="FluentJson.Core.Builder.EntityTypeBuilder`1.Property*"></a>
+  <h4 id="FluentJson_Core_Builder_EntityTypeBuilder_1_Property__1_System_Linq_Expressions_Expression_System_Func__0___0___" data-uid="FluentJson.Core.Builder.EntityTypeBuilder`1.Property``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})">Property&lt;TProperty&gt;(Expression&lt;Func&lt;TEntity, TProperty&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Configures a property or field using a strongly-typed expression.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PropertyBuilder&lt;TProperty&gt; Property&lt;TProperty&gt;(Expression&lt;Func&lt;TEntity, TProperty&gt;&gt; propertyExpression)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.linq.expressions.expression-1">Expression</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.func-2">Func</a>&lt;TEntity, TProperty&gt;&gt;</td>
+        <td><span class="parametername">propertyExpression</span></td>
+        <td><p>A lambda expression representing the member access (e.g., <code>x =&gt; x.Name</code>).</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="FluentJson.Core.Builder.PropertyBuilder-1.html">PropertyBuilder</a>&lt;TProperty&gt;</td>
+        <td><p>A <a class="xref" href="FluentJson.Core.Builder.PropertyBuilder-1.html">PropertyBuilder&lt;TProperty&gt;</a> to further configure the mapped member.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TProperty</span></td>
+        <td><p>The type of the property being configured.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="FluentJson_Core_Builder_EntityTypeBuilder_1_Property__1_System_Linq_Expressions_Expression_System_Func__0___0____remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>This is the preferred method for mapping members as it provides compile-time safety and refactoring support.</p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/zsmahi/FluentJson/new/main/apiSpec/new?filename=FluentJson_Core_Builder_EntityTypeBuilder_1_Property__1_System_String_.md&amp;value=---%0Auid%3A%20FluentJson.Core.Builder.EntityTypeBuilder%601.Property%60%601(System.String)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Edit this page</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/zsmahi/FluentJson/blob/main/src/FluentJson.Core/Builder/EntityTypeBuilder.cs/#L115">View Source</a>
+  </span>
+  <a id="FluentJson_Core_Builder_EntityTypeBuilder_1_Property_" data-uid="FluentJson.Core.Builder.EntityTypeBuilder`1.Property*"></a>
+  <h4 id="FluentJson_Core_Builder_EntityTypeBuilder_1_Property__1_System_String_" data-uid="FluentJson.Core.Builder.EntityTypeBuilder`1.Property``1(System.String)">Property&lt;TProperty&gt;(string)</h4>
+  <div class="markdown level1 summary"><p>Configures a property or field by its string name.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PropertyBuilder&lt;TProperty&gt; Property&lt;TProperty&gt;(string propertyName)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td><span class="parametername">propertyName</span></td>
+        <td><p>The name of the property or field to map.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="FluentJson.Core.Builder.PropertyBuilder-1.html">PropertyBuilder</a>&lt;TProperty&gt;</td>
+        <td><p>A <a class="xref" href="FluentJson.Core.Builder.PropertyBuilder-1.html">PropertyBuilder&lt;TProperty&gt;</a> to further configure the mapped member.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TProperty</span></td>
+        <td><p>The type of the target member to configure.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="FluentJson_Core_Builder_EntityTypeBuilder_1_Property__1_System_String__remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>Useful for mapping private fields or properties that are not accessible via standard lambda expressions.</p>
+</div>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/zsmahi/FluentJson/new/main/apiSpec/new?filename=FluentJson_Core_Builder_EntityTypeBuilder_1.md&amp;value=---%0Auid%3A%20FluentJson.Core.Builder.EntityTypeBuilder%601%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Edit this page</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/zsmahi/FluentJson/blob/main/src/FluentJson.Core/Builder/EntityTypeBuilder.cs/#L20" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>
