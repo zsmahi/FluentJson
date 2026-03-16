@@ -48,7 +48,6 @@ jobs:
         
       - name: Verify code formatting
         run: dotnet format --verify-no-changes
-        # This will fail the pipeline if any files do not match the formatting rules.
 
   security-scan:
     name: Security Scan
@@ -115,12 +114,27 @@ jobs:
     name: Performance Benchmarks
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Needed to push to gh-pages branch
+      contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Auto-bootstrap gh-pages branch
+        run: |
+          if ! git ls-remote --exit-code --heads origin gh-pages; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git checkout --orphan gh-pages
+            git rm -rf .
+            echo "# FluentJson Documentation & Benchmarks" > index.html
+            touch .nojekyll
+            git add index.html .nojekyll
+            git commit -m "chore: bootstrap gh-pages branch"
+            git push origin gh-pages
+            git checkout -
+          fi
         
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -146,11 +160,11 @@ jobs:
           output-file-path: BenchmarkDotNet.Artifacts/results/FluentJson.Benchmarks.DeserializationBenchmarks-report-brief.json
           github-token: ${{ secrets.GITHUB_TOKEN }}
           auto-push: true
-          alert-threshold: '120%' # Fails if degradation > 20%
+          alert-threshold: '120%'
           fail-on-alert: true
           comment-on-alert: true
           summary-always: true
-          skip-fetch-gh-pages: true # Skip fetching branch if it doesn't exist yet
+          skip-fetch-gh-pages: true
 
   mutation-gate:
     name: Mutation Testing (Stryker.NET)
@@ -172,7 +186,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
 
-      - name: Install Stryker CLI (Local Tool)
+      - name: Install Stryker CLI
         run: |
           dotnet new tool-manifest || true
           dotnet tool install dotnet-stryker
@@ -190,7 +204,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
     permissions:
-      contents: write # Needed for deploying to gh-pages
+      contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -207,16 +221,19 @@ jobs:
         
       - name: Build Documentation
         run: docfx docfx.json
-        
-      - name: Create .nojekyll
-        run: touch _site/.nojekyll
+
+      - name: Prepare Deployment Payload
+        run: |
+          mkdir -p ./publish_payload
+          cp -a ./_site/. ./publish_payload/
+          touch ./publish_payload/.nojekyll
         
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site
-          keep_files: true # CRITICAL: Don't delete benchmark results (dev/bench)!
+          publish_dir: ./publish_payload
+          keep_files: true
 
   cd-release:
     name: Continuous Deployment (NuGet & GitHub Release)
@@ -227,7 +244,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Needed for comprehensive changelog generation
+          fetch-depth: 0
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -237,12 +254,8 @@ jobs:
       - name: Pack NuGet packages
         run: dotnet pack --configuration Release /p:Version=${GITHUB_REF_NAME#v} --output ./nupkg_artifacts
         
-      # Sign NuGet Packages 
-      # Note: Requires importing a valid code signing certificate via Secrets
       - name: Sign NuGet Packages
         run: |
-          # Example signature command - adjust certificate path and timestamper as needed
-          # dotnet nuget sign ./nupkg_artifacts/*.nupkg --certificate-path ${{ secrets.CERT_PATH }} --certificate-password ${{ secrets.CERT_PASSWORD }} --timestamper http://timestamp.digicert.com
           echo "Placeholder for Nuget Signing. Modify with actual cert secrets."
 
       - name: Push Core to NuGet
