@@ -180,9 +180,39 @@ jobs:
         run: dotnet tool run dotnet-stryker --project src/FluentJson.Core/FluentJson.Core.csproj --break-at 100
         working-directory: .
 
+  publish-docs:
+    name: Publish Documentation (Docfx)
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: write # Needed for deploying to gh-pages
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+          
+      - name: Install Docfx
+        run: dotnet tool install -g docfx
+        
+      - name: Build Documentation
+        run: docfx docfx.json
+        
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site
+          keep_files: true # CRITICAL: Don't delete benchmark results on gh-pages!
+
   cd-release:
     name: Continuous Deployment (NuGet & GitHub Release)
-    needs: [lint-and-format, security-scan, ci-build-and-test, performance-benchmarks, mutation-gate]
+    needs: [lint-and-format, security-scan, ci-build-and-test, performance-benchmarks, mutation-gate, publish-docs]
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     steps:

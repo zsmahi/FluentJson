@@ -1,0 +1,14 @@
+- name: Getting Started
+  href: ../README.md
+- name: Architecture Guide
+  items:
+    - name: The Agnostic Engine
+      href: arch/engine.md
+    - name: The Metadata Model
+      href: arch/metadata.md
+- name: Security Hardening
+  href: arch/security.md
+- name: Performance Lab
+  href: arch/performance.md
+- name: API Reference
+  href: api/
