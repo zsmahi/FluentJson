@@ -135,7 +135,7 @@ jobs:
         with:
           name: BenchmarkDotNet Benchmarks
           tool: 'benchmarkdotnet'
-          output-file-path: tests/FluentJson.Benchmarks/BenchmarkDotNet.Artifacts/results/FluentJson.Benchmarks.DeserializationBenchmarks-report.json
+          output-file-path: BenchmarkDotNet.Artifacts/results/FluentJson.Benchmarks.DeserializationBenchmarks-report.json
           github-token: ${{ secrets.GITHUB_TOKEN }}
           auto-push: false
           alert-threshold: '110%' # Fails if degradation > 10%
